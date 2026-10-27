@@ -1,0 +1,1652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LearnWise × Kraftshala — Meta Ads Key Metrics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Floating Toast Notifications for XP & Combos -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <!-- Gamification HUD (Top Header across Quiz) -->
+  <header id="gamification-hud" class="hud hidden">
+    <div class="hud-left">
+      <button id="btn-back" class="hud-btn-back" title="Go back to previous screen">
+        <span class="back-arrow">←</span> <span class="back-text">Back</span>
+      </button>
+      <div class="hud-topic-tag">
+        <span class="topic-dot"></span>
+        <span class="topic-title">META ADS · KEY METRICS</span>
+      </div>
+    </div>
+
+    <div class="hud-center">
+      <div class="progress-track" title="Quiz Progress">
+        <div id="progress-bar-fill" class="progress-fill" style="width: 0%;"></div>
+      </div>
+      <span id="progress-text" class="progress-counter">1 / 12</span>
+    </div>
+
+    <div class="hud-right">
+      <!-- XP Pill -->
+      <div class="hud-stat-pill xp-pill" title="Total XP Earned">
+        <span class="hud-pill-icon">⚡</span>
+        <span id="hud-xp-val" class="hud-pill-num">0</span>
+        <span class="hud-pill-unit">XP</span>
+      </div>
+
+      <!-- Combo Streak Pill -->
+      <div id="hud-combo-pill" class="hud-stat-pill combo-pill" title="Current Answer Streak: Consecutive Correct Answers">
+        <span class="hud-pill-icon" id="hud-combo-icon">🔥</span>
+        <span id="hud-combo-val" class="hud-pill-num">0</span>
+        <span class="hud-pill-unit">STREAK</span>
+      </div>
+
+      <!-- Audio Toggle -->
+      <button id="btn-audio-toggle" class="hud-icon-btn" title="Toggle Sound Effects">
+        <span id="audio-icon">🔊</span>
+      </button>
+
+      <!-- Student Profile -->
+      <div id="hud-user-profile" class="user-profile-badge" title="Logged in student">
+        <div class="user-avatar" id="user-avatar-initial">S</div>
+        <span class="user-name-text" id="user-display-name">Student</span>
+      </div>
+
+      <!-- HUD Logout Button -->
+      <button id="btn-hud-logout" class="hud-icon-btn" title="Sign out" aria-label="Sign out">
+        <span>🚪</span>
+      </button>
+
+      <!-- Kraftshala Logo -->
+      <a href="https://www.kraftshala.com" target="_blank" rel="noopener noreferrer" class="hud-logo-link" title="Visit Kraftshala">
+        <img src="assets/images/image18.png" alt="Kraftshala" class="hud-brand-logo">
+      </a>
+    </div>
+  </header>
+
+  <!-- Main App Viewport -->
+  <main id="app-viewport">
+
+    <!-- ========================================================
+         SCREEN 1: COVER SCREEN
+         ======================================================== -->
+    <section id="screen-cover" class="screen active screen-cover-layout">
+      <!-- Clean Top Navigation Bar -->
+      <div class="cover-top-bar">
+        <div class="cover-brand-title">
+          <span>Meta Ads Key Metrics</span>
+        </div>
+        <div class="cover-auth-container">
+          <!-- When Logged Out -->
+          <div id="cover-guest-section" class="cover-auth-state">
+            <button id="btn-cover-login" class="btn-cover-auth btn-auth-login">Login / Sign Up</button>
+          </div>
+
+          <!-- When Logged In -->
+          <div id="cover-user-section" class="cover-auth-state hidden">
+            <span class="cover-student-chip">
+              <span class="student-chip-icon">👤</span>
+              <strong id="cover-student-name">Student</strong>
+            </span>
+            <button id="btn-cover-logout" class="btn-cover-auth btn-auth-logout">Log Out</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="cover-canvas">
+        <!-- Floating Doodles -->
+        <div class="doodle doodle-lightbulb" aria-hidden="true">💡</div>
+        <div class="doodle doodle-coffee" aria-hidden="true">☕</div>
+        <div class="doodle doodle-sparkle doodle-sparkle-1" aria-hidden="true">✨</div>
+        <div class="doodle doodle-sparkle doodle-sparkle-2" aria-hidden="true">✨</div>
+
+        <!-- Animated Paper Airplane SVG -->
+        <div class="airplane-flight-path">
+          <svg class="flight-svg" viewBox="0 0 500 200" fill="none">
+            <path id="airplane-dashed-arc" d="M 20 180 Q 200 40 450 60" stroke="#F1AE13" stroke-width="2.5" stroke-dasharray="6 6" />
+          </svg>
+          <div class="paper-plane-icon" id="cover-plane">✈️</div>
+        </div>
+
+        <div class="cover-content">
+          <div class="cover-brand-header">
+            <img src="assets/images/image18.png" alt="Kraftshala School of Business" class="cover-logo-img">
+          </div>
+
+          <h1 class="cover-hero-title">
+            <span class="brand-learnwise">LearnWise</span>
+            <span class="brand-x">✕</span>
+            <span class="brand-kraftshala">Kraftshala</span>
+          </h1>
+
+          <p class="cover-hero-subtitle">
+            Short, focused practice to master key marketing concepts.
+          </p>
+
+          <div class="cover-cta-wrapper">
+            <button id="btn-learn-mode" class="btn-primary-kraft btn-hero">
+              <span>Learn Mode</span>
+              <span class="btn-arrow">→</span>
+            </button>
+          </div>
+
+          <!-- Decorative Notepad Checklist -->
+          <div class="cover-notepad-card">
+            <div class="notepad-spiral">
+              <span></span><span></span><span></span><span></span>
+            </div>
+            <ul class="notepad-items">
+              <li><span class="notepad-check">☑</span> Strategy</li>
+              <li><span class="notepad-check">☑</span> Content</li>
+              <li><span class="notepad-check">☑</span> Ads</li>
+              <li><span class="notepad-check">☑</span> Analytics</li>
+            </ul>
+          </div>
+
+          <!-- Decorative Laptop Graphic -->
+          <div class="cover-laptop-doodle">
+            <div class="laptop-screen">
+              <div class="mini-bar-chart">
+                <span style="height: 35%;"></span>
+                <span style="height: 60%;"></span>
+                <span style="height: 85%;"></span>
+                <span style="height: 100%;"></span>
+              </div>
+            </div>
+            <div class="laptop-base"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         SCREEN 2: INTRO SCREEN
+         ======================================================== -->
+    <section id="screen-intro" class="screen screen-intro-layout">
+      <div class="intro-canvas">
+        <div class="intro-brand-top">
+          <img src="assets/images/image18.png" alt="Kraftshala" class="intro-logo-img">
+        </div>
+
+        <div class="airplane-flight-path intro-path">
+          <svg class="flight-svg" viewBox="0 0 500 200" fill="none">
+            <path d="M 50 160 Q 250 20 480 80" stroke="#F1AE13" stroke-width="2.5" stroke-dasharray="6 6" />
+          </svg>
+          <div class="paper-plane-icon" id="intro-plane">✈️</div>
+        </div>
+
+        <div class="intro-main-box">
+          <span class="intro-eyebrow">Interactive Assessment</span>
+          <h1 class="intro-title">
+            Meta Ads — <span class="highlight-yellow">Crucial Metrics</span>
+          </h1>
+          <p class="intro-desc">
+            Test your understanding of the most important Meta Ads metrics with quick, practical questions and scenario challenges.
+          </p>
+
+          <div class="intro-checklist-preview">
+            <div class="check-chip"><span>✓</span> Impressions</div>
+            <div class="check-chip"><span>✓</span> Reach & Frequency</div>
+            <div class="check-chip"><span>✓</span> Clicks vs Views</div>
+            <div class="check-chip"><span>✓</span> CTR & Conversions</div>
+          </div>
+
+          <div class="intro-action-group">
+            <button id="btn-take-quiz" class="btn-primary-kraft btn-hero">
+              <span>Take the Quiz</span>
+              <span class="btn-arrow">→</span>
+            </button>
+            <p class="intro-footnote">⚡ Earn XP & badges as you solve real advertising scenarios!</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         QUESTIONS 1 TO 11 TEMPLATES
+         ======================================================== -->
+
+    <!-- Q1: Impressions -->
+    <section id="screen-q1" class="screen question-screen">
+      <div class="quiz-card-container">
+        <div class="quiz-header">
+          <div class="quiz-badge">Question 1</div>
+          <h2 class="quiz-question-text">What are Impressions?</h2>
+        </div>
+        <div class="options-container" data-qid="Q1">
+          <button class="option-btn" data-opt="A">
+            <span class="opt-key">A</span>
+            <span class="opt-label">The number of times your ad was delivered (shown) on screen.</span>
+          </button>
+          <button class="option-btn" data-opt="B">
+            <span class="opt-key">B</span>
+            <span class="opt-label">The number of unique people who saw your ad.</span>
+          </button>
+          <button class="option-btn" data-opt="C">
+            <span class="opt-key">C</span>
+            <span class="opt-label">The number of audience you targeted in your Meta campaign.</span>
+          </button>
+          <button class="option-btn" data-opt="D">
+            <span class="opt-key">D</span>
+            <span class="opt-label">The average number of times a unique user saw your ad.</span>
+          </button>
+        </div>
+        <div class="feedback-box hidden" id="feedback-Q1">
+          <div class="feedback-content">
+            <span class="feedback-icon">🎉</span>
+            <span class="feedback-text">Correct! Great start!</span>
+          </div>
+        </div>
+        <div class="quiz-footer">
+          <div class="quiz-footer-doodle">✈️</div>
+          <button class="btn-primary-kraft btn-submit" id="btn-submit-Q1" disabled>Submit Answer →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXP 1: Impressions Explanation -->
+    <section id="screen-exp1" class="screen explanation-screen">
+      <div class="exp-card-container">
+        <div class="exp-header">
+          <span class="exp-badge">Concept Deep Dive</span>
+          <h1 class="exp-title">Impressions</h1>
+          <p class="exp-subtitle">The total number of times your ad was displayed on screen.</p>
+        </div>
+        
+        <div class="exp-body-split">
+          <div class="exp-visual-panel">
+            <h3 class="panel-heading">Timeline Scenario: Daily Delivery</h3>
+            <div class="timeline-chart">
+              <div class="timeline-row">
+                <div class="timeline-person"><span class="avatar-dot priya">👩</span> <strong>Priya</strong></div>
+                <div class="timeline-events">
+                  <span class="delivery-bubble" title="9:05 AM">📱 9:05</span>
+                  <span class="delivery-bubble" title="12:20 PM">📱 12:20</span>
+                  <span class="delivery-bubble" title="6:40 PM">📱 6:40</span>
+                </div>
+                <div class="person-count-tag">3 views</div>
+              </div>
+              <div class="timeline-row">
+                <div class="timeline-person"><span class="avatar-dot aman">👨</span> <strong>Aman</strong></div>
+                <div class="timeline-events">
+                  <span class="delivery-bubble" title="12:10 PM">📱 12:10</span>
+                </div>
+                <div class="person-count-tag">1 view</div>
+              </div>
+              <div class="timeline-row">
+                <div class="timeline-person"><span class="avatar-dot rohit">👦</span> <strong>Rohit</strong></div>
+                <div class="timeline-events">
+                  <span class="delivery-bubble" title="3:30 PM">📱 3:30</span>
+                  <span class="delivery-bubble" title="9:00 PM">📱 9:00</span>
+                </div>
+                <div class="person-count-tag">2 views</div>
+              </div>
+            </div>
+            <div class="total-calc-box">
+              <span>Total Deliveries: 3 + 1 + 2 = <strong>6 Impressions</strong></span>
+            </div>
+          </div>
+
+          <div class="exp-practice-panel">
+            <div class="practice-box">
+              <h4>Quick Scenario Check</h4>
+              <p>How many impressions did Priya, Aman, and Rohit generate combined?</p>
+              <div class="practice-options">
+                <div class="practice-chip">A) 3</div>
+                <div class="practice-chip">B) 5</div>
+                <div class="practice-chip correct-chip">C) 6 (Correct)</div>
+                <div class="practice-chip">D) 2</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="exp-footer">
+          <div class="remember-card">
+            <span class="remember-lamp">💡</span>
+            <div>
+              <strong>Remember:</strong>
+              <span>We count every delivery, even when the same person sees the ad multiple times.</span>
+            </div>
+          </div>
+          <button class="btn-primary-kraft btn-next-exp" id="btn-next-exp1">Next: Reach →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Q2: Reach -->
+    <section id="screen-q2" class="screen question-screen">
+      <div class="quiz-card-container">
+        <div class="quiz-header">
+          <div class="quiz-badge">Question 2</div>
+          <h2 class="quiz-question-text">What is Reach?</h2>
+        </div>
+        <div class="options-container" data-qid="Q2">
+          <button class="option-btn" data-opt="A">
+            <span class="opt-key">A</span>
+            <span class="opt-label">The total number of times your ad was shown.</span>
+          </button>
+          <button class="option-btn" data-opt="B">
+            <span class="opt-key">B</span>
+            <span class="opt-label">The total number of unique people who saw your ad.</span>
+          </button>
+          <button class="option-btn" data-opt="C">
+            <span class="opt-key">C</span>
+            <span class="opt-label">The number of clicks your ad received.</span>
+          </button>
+          <button class="option-btn" data-opt="D">
+            <span class="opt-key">D</span>
+            <span class="opt-label">The number of people who engaged with your ad.</span>
+          </button>
+        </div>
+        <div class="feedback-box hidden" id="feedback-Q2">
+          <div class="feedback-content">
+            <span class="feedback-icon">🎉</span>
+            <span class="feedback-text">Spot on! Reach measures unique individuals.</span>
+          </div>
+        </div>
+        <div class="quiz-footer">
+          <div class="quiz-footer-doodle">✈️</div>
+          <button class="btn-primary-kraft btn-submit" id="btn-submit-Q2" disabled>Submit Answer →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXP 2: Reach Explanation -->
+    <section id="screen-exp2" class="screen explanation-screen">
+      <div class="exp-card-container">
+        <div class="exp-header">
+          <span class="exp-badge">Concept Deep Dive</span>
+          <h1 class="exp-title">Reach</h1>
+          <p class="exp-subtitle">The total number of unique people who saw your ad at least once.</p>
+        </div>
+
+        <div class="exp-body-split">
+          <div class="exp-visual-panel">
+            <h3 class="panel-heading">Unique Individuals vs. Multiple Views</h3>
+            <div class="unique-people-grid">
+              <div class="person-card">
+                <span class="big-avatar">👩</span>
+                <strong>Priya</strong>
+                <span class="sub-label">Saw it 3 times</span>
+                <span class="badge-unique">Counts as 1</span>
+              </div>
+              <div class="person-card">
+                <span class="big-avatar">👨</span>
+                <strong>Aman</strong>
+                <span class="sub-label">Saw it 1 time</span>
+                <span class="badge-unique">Counts as 1</span>
+              </div>
+              <div class="person-card">
+                <span class="big-avatar">👦</span>
+                <strong>Rohit</strong>
+                <span class="sub-label">Saw it 2 times</span>
+                <span class="badge-unique">Counts as 1</span>
+              </div>
+            </div>
+            <div class="reach-summary-callout">
+              <span>Total Unique Viewers = <strong>3 People (Reach)</strong></span>
+            </div>
+          </div>
+
+          <div class="exp-practice-panel">
+            <div class="practice-box">
+              <h4>Reach Calculation Check</h4>
+              <p>In the scenario above with 6 impressions across Priya, Aman, and Rohit, what is the Reach?</p>
+              <div class="practice-options">
+                <div class="practice-chip correct-chip">A) 3 Unique People (Correct)</div>
+                <div class="practice-chip">B) 6 Total Deliveries</div>
+                <div class="practice-chip">C) 1 Account</div>
+                <div class="practice-chip">D) 5 Contacts</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="exp-footer">
+          <div class="remember-card">
+            <span class="remember-lamp">💡</span>
+            <div>
+              <strong>Remember:</strong>
+              <span>Reach counts people, not views. Each unique person is counted only once regardless of ad frequency.</span>
+            </div>
+          </div>
+          <button class="btn-primary-kraft btn-next-exp" id="btn-next-exp2">Next: Frequency →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Q3: Frequency -->
+    <section id="screen-q3" class="screen question-screen">
+      <div class="quiz-card-container">
+        <div class="quiz-header">
+          <div class="quiz-badge">Question 3</div>
+          <h2 class="quiz-question-text">What is Frequency?</h2>
+        </div>
+        <div class="options-container" data-qid="Q3">
+          <button class="option-btn" data-opt="A">
+            <span class="opt-key">A</span>
+            <span class="opt-label">The total number of impressions generated.</span>
+          </button>
+          <button class="option-btn" data-opt="B">
+            <span class="opt-key">B</span>
+            <span class="opt-label">The average number of times each unique person saw your ad (Impressions ÷ Reach).</span>
+          </button>
+          <button class="option-btn" data-opt="C">
+            <span class="opt-key">C</span>
+            <span class="opt-label">The speed at which your budget is consumed daily.</span>
+          </button>
+          <button class="option-btn" data-opt="D">
+            <span class="opt-key">D</span>
+            <span class="opt-label">The number of days an ad set remains actively published.</span>
+          </button>
+        </div>
+        <div class="feedback-box hidden" id="feedback-Q3">
+          <div class="feedback-content">
+            <span class="feedback-icon">🎉</span>
+            <span class="feedback-text">Excellent! Frequency = Impressions ÷ Reach.</span>
+          </div>
+        </div>
+        <div class="quiz-footer">
+          <div class="quiz-footer-doodle">✈️</div>
+          <button class="btn-primary-kraft btn-submit" id="btn-submit-Q3" disabled>Submit Answer →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXP 3: Frequency Explanation -->
+    <section id="screen-exp3" class="screen explanation-screen">
+      <div class="exp-card-container">
+        <div class="exp-header">
+          <span class="exp-badge">Concept Deep Dive</span>
+          <h1 class="exp-title">Frequency</h1>
+          <p class="exp-subtitle">The average number of times each person saw your ad.</p>
+        </div>
+
+        <div class="exp-body-split">
+          <div class="exp-visual-panel">
+            <div class="formula-card">
+              <div class="formula-math">
+                <span class="math-term">Frequency</span>
+                <span class="math-equals">=</span>
+                <div class="math-fraction">
+                  <span class="num">Impressions</span>
+                  <span class="denom">Reach</span>
+                </div>
+              </div>
+              <div class="formula-example">
+                <span class="example-label">Our Scenario:</span>
+                <span class="example-math">6 Impressions ÷ 3 Reach = <strong>2.0 Frequency</strong></span>
+              </div>
+            </div>
+            <div class="frequency-indicator-bar">
+              <div class="freq-tag low">1.0 - 2.0: Fresh Audience</div>
+              <div class="freq-tag med">2.0 - 4.0: High Recall</div>
+              <div class="freq-tag high">5.0+: Potential Ad Fatigue</div>
+            </div>
+          </div>
+
+          <div class="exp-practice-panel">
+            <div class="practice-box">
+              <h4>Frequency Check</h4>
+              <p>If an ad achieves 1,000 Impressions across 500 Reach, what is the ad frequency?</p>
+              <div class="practice-options">
+                <div class="practice-chip">A) 0.5</div>
+                <div class="practice-chip correct-chip">B) 2.0 (Correct: 1000 ÷ 500)</div>
+                <div class="practice-chip">C) 5.0</div>
+                <div class="practice-chip">D) 500</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="exp-footer">
+          <div class="remember-card">
+            <span class="remember-lamp">💡</span>
+            <div>
+              <strong>Remember:</strong>
+              <span>High frequency can mean users are fatigued with your ad; low frequency may mean they haven't noticed it yet.</span>
+            </div>
+          </div>
+          <button class="btn-primary-kraft btn-next-exp" id="btn-next-exp3">Next: Clicks (all) →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Q4: Clicks (all) -->
+    <section id="screen-q4" class="screen question-screen">
+      <div class="quiz-card-container">
+        <div class="quiz-header">
+          <div class="quiz-badge">Question 4</div>
+          <h2 class="quiz-question-text">What does Clicks (all) count?</h2>
+        </div>
+        <div class="options-container" data-qid="Q4">
+          <button class="option-btn" data-opt="A">
+            <span class="opt-key">A</span>
+            <span class="opt-label">Only clicks on the call-to-action button.</span>
+          </button>
+          <button class="option-btn" data-opt="B">
+            <span class="opt-key">B</span>
+            <span class="opt-label">Only link clicks that direct users off Meta to an external website.</span>
+          </button>
+          <button class="option-btn" data-opt="C">
+            <span class="opt-key">C</span>
+            <span class="opt-label">Every single click on the ad, including post likes, comments, shares, profile visits, and link clicks.</span>
+          </button>
+          <button class="option-btn" data-opt="D">
+            <span class="opt-key">D</span>
+            <span class="opt-label">Only clicks made by unique individuals.</span>
+          </button>
+        </div>
+        <div class="feedback-box hidden" id="feedback-Q4">
+          <div class="feedback-content">
+            <span class="feedback-icon">🎉</span>
+            <span class="feedback-text">Nice work! Clicks (all) captures every single tap or click on the ad unit.</span>
+          </div>
+        </div>
+        <div class="quiz-footer">
+          <div class="quiz-footer-doodle">✈️</div>
+          <button class="btn-primary-kraft btn-submit" id="btn-submit-Q4" disabled>Submit Answer →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXP 4: Clicks (all) Explanation -->
+    <section id="screen-exp4" class="screen explanation-screen">
+      <div class="exp-card-container">
+        <div class="exp-header">
+          <span class="exp-badge">Concept Deep Dive</span>
+          <h1 class="exp-title">Clicks (all)</h1>
+          <p class="exp-subtitle">Every click on your ad is counted, whether on the image, headline, or buttons.</p>
+        </div>
+
+        <div class="exp-body-split">
+          <div class="exp-visual-panel">
+            <h3 class="panel-heading">Interactive Ad Unit Breakdown</h3>
+            <div class="ad-mockup-card">
+              <div class="ad-header-row">
+                <div class="ad-page-info">
+                  <div class="ad-page-avatar">🌱</div>
+                  <div>
+                    <strong>Planterie</strong>
+                    <span class="sponsored-tag">Sponsored · 🌐</span>
+                  </div>
+                </div>
+                <span class="tag-click" title="Profile Click">+1 Click</span>
+              </div>
+              <div class="ad-creative-box">
+                <img src="assets/images/image1.png" alt="Ad Creative Plant" class="mockup-img-render">
+                <span class="creative-click-tag" title="Photo expansion click">+1 Click (Expand Photo)</span>
+              </div>
+              <div class="ad-social-row">
+                <span class="social-action">❤️ Like (+1)</span>
+                <span class="social-action">💬 Comment (+1)</span>
+                <span class="social-action">↗️ Share (+1)</span>
+              </div>
+              <div class="ad-cta-row">
+                <span>Free delivery on orders over ₹499</span>
+                <button class="cta-mini-btn">Shop Now (+1 Link Click)</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="exp-practice-panel">
+            <div class="practice-box">
+              <h4>Clicks Scenario Check</h4>
+              <p>A user likes your post, comments, expands the photo, and clicks "Shop Now". How many Clicks (all) does Meta report?</p>
+              <div class="practice-options">
+                <div class="practice-chip">A) 1 Link Click</div>
+                <div class="practice-chip">B) 2 Clicks</div>
+                <div class="practice-chip correct-chip">C) 4 Clicks (all) (Correct)</div>
+                <div class="practice-chip">D) 0 Clicks</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="exp-footer">
+          <div class="remember-card">
+            <span class="remember-lamp">💡</span>
+            <div>
+              <strong>Remember:</strong>
+              <span>Clicks (all) is great for measuring overall engagement, but not all of these clicks visit your destination URL.</span>
+            </div>
+          </div>
+          <button class="btn-primary-kraft btn-next-exp" id="btn-next-exp4">Next: Link Clicks →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Q5: Link Clicks -->
+    <section id="screen-q5" class="screen question-screen">
+      <div class="quiz-card-container">
+        <div class="quiz-header">
+          <div class="quiz-badge">Question 5</div>
+          <h2 class="quiz-question-text">What does Link Clicks count?</h2>
+        </div>
+        <div class="options-container" data-qid="Q5">
+          <button class="option-btn" data-opt="A">
+            <span class="opt-key">A</span>
+            <span class="opt-label">All reactions, comments, and shares on the ad.</span>
+          </button>
+          <button class="option-btn" data-opt="B">
+            <span class="opt-key">B</span>
+            <span class="opt-label">Only clicks that result in an immediate purchase.</span>
+          </button>
+          <button class="option-btn" data-opt="C">
+            <span class="opt-key">C</span>
+            <span class="opt-label">Clicks on links that direct users to select destinations (e.g. website, app store, messaging app).</span>
+          </button>
+          <button class="option-btn" data-opt="D">
+            <span class="opt-key">D</span>
+            <span class="opt-label">The total number of unique people who clicked.</span>
+          </button>
+        </div>
+        <div class="feedback-box hidden" id="feedback-Q5">
+          <div class="feedback-content">
+            <span class="feedback-icon">🎉</span>
+            <span class="feedback-text">Exactly right! Link Clicks specifically drive users to a designated destination.</span>
+          </div>
+        </div>
+        <div class="quiz-footer">
+          <div class="quiz-footer-doodle">✈️</div>
+          <button class="btn-primary-kraft btn-submit" id="btn-submit-Q5" disabled>Submit Answer →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXP 5: Link Clicks Explanation -->
+    <section id="screen-exp5" class="screen explanation-screen">
+      <div class="exp-card-container">
+        <div class="exp-header">
+          <span class="exp-badge">Concept Deep Dive</span>
+          <h1 class="exp-title">Link Clicks</h1>
+          <p class="exp-subtitle">Clicks specifically directed to an advertiser-specified destination.</p>
+        </div>
+
+        <div class="exp-body-split">
+          <div class="exp-visual-panel">
+            <h3 class="panel-heading">Destination Specific Clicks</h3>
+            <div class="link-click-diagram">
+              <div class="source-ad-box">
+                <div class="ad-tag-header">Meta Ad Unit</div>
+                <div class="cta-highlight-target">
+                  <span>👉 "Shop Now" / Link Headline</span>
+                  <span class="badge-link-action">Valid Link Click</span>
+                </div>
+              </div>
+              <div class="arrow-connector">➔ ➔ ➔</div>
+              <div class="destination-web-box">
+                <div class="dest-browser-bar">🌐 https://yourshop.com</div>
+                <div class="dest-page-preview">External Website / App Store</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="exp-practice-panel">
+            <div class="practice-box">
+              <h4>Link Clicks Scenario</h4>
+              <p>If 2 users clicked "Shop Now" and 1 user clicked "Share", how many Link Clicks occurred?</p>
+              <div class="practice-options">
+                <div class="practice-chip">A) 3 Clicks (all)</div>
+                <div class="practice-chip correct-chip">B) 2 Link Clicks (Correct)</div>
+                <div class="practice-chip">C) 1 Conversion</div>
+                <div class="practice-chip">D) 0 Clicks</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="exp-footer">
+          <div class="remember-card">
+            <span class="remember-lamp">💡</span>
+            <div>
+              <strong>Remember:</strong>
+              <span>Link Clicks filter out likes, comments, and profile navigations, focusing on traffic headed to your landing destination.</span>
+            </div>
+          </div>
+          <button class="btn-primary-kraft btn-next-exp" id="btn-next-exp5">Next: Unique Clicks →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Q6: Unique Clicks (all) -->
+    <section id="screen-q6" class="screen question-screen">
+      <div class="quiz-card-container">
+        <div class="quiz-header">
+          <div class="quiz-badge">Question 6</div>
+          <h2 class="quiz-question-text">What is the difference between Clicks (all) and Unique Clicks (all)?</h2>
+        </div>
+        <div class="options-container" data-qid="Q6">
+          <button class="option-btn" data-opt="A">
+            <span class="opt-key">A</span>
+            <span class="opt-label">They are the same metric with different names in Ads Manager.</span>
+          </button>
+          <button class="option-btn" data-opt="B">
+            <span class="opt-key">B</span>
+            <span class="opt-label">Clicks (all) counts only link clicks; Unique Clicks counts all clicks.</span>
+          </button>
+          <button class="option-btn" data-opt="C">
+            <span class="opt-key">C</span>
+            <span class="opt-label">Clicks (all) counts every interaction; Unique Clicks (all) counts the number of unique individuals who clicked.</span>
+          </button>
+          <button class="option-btn" data-opt="D">
+            <span class="opt-key">D</span>
+            <span class="opt-label">Unique Clicks counts clicks that occurred during desktop sessions only.</span>
+          </button>
+        </div>
+        <div class="feedback-box hidden" id="feedback-Q6">
+          <div class="feedback-content">
+            <span class="feedback-icon">🎉</span>
+            <span class="feedback-text">Brilliant! Unique Clicks deduplicates multiple clicks from the same person.</span>
+          </div>
+        </div>
+        <div class="quiz-footer">
+          <div class="quiz-footer-doodle">✈️</div>
+          <button class="btn-primary-kraft btn-submit" id="btn-submit-Q6" disabled>Submit Answer →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXP 6: Unique Clicks Explanation -->
+    <section id="screen-exp6" class="screen explanation-screen">
+      <div class="exp-card-container">
+        <div class="exp-header">
+          <span class="exp-badge">Concept Deep Dive</span>
+          <h1 class="exp-title">Unique Clicks (all)</h1>
+          <p class="exp-subtitle">The number of unique people who performed any click interaction.</p>
+        </div>
+
+        <div class="exp-body-split">
+          <div class="exp-visual-panel">
+            <h3 class="panel-heading">Deduplication in Action</h3>
+            <div class="dedup-visual-card">
+              <div class="dedup-row">
+                <span class="user-avatar-tag">👩 Priya</span>
+                <span class="user-actions-tag">Liked + Clicked Link (2 clicks)</span>
+                <span class="dedup-tag">Counts as 1 Unique Clicker</span>
+              </div>
+              <div class="dedup-row">
+                <span class="user-avatar-tag">👨 Aman</span>
+                <span class="user-actions-tag">Commented + Expanded Photo (2 clicks)</span>
+                <span class="dedup-tag">Counts as 1 Unique Clicker</span>
+              </div>
+              <div class="dedup-row">
+                <span class="user-avatar-tag">👦 Rohit</span>
+                <span class="user-actions-tag">Clicked Link (1 click)</span>
+                <span class="dedup-tag">Counts as 1 Unique Clicker</span>
+              </div>
+            </div>
+            <div class="dedup-comparison-box">
+              <span class="stat-bubble">Total Clicks (all): <strong>5</strong></span>
+              <span class="stat-bubble highlight">Unique Clicks (all): <strong>3</strong></span>
+            </div>
+          </div>
+
+          <div class="exp-practice-panel">
+            <div class="practice-box">
+              <h4>Unique Clicks Check</h4>
+              <p>5 total clicks were made by 3 different people. How many Unique Clicks (all) were registered?</p>
+              <div class="practice-options">
+                <div class="practice-chip">A) 5</div>
+                <div class="practice-chip correct-chip">B) 3 (Correct)</div>
+                <div class="practice-chip">C) 15</div>
+                <div class="practice-chip">D) 2</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="exp-footer">
+          <div class="remember-card">
+            <span class="remember-lamp">💡</span>
+            <div>
+              <strong>Remember:</strong>
+              <span>Just as Reach is to Impressions, Unique Clicks is to Clicks (all).</span>
+            </div>
+          </div>
+          <button class="btn-primary-kraft btn-next-exp" id="btn-next-exp6">Next: Landing Page Views →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Q7: Landing Page Views -->
+    <section id="screen-q7" class="screen question-screen">
+      <div class="quiz-card-container">
+        <div class="quiz-header">
+          <div class="quiz-badge">Question 7</div>
+          <h2 class="quiz-question-text">What does Landing Page Views count?</h2>
+        </div>
+        <div class="options-container" data-qid="Q7">
+          <button class="option-btn" data-opt="A">
+            <span class="opt-key">A</span>
+            <span class="opt-label">The number of times someone clicked any link in your ad.</span>
+          </button>
+          <button class="option-btn" data-opt="B">
+            <span class="opt-key">B</span>
+            <span class="opt-label">The number of people who saw your landing page in search results.</span>
+          </button>
+          <button class="option-btn" data-opt="C">
+            <span class="opt-key">C</span>
+            <span class="opt-label">The number of times a person clicked an ad link and the landing page successfully loaded (Meta Pixel fired).</span>
+          </button>
+          <button class="option-btn" data-opt="D">
+            <span class="opt-key">D</span>
+            <span class="opt-label">The total number of page refreshes made by your internal team.</span>
+          </button>
+        </div>
+        <div class="feedback-box hidden" id="feedback-Q7">
+          <div class="feedback-content">
+            <span class="feedback-icon">🎉</span>
+            <span class="feedback-text">Great job! A landing page view requires the website to successfully load.</span>
+          </div>
+        </div>
+        <div class="quiz-footer">
+          <div class="quiz-footer-doodle">✈️</div>
+          <button class="btn-primary-kraft btn-submit" id="btn-submit-Q7" disabled>Submit Answer →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXP 7: Landing Page Views Explanation -->
+    <section id="screen-exp7" class="screen explanation-screen">
+      <div class="exp-card-container">
+        <div class="exp-header">
+          <span class="exp-badge">Concept Deep Dive</span>
+          <h1 class="exp-title">Landing Page Views</h1>
+          <p class="exp-subtitle">The user didn't just click — the destination page actually opened and loaded.</p>
+        </div>
+
+        <div class="exp-body-split">
+          <div class="exp-visual-panel">
+            <h3 class="panel-heading">The Loading Drop-off (Bounce) Reality</h3>
+            <div class="lpv-flow-diagram">
+              <div class="flow-step">
+                <span class="flow-num">1</span>
+                <strong>3 Link Clicks</strong>
+                <p>3 users tapped the ad link</p>
+              </div>
+              <div class="flow-arrow">➔</div>
+              <div class="flow-step">
+                <span class="flow-num">2</span>
+                <strong>Network / Load Time</strong>
+                <p>Page loading...</p>
+              </div>
+              <div class="flow-arrow">➔</div>
+              <div class="flow-step success-step">
+                <span class="flow-num">3</span>
+                <strong>2 Loaded Views</strong>
+                <p>1 user bounced before load!</p>
+              </div>
+            </div>
+            <div class="lpv-insight-box">
+              <span>⚠️ If Link Clicks are much higher than Landing Page Views, your site is too slow!</span>
+            </div>
+          </div>
+
+          <div class="exp-practice-panel">
+            <div class="practice-box">
+              <h4>Load Check</h4>
+              <p>3 people clicked your ad link. 2 waited for the page to load; 1 closed the tab immediately. How many Landing Page Views are recorded?</p>
+              <div class="practice-options">
+                <div class="practice-chip">A) 3</div>
+                <div class="practice-chip correct-chip">B) 2 (Correct)</div>
+                <div class="practice-chip">C) 1</div>
+                <div class="practice-chip">D) 0</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="exp-footer">
+          <div class="remember-card">
+            <span class="remember-lamp">💡</span>
+            <div>
+              <strong>Remember:</strong>
+              <span>A Landing Page View requires the Meta Pixel to fire on your site. Slow loading sites lose massive traffic here.</span>
+            </div>
+          </div>
+          <button class="btn-primary-kraft btn-next-exp" id="btn-next-exp7">Next: Conversions →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Q8: Conversions -->
+    <section id="screen-q8" class="screen question-screen">
+      <div class="quiz-card-container">
+        <div class="quiz-header">
+          <div class="quiz-badge">Question 8</div>
+          <h2 class="quiz-question-text">What is a Conversion in Meta Ads?</h2>
+        </div>
+        <div class="options-container" data-qid="Q8">
+          <button class="option-btn" data-opt="A">
+            <span class="opt-key">A</span>
+            <span class="opt-label">Any generic click on your ad image.</span>
+          </button>
+          <button class="option-btn" data-opt="B">
+            <span class="opt-key">B</span>
+            <span class="opt-label">When someone watches an ad video for more than 3 seconds.</span>
+          </button>
+          <button class="option-btn" data-opt="C">
+            <span class="opt-key">C</span>
+            <span class="opt-label">The total number of impressions delivered on mobile feeds.</span>
+          </button>
+          <button class="option-btn" data-opt="D">
+            <span class="opt-key">D</span>
+            <span class="opt-label">A specific valuable action a person takes on your website or app that aligns with your campaign goal.</span>
+          </button>
+        </div>
+        <div class="feedback-box hidden" id="feedback-Q8">
+          <div class="feedback-content">
+            <span class="feedback-icon">🎉</span>
+            <span class="feedback-text">Correct! Conversions represent actual business outcomes (purchases, leads, registrations).</span>
+          </div>
+        </div>
+        <div class="quiz-footer">
+          <div class="quiz-footer-doodle">✈️</div>
+          <button class="btn-primary-kraft btn-submit" id="btn-submit-Q8" disabled>Submit Answer →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXP 8: Conversions Explanation -->
+    <section id="screen-exp8" class="screen explanation-screen">
+      <div class="exp-card-container">
+        <div class="exp-header">
+          <span class="exp-badge">Concept Deep Dive</span>
+          <h1 class="exp-title">Conversions</h1>
+          <p class="exp-subtitle">The desired final action that delivers business value.</p>
+        </div>
+
+        <div class="exp-body-split">
+          <div class="exp-visual-panel">
+            <h3 class="panel-heading">Types of Standard Conversions</h3>
+            <div class="conversions-grid">
+              <div class="conv-tile">
+                <span class="tile-icon">🛒</span>
+                <strong>Purchase</strong>
+                <p>E-commerce checkout completed</p>
+              </div>
+              <div class="conv-tile">
+                <span class="tile-icon">📝</span>
+                <strong>Lead Form</strong>
+                <p>Contact details submitted</p>
+              </div>
+              <div class="conv-tile">
+                <span class="tile-icon">📱</span>
+                <strong>App Install</strong>
+                <p>Application downloaded & opened</p>
+              </div>
+              <div class="conv-tile">
+                <span class="tile-icon">💳</span>
+                <strong>Add Payment</strong>
+                <p>Billing info saved</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="exp-practice-panel">
+            <div class="practice-box">
+              <h4>Objective Match</h4>
+              <p>For an e-commerce brand wanting sales, which event represents the true conversion?</p>
+              <div class="practice-options">
+                <div class="practice-chip">A) Link Click</div>
+                <div class="practice-chip correct-chip">B) Order Purchase (Correct)</div>
+                <div class="practice-chip">C) Page Scroll</div>
+                <div class="practice-chip">D) Ad Impression</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="exp-footer">
+          <div class="remember-card">
+            <span class="remember-lamp">💡</span>
+            <div>
+              <strong>Remember:</strong>
+              <span>You define what a conversion is based on your objective. Conversions are what justify advertising spend!</span>
+            </div>
+          </div>
+          <button class="btn-primary-kraft btn-next-exp" id="btn-next-exp8">Next: User Journey Puzzle 🧩 →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         INTERACTIVE USER JOURNEY PUZZLE (SCREEN 25)
+         ======================================================== -->
+    <section id="screen-journey" class="screen journey-screen">
+      <div class="journey-card-container">
+        <div class="journey-header">
+          <div class="journey-badge-pill">Interactive Funnel Puzzle</div>
+          <h1 class="journey-main-title">User Journey: 8-Step Funnel</h1>
+          <p class="journey-subtitle">
+            Drag or tap each metric into its chronological order from initial delivery to business action.
+          </p>
+        </div>
+
+        <!-- 8 Numbered Placement Slots -->
+        <div class="journey-slots-grid" id="journey-slots-grid">
+          <div class="journey-slot" data-slot-num="1" data-expected="Impressions">
+            <div class="slot-badge">Step 1</div>
+            <div class="slot-icon">📢</div>
+            <div class="slot-dropzone" data-pos="1">
+              <span class="dropzone-placeholder">Drop #1 Metric</span>
+            </div>
+            <p class="slot-prompt">The ad was delivered on screen. What does this count as?</p>
+          </div>
+
+          <div class="journey-slot" data-slot-num="2" data-expected="Reach">
+            <div class="slot-badge">Step 2</div>
+            <div class="slot-icon">👥</div>
+            <div class="slot-dropzone" data-pos="2">
+              <span class="dropzone-placeholder">Drop #2 Metric</span>
+            </div>
+            <p class="slot-prompt">The ad was delivered to 5 unique people. What do they represent?</p>
+          </div>
+
+          <div class="journey-slot" data-slot-num="3" data-expected="Frequency">
+            <div class="slot-badge">Step 3</div>
+            <div class="slot-icon">🔄</div>
+            <div class="slot-dropzone" data-pos="3">
+              <span class="dropzone-placeholder">Drop #3 Metric</span>
+            </div>
+            <p class="slot-prompt">What calculates the average number of times each person saw it?</p>
+          </div>
+
+          <div class="journey-slot" data-slot-num="4" data-expected="Clicks (all)">
+            <div class="slot-badge">Step 4</div>
+            <div class="slot-icon">👆</div>
+            <div class="slot-dropzone" data-pos="4">
+              <span class="dropzone-placeholder">Drop #4 Metric</span>
+            </div>
+            <p class="slot-prompt">People interacted (liked, shared, commented). What counts all of these?</p>
+          </div>
+
+          <div class="journey-slot" data-slot-num="5" data-expected="Unique Clicks (all)">
+            <div class="slot-badge">Step 5</div>
+            <div class="slot-icon">👤</div>
+            <div class="slot-dropzone" data-pos="5">
+              <span class="dropzone-placeholder">Drop #5 Metric</span>
+            </div>
+            <p class="slot-prompt">5 clicks came from 3 different people. What counts the 3 people?</p>
+          </div>
+
+          <div class="journey-slot" data-slot-num="6" data-expected="Link Clicks">
+            <div class="slot-badge">Step 6</div>
+            <div class="slot-icon">🔗</div>
+            <div class="slot-dropzone" data-pos="6">
+              <span class="dropzone-placeholder">Drop #6 Metric</span>
+            </div>
+            <p class="slot-prompt">People clicked the "Visit Website" button. What counts these clicks?</p>
+          </div>
+
+          <div class="journey-slot" data-slot-num="7" data-expected="Landing Page Views">
+            <div class="slot-badge">Step 7</div>
+            <div class="slot-icon">🌐</div>
+            <div class="slot-dropzone" data-pos="7">
+              <span class="dropzone-placeholder">Drop #7 Metric</span>
+            </div>
+            <p class="slot-prompt">The page successfully opened and loaded. What counts these visits?</p>
+          </div>
+
+          <div class="journey-slot" data-slot-num="8" data-expected="Conversions">
+            <div class="slot-badge">Step 8</div>
+            <div class="slot-icon">🛒</div>
+            <div class="slot-dropzone" data-pos="8">
+              <span class="dropzone-placeholder">Drop #8 Metric</span>
+            </div>
+            <p class="slot-prompt">People took the valuable business action you wanted them to take.</p>
+          </div>
+        </div>
+
+        <!-- Draggable Metric Cards Pool (Shuffled) -->
+        <div class="journey-cards-pool" id="journey-cards-pool">
+          <div class="journey-chip" draggable="true" data-metric="Link Clicks">
+            <span class="drag-grip">⋮⋮</span> Link Clicks
+          </div>
+          <div class="journey-chip" draggable="true" data-metric="Frequency">
+            <span class="drag-grip">⋮⋮</span> Frequency
+          </div>
+          <div class="journey-chip" draggable="true" data-metric="Conversions">
+            <span class="drag-grip">⋮⋮</span> Conversions
+          </div>
+          <div class="journey-chip" draggable="true" data-metric="Impressions">
+            <span class="drag-grip">⋮⋮</span> Impressions
+          </div>
+          <div class="journey-chip" draggable="true" data-metric="Landing Page Views">
+            <span class="drag-grip">⋮⋮</span> Landing Page Views
+          </div>
+          <div class="journey-chip" draggable="true" data-metric="Unique Clicks (all)">
+            <span class="drag-grip">⋮⋮</span> Unique Clicks (all)
+          </div>
+          <div class="journey-chip" draggable="true" data-metric="Reach">
+            <span class="drag-grip">⋮⋮</span> Reach
+          </div>
+          <div class="journey-chip" draggable="true" data-metric="Clicks (all)">
+            <span class="drag-grip">⋮⋮</span> Clicks (all)
+          </div>
+        </div>
+
+        <div class="journey-footer">
+          <div class="remember-card">
+            <span class="remember-lamp">💡</span>
+            <div>
+              <strong>REMEMBER:</strong>
+              <span>The user journey helps us map what is happening at each stage and, with rates, identify where drop-offs occur.</span>
+            </div>
+          </div>
+          <button class="btn-primary-kraft btn-next-journey" id="btn-next-journey" disabled>
+            Next: CTR Formula →
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Q9: CTR -->
+    <section id="screen-q9" class="screen question-screen">
+      <div class="quiz-card-container">
+        <div class="quiz-header">
+          <div class="quiz-badge">Question 9</div>
+          <h2 class="quiz-question-text">How is Click-Through Rate (CTR) calculated?</h2>
+        </div>
+        <div class="options-container" data-qid="Q9">
+          <button class="option-btn" data-opt="A">
+            <span class="opt-key">A</span>
+            <span class="opt-label">(Impressions ÷ Clicks) × 100</span>
+          </button>
+          <button class="option-btn" data-opt="B">
+            <span class="opt-key">B</span>
+            <span class="opt-label">(Clicks ÷ Impressions) × 100</span>
+          </button>
+          <button class="option-btn" data-opt="C">
+            <span class="opt-key">C</span>
+            <span class="opt-label">(Conversions ÷ Impressions) × 100</span>
+          </button>
+          <button class="option-btn" data-opt="D">
+            <span class="opt-key">D</span>
+            <span class="opt-label">Clicks × Impressions</span>
+          </button>
+        </div>
+        <div class="feedback-box hidden" id="feedback-Q9">
+          <div class="feedback-content">
+            <span class="feedback-icon">🎉</span>
+            <span class="feedback-text">Spot on! CTR = (Clicks ÷ Impressions) × 100.</span>
+          </div>
+        </div>
+        <div class="quiz-footer">
+          <div class="quiz-footer-doodle">✈️</div>
+          <button class="btn-primary-kraft btn-submit" id="btn-submit-Q9" disabled>Submit Answer →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXP 9: CTR Explanation -->
+    <section id="screen-exp9" class="screen explanation-screen">
+      <div class="exp-card-container">
+        <div class="exp-header">
+          <span class="exp-badge">Concept Deep Dive</span>
+          <h1 class="exp-title">Click-Through Rate (CTR)</h1>
+          <p class="exp-subtitle">The percentage of impressions that led to a click.</p>
+        </div>
+
+        <div class="exp-body-split">
+          <div class="exp-visual-panel">
+            <div class="formula-card">
+              <div class="formula-math">
+                <span class="math-term">CTR</span>
+                <span class="math-equals">=</span>
+                <div class="math-fraction">
+                  <span class="num">Clicks</span>
+                  <span class="denom">Impressions</span>
+                </div>
+                <span class="math-times">× 100</span>
+              </div>
+              <div class="formula-example">
+                <span class="example-label">Benchmark Guide:</span>
+                <span class="example-math">Average Feed Ad CTR: <strong>0.90% - 1.50%</strong></span>
+              </div>
+            </div>
+            <div class="ctr-meter-box">
+              <div class="meter-bar">
+                <div class="meter-fill" style="width: 65%;"></div>
+              </div>
+              <div class="meter-labels">
+                <span>0.5% (Low)</span>
+                <span>1.2% (Good)</span>
+                <span>2.5%+ (Outstanding)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="exp-practice-panel">
+            <div class="practice-box">
+              <h4>CTR Calculation Check</h4>
+              <p>Your ad generated 10 clicks out of 500 impressions. What is the CTR?</p>
+              <div class="practice-options">
+                <div class="practice-chip correct-chip">A) 2% ((10 ÷ 500) × 100) (Correct)</div>
+                <div class="practice-chip">B) 0.02%</div>
+                <div class="practice-chip">C) 5%</div>
+                <div class="practice-chip">D) 20%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="exp-footer">
+          <div class="remember-card">
+            <span class="remember-lamp">💡</span>
+            <div>
+              <strong>Remember:</strong>
+              <span>CTR tells you how effective your creative and copy are at stopping thumbs and generating interest.</span>
+            </div>
+          </div>
+          <button class="btn-primary-kraft btn-next-exp" id="btn-next-exp9">Next: Conversion Rate (CVR) →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Q10: CVR -->
+    <section id="screen-q10" class="screen question-screen">
+      <div class="quiz-card-container">
+        <div class="quiz-header">
+          <div class="quiz-badge">Question 10</div>
+          <h2 class="quiz-question-text">How is Conversion Rate (CVR) calculated?</h2>
+        </div>
+        <div class="options-container" data-qid="Q10">
+          <button class="option-btn" data-opt="A">
+            <span class="opt-key">A</span>
+            <span class="opt-label">(Conversions ÷ Impressions) × 100</span>
+          </button>
+          <button class="option-btn" data-opt="B">
+            <span class="opt-key">B</span>
+            <span class="opt-label">(Conversions ÷ Total Clicks) × 100</span>
+          </button>
+          <button class="option-btn" data-opt="C">
+            <span class="opt-key">C</span>
+            <span class="opt-label">(Total Clicks ÷ Conversions) × 100</span>
+          </button>
+          <button class="option-btn" data-opt="D">
+            <span class="opt-key">D</span>
+            <span class="opt-label">Conversions × Total Spend</span>
+          </button>
+        </div>
+        <div class="feedback-box hidden" id="feedback-Q10">
+          <div class="feedback-content">
+            <span class="feedback-icon">🎉</span>
+            <span class="feedback-text">Spot on! CVR = (Conversions ÷ Total Clicks) × 100.</span>
+          </div>
+        </div>
+        <div class="quiz-footer">
+          <div class="quiz-footer-doodle">✈️</div>
+          <button class="btn-primary-kraft btn-submit" id="btn-submit-Q10" disabled>Submit Answer →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXP 10: CVR Explanation -->
+    <section id="screen-exp10" class="screen explanation-screen">
+      <div class="exp-card-container">
+        <div class="exp-header">
+          <span class="exp-badge">Concept Deep Dive</span>
+          <h1 class="exp-title">Conversion Rate (CVR)</h1>
+          <p class="exp-subtitle">The percentage of clicks that turned into valuable conversions.</p>
+        </div>
+
+        <div class="exp-body-split">
+          <div class="exp-visual-panel">
+            <div class="formula-card">
+              <div class="formula-math">
+                <span class="math-term">CVR</span>
+                <span class="math-equals">=</span>
+                <div class="math-fraction">
+                  <span class="num">Conversions</span>
+                  <span class="denom">Clicks</span>
+                </div>
+                <span class="math-times">× 100</span>
+              </div>
+              <div class="formula-example">
+                <span class="example-label">Funnel Diagnostic:</span>
+                <span class="example-math">High CTR + Low CVR = <strong>Landing Page / Offer Problem!</strong></span>
+              </div>
+            </div>
+            <div class="funnel-diagnostic-box">
+              <div class="funnel-bar feed">Creative Stops Scroll (CTR)</div>
+              <div class="funnel-bar landing">Landing Page Convinces User (CVR)</div>
+            </div>
+          </div>
+
+          <div class="exp-practice-panel">
+            <div class="practice-box">
+              <h4>CVR Calculation Check</h4>
+              <p>Your ad brought 20 clicks to your website resulting in 1 completed purchase. What is the CVR?</p>
+              <div class="practice-options">
+                <div class="practice-chip">A) 1%</div>
+                <div class="practice-chip correct-chip">B) 5% ((1 ÷ 20) × 100) (Correct)</div>
+                <div class="practice-chip">C) 20%</div>
+                <div class="practice-chip">D) 0.05%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="exp-footer">
+          <div class="remember-card">
+            <span class="remember-lamp">💡</span>
+            <div>
+              <strong>Remember:</strong>
+              <span>CVR evaluates the quality of your website and offer, while CTR evaluates the ad creative.</span>
+            </div>
+          </div>
+          <button class="btn-primary-kraft btn-next-exp" id="btn-next-exp10">Next: CPC & CPA →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Q11: CPC & CPA -->
+    <section id="screen-q11" class="screen question-screen">
+      <div class="quiz-card-container">
+        <div class="quiz-header">
+          <div class="quiz-badge">Question 11</div>
+          <h2 class="quiz-question-text">How do CPC and CPA evaluate campaign efficiency?</h2>
+        </div>
+        <div class="options-container" data-qid="Q11">
+          <button class="option-btn" data-opt="A">
+            <span class="opt-key">A</span>
+            <span class="opt-label">CPC and CPA both measure the exact same cost per impression.</span>
+          </button>
+          <button class="option-btn" data-opt="B">
+            <span class="opt-key">B</span>
+            <span class="opt-label">CPC measures cost per traffic click; CPA measures cost per acquired conversion goal.</span>
+          </button>
+          <button class="option-btn" data-opt="C">
+            <span class="opt-key">C</span>
+            <span class="opt-label">CPC measures frequency efficiency; CPA measures reach efficiency.</span>
+          </button>
+          <button class="option-btn" data-opt="D">
+            <span class="opt-key">D</span>
+            <span class="opt-label">They are only used in non-profit awareness campaigns.</span>
+          </button>
+        </div>
+        <div class="feedback-box hidden" id="feedback-Q11">
+          <div class="feedback-content">
+            <span class="feedback-icon">🎉</span>
+            <span class="feedback-text">Spot on! CPC measures traffic cost, while CPA measures actual customer acquisition cost.</span>
+          </div>
+        </div>
+        <div class="quiz-footer">
+          <div class="quiz-footer-doodle">✈️</div>
+          <button class="btn-primary-kraft btn-submit" id="btn-submit-Q11" disabled>Submit Answer →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXP 11: CPC & CPA Explanation -->
+    <section id="screen-exp11" class="screen explanation-screen">
+      <div class="exp-card-container">
+        <div class="exp-header">
+          <span class="exp-badge">Final Concept</span>
+          <h1 class="exp-title">CPC (Cost per Click) and CPA (Cost per Action)</h1>
+          <p class="exp-subtitle">CPC is what we pay to get one click; CPA is what we pay to acquire one conversion.</p>
+        </div>
+
+        <div class="exp-body-split">
+          <div class="cost-metric-card cpc-card">
+            <div class="cost-num-badge">1</div>
+            <h3>CPC (Cost per Click)</h3>
+            <p>Cost paid to Meta for every click on our ad unit.</p>
+            <div class="cost-formula">
+              <strong>CPC = Spend ÷ Clicks</strong>
+            </div>
+            <div class="cost-example-pill">
+              If spend is ₹500 for 100 clicks: <strong>₹5 per click</strong>
+            </div>
+          </div>
+
+          <div class="cost-metric-card cpa-card">
+            <div class="cost-num-badge">2</div>
+            <h3>CPA (Cost per Action)</h3>
+            <p>Cost paid to acquire one conversion (desired business action).</p>
+            <div class="cost-formula">
+              <strong>CPA = Spend ÷ Conversions</strong>
+            </div>
+            <div class="cost-example-pill">
+              If spend is ₹1,000 for 20 conversions: <strong>₹50 per conversion</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="exp-footer">
+          <div class="remember-card">
+            <span class="remember-lamp">💡</span>
+            <div>
+              <strong>REMEMBER:</strong>
+              <span>Everything in the user journey comes at a cost. Manage your funnel to keep CPA profitable!</span>
+            </div>
+          </div>
+          <button class="btn-primary-kraft btn-finish-quiz" id="btn-finish-quiz">
+            Finish & View Results 🏆
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         SCREEN 26: FINAL GAMIFIED PERFORMANCE REPORT
+         ======================================================== -->
+    <section id="screen-report" class="screen report-screen">
+      <div class="report-canvas">
+        <div class="report-header">
+          <div class="confetti-burst" id="confetti-burst"></div>
+          <span class="report-badge">Assessment Completed</span>
+          <h1 class="report-main-title">Quiz Complete! 🎉</h1>
+          <p class="report-subtitle" id="report-personalized-greeting">
+            Here's how you performed on Meta Ads Key Metrics:
+          </p>
+        </div>
+
+        <!-- Score Ring & Percentage -->
+        <div class="report-score-hero">
+          <div class="score-ring-wrapper">
+            <svg class="score-ring-svg" viewBox="0 0 140 140">
+              <circle class="score-ring-bg" cx="70" cy="70" r="58"></circle>
+              <circle id="score-ring-bar" class="score-ring-bar" cx="70" cy="70" r="58"></circle>
+            </svg>
+            <div class="score-ring-content">
+              <span id="score-num-display" class="score-big-num">0</span>
+              <span class="score-out-of">out of 11</span>
+            </div>
+          </div>
+          <div class="score-text-summary">
+            <h2 id="score-percentage-text" class="score-pct">0%</h2>
+            <p id="score-verdict" class="score-verdict-tag">Calculating...</p>
+          </div>
+        </div>
+
+        <!-- 3 Gamification Stat Cards (Duolingo Style) -->
+        <div class="gamified-stats-row">
+          <div class="stat-card stat-card-xp">
+            <span class="stat-card-icon">⚡</span>
+            <div class="stat-card-data">
+              <span class="stat-card-label">TOTAL XP</span>
+              <span id="final-xp-stat" class="stat-card-val">0</span>
+            </div>
+          </div>
+
+          <div class="stat-card stat-card-combo">
+            <span class="stat-card-icon">🔥</span>
+            <div class="stat-card-data">
+              <span class="stat-card-label">BEST STREAK</span>
+              <span id="final-combo-stat" class="stat-card-val">0</span>
+            </div>
+          </div>
+
+          <div class="stat-card stat-card-accuracy">
+            <span class="stat-card-icon">🎯</span>
+            <div class="stat-card-data">
+              <span class="stat-card-label">ACCURACY</span>
+              <span id="final-accuracy-stat" class="stat-card-val">0%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Achievement Badges -->
+        <div class="achievements-section">
+          <h3 class="section-title">Earned Badges</h3>
+          <div class="badges-rack" id="badges-rack">
+            <!-- Dynamic Badges -->
+          </div>
+        </div>
+
+        <!-- Strong & Weak Topic Areas -->
+        <div class="diagnostics-split-row">
+          <div class="diag-column diag-strong">
+            <div class="diag-header">
+              <span class="diag-icon">💪</span>
+              <h4>Strong Areas</h4>
+            </div>
+            <ul id="strong-topics-list" class="diag-topics-list">
+              <!-- Dynamically populated -->
+            </ul>
+          </div>
+
+          <div class="diag-column diag-weak">
+            <div class="diag-header">
+              <span class="diag-icon">📚</span>
+              <h4>Areas to Revisit</h4>
+            </div>
+            <ul id="weak-topics-list" class="diag-topics-list">
+              <!-- Dynamically populated -->
+            </ul>
+          </div>
+        </div>
+
+        <!-- ========================================================
+             LEADERBOARD SECTION (Scores & Highest Streak)
+             ======================================================== -->
+        <div class="leaderboard-section">
+          <div class="leaderboard-header-row">
+            <div class="leaderboard-title-group">
+              <span class="leaderboard-trophy-icon">🏆</span>
+              <div>
+                <h3 class="leaderboard-title">Student Leaderboard</h3>
+                <p class="leaderboard-subtitle">Ranked by total XP points scored across students</p>
+              </div>
+            </div>
+
+            <!-- Global Highest Streak Callout Pill -->
+            <div class="global-streak-badge" id="global-streak-badge">
+              <span class="streak-flame-icon">🔥</span>
+              <div class="global-streak-content">
+                <span class="global-streak-label">ALL-TIME HIGHEST STREAK</span>
+                <span class="global-streak-value" id="global-highest-streak">0 in a row</span>
+                <span class="global-streak-holder" id="global-streak-holder">No records yet</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Leaderboard Table Container -->
+          <div class="leaderboard-card">
+            <div class="leaderboard-table-header">
+              <span class="th-cell th-rank">Rank</span>
+              <span class="th-cell th-student">Student Name</span>
+              <span class="th-cell th-xp">Score (XP)</span>
+              <span class="th-cell th-streak">Best Streak</span>
+              <span class="th-cell th-accuracy">Accuracy</span>
+            </div>
+            <div class="leaderboard-table-body" id="leaderboard-table-body">
+              <div class="leaderboard-loading-state">
+                <span class="loading-spinner"></span>
+                <span>Loading latest student rankings...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="report-actions-row">
+          <button id="btn-review-weak-areas" class="btn-secondary-kraft">
+            <span>Review Weak Areas</span>
+          </button>
+          <button id="btn-retake-quiz" class="btn-primary-kraft">
+            <span>Retake Quiz 🔄</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================
+       MODAL 1: AUTHENTICATION MODAL (Name & Password)
+       ======================================================== -->
+  <div id="auth-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="modal-box auth-box">
+      <div class="auth-box-header">
+        <img src="assets/images/image18.png" alt="Kraftshala" class="auth-brand-logo">
+        <h2 id="auth-heading">Sign In to Continue</h2>
+        <p class="auth-desc">Track your scores, XP, and learning progress.</p>
+      </div>
+
+      <div class="auth-tab-bar">
+        <button id="tab-login" class="auth-tab-btn active">Sign In</button>
+        <button id="tab-signup" class="auth-tab-btn">Create Account</button>
+      </div>
+
+      <form id="auth-form" class="auth-form-body">
+        <div class="form-field">
+          <label for="input-student-name">Student Name</label>
+          <input type="text" id="input-student-name" placeholder="e.g. Priya Sharma" required autocomplete="name">
+        </div>
+
+        <div class="form-field">
+          <label for="input-password">Password</label>
+          <input type="password" id="input-password" placeholder="At least 6 characters" required minlength="6" autocomplete="current-password">
+        </div>
+
+        <div id="auth-error-banner" class="auth-alert hidden"></div>
+
+        <button type="submit" id="btn-auth-submit" class="btn-primary-kraft btn-block">
+          <span>Sign In</span> →
+        </button>
+      </form>
+      <button id="btn-cancel-auth" class="btn-link-cancel">Cancel and return</button>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL 2: NON-DESTRUCTIVE REVIEW WEAK AREAS
+       ======================================================== -->
+  <div id="review-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="modal-box review-box">
+      <div class="review-box-header">
+        <div class="review-title-group">
+          <span class="review-emoji">📖</span>
+          <h2>Review Weak Areas</h2>
+        </div>
+        <button id="btn-close-review" class="modal-close-icon" aria-label="Close">✕</button>
+      </div>
+
+      <div class="review-scroll-body" id="review-cards-container">
+        <!-- Dynamically injected review cards -->
+      </div>
+
+      <div class="review-box-footer">
+        <button id="btn-finish-review" class="btn-primary-kraft">Got it! Back to Results</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="api-client.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
+

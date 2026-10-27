@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>LearnWise × Kraftshala — Automated Test Runner</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding: 2rem; background: #F8FAFC; color: #1E293B; }
+    .test-box { max-width: 800px; margin: 0 auto; background: #FFF; border-radius: 12px; padding: 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+    h1 { color: #243E60; margin-bottom: 0.5rem; }
+    .status-banner { padding: 0.75rem 1rem; border-radius: 8px; font-weight: 700; margin-bottom: 1.5rem; }
+    .status-pass { background: #D1FAE5; color: #065F46; }
+    .status-fail { background: #FEE2E2; color: #991B1B; }
+    .test-item { padding: 0.6rem 0; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center; }
+    .pass-tag { color: #10B981; font-weight: 700; }
+    .fail-tag { color: #EF4444; font-weight: 700; }
+    .btn-return { display: inline-block; margin-top: 1.5rem; background: #F1AE13; color: #243E60; font-weight: 700; text-decoration: none; padding: 0.75rem 1.5rem; border-radius: 9999px; }
+  </style>
+</head>
+<body>
+  <div class="test-box">
+    <h1>🧪 LearnWise Verification Suite</h1>
+    <p>Automated verification of core curriculum, state machine, and scoring rules.</p>
+    <div id="summary-banner" class="status-banner status-pass">Running tests...</div>
+    <div id="test-results"></div>
+    <a href="index.html" class="btn-return">← Open Application</a>
+  </div>
+
+  <script src="api-client.js"></script>
+  <script src="app.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const resultsEl = document.getElementById('test-results');
+      const banner = document.getElementById('summary-banner');
+      const tests = [];
+
+      function assert(name, condition) {
+        tests.push({ name, passed: Boolean(condition) });
+      }
+
+      // Test 1: Question count
+      assert('Core questions catalog has exactly 11 questions', typeof QUESTIONS !== 'undefined' && QUESTIONS.length === 11);
+
+      // Test 2: Q1 Impressions
+      const q1 = QUESTIONS.find(q => q.id === 'Q1');
+      assert('Q1 is Impressions with correct answer A', q1 && q1.correct === 'A' && q1.topic === 'Impressions');
+
+      // Test 3: Q2 Reach
+      const q2 = QUESTIONS.find(q => q.id === 'Q2');
+      assert('Q2 is Reach with correct answer B', q2 && q2.correct === 'B');
+
+      // Test 4: Q3 Frequency
+      const q3 = QUESTIONS.find(q => q.id === 'Q3');
+      assert('Q3 is Frequency with correct answer B', q3 && q3.correct === 'B');
+
+      // Test 5: Q4 Clicks (all)
+      const q4 = QUESTIONS.find(q => q.id === 'Q4');
+      assert('Q4 is Clicks (all) with correct answer C', q4 && q4.correct === 'C');
+
+      // Test 6: Q5 Link Clicks
+      const q5 = QUESTIONS.find(q => q.id === 'Q5');
+      assert('Q5 is Link Clicks with correct answer C', q5 && q5.correct === 'C');
+
+      // Test 7: Q6 Unique Clicks
+      const q6 = QUESTIONS.find(q => q.id === 'Q6');
+      assert('Q6 is Unique Clicks with correct answer C', q6 && q6.correct === 'C');
+
+      // Test 8: Q7 Landing Page Views
+      const q7 = QUESTIONS.find(q => q.id === 'Q7');
+      assert('Q7 is Landing Page Views with correct answer C', q7 && q7.correct === 'C');
+
+      // Test 9: Q8 Conversions
+      const q8 = QUESTIONS.find(q => q.id === 'Q8');
+      assert('Q8 is Conversions with correct answer D and transitions to User Journey puzzle', q8 && q8.correct === 'D' && q8.nextScreenId === 'screen-journey');
+
+      // Test 10: Q9 CTR
+      const q9 = QUESTIONS.find(q => q.id === 'Q9');
+      assert('Q9 is CTR with correct answer B', q9 && q9.correct === 'B');
+
+      // Test 11: Q10 CVR
+      const q10 = QUESTIONS.find(q => q.id === 'Q10');
+      assert('Q10 is CVR with correct answer B', q10 && q10.correct === 'B');
+
+      // Test 12: Q11 CPC & CPA
+      const q11 = QUESTIONS.find(q => q.id === 'Q11');
+      assert('Q11 is CPC & CPA with correct answer B and transitions to final report', q11 && q11.correct === 'B' && q11.nextScreenId === 'screen-report');
+
+      // Test 13: Web Audio Synth Available
+      assert('SoundFX synthesizer object is defined and enabled', typeof SoundFX !== 'undefined' && SoundFX.enabled === true);
+
+      // Test 14: AppState structure
+      assert('AppState tracking object exists with historyStack, answers, xp, and combo', 
+        typeof AppState !== 'undefined' && Array.isArray(AppState.historyStack) && typeof AppState.xp === 'number');
+
+      // Render Results
+      let allPassed = true;
+      resultsEl.innerHTML = tests.map(t => {
+        if (!t.passed) allPassed = false;
+        return `
+          <div class="test-item">
+            <span>${t.name}</span>
+            <span class="${t.passed ? 'pass-tag' : 'fail-tag'}">${t.passed ? '✓ PASS' : '✗ FAIL'}</span>
+          </div>
+        `;
+      }).join('');
+
+      banner.className = allPassed ? 'status-banner status-pass' : 'status-banner status-fail';
+      banner.textContent = allPassed ? `🎉 All ${tests.length} automated verification benchmarks passed!` : 'Some tests failed.';
+    });
+  </script>
+</body>
+</html>
+

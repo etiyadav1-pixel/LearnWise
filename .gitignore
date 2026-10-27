@@ -1,0 +1,15 @@
+# Environment Variables - Keep Secret!
+.env
+.env.local
+.env.*.local
+
+# Node modules
+node_modules/
+
+# Local databases & logs
+local_db.json
+*.log
+
+# System files
+.DS_Store
+Thumbs.db
