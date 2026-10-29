@@ -652,16 +652,10 @@ function setupQuestionScreens() {
       // Convert Submit Button into "Continue to Explanation →"
       submitBtn.textContent = 'Continue to Explanation →';
       submitBtn.disabled = false;
+      submitBtn.classList.add('pulse-active');
       submitBtn.onclick = () => {
         navigateTo(q.expId);
       };
-
-      // Auto-advance after 1.8 seconds if user doesn't click
-      setTimeout(() => {
-        if (AppState.currentScreen === q.screenId) {
-          navigateTo(q.expId);
-        }
-      }, 2000);
     });
   });
 
@@ -1301,6 +1295,7 @@ function setupRetakeButton() {
       if (submitBtn) {
         submitBtn.disabled = true;
         submitBtn.textContent = 'Submit Answer →';
+        submitBtn.classList.remove('pulse-active');
       }
       const feedbackBox = qScreen.querySelector('.feedback-box');
       if (feedbackBox) {
