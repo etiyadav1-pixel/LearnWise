@@ -696,6 +696,71 @@ function setupQuestionScreens() {
 }
 
 // ============================================================
+// 6B. INTERACTIVE EXPLANATION PRACTICE CHECK
+// ============================================================
+function setupExplanationPractice() {
+  const practiceBoxes = document.querySelectorAll('.practice-box');
+  practiceBoxes.forEach((box) => {
+    const chips = box.querySelectorAll('.practice-chip');
+    const feedback = box.querySelector('.practice-feedback');
+
+    chips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        if (box.dataset.answered === 'true') return; // already answered
+        box.dataset.answered = 'true';
+
+        // Lock all options in this box
+        chips.forEach((c) => c.classList.add('locked'));
+
+        const isCorrect = chip.getAttribute('data-correct') === 'true';
+
+        if (isCorrect) {
+          chip.classList.add('correct-chip');
+          const checkIcon = document.createElement('span');
+          checkIcon.className = 'practice-result-icon';
+          checkIcon.textContent = ' ✓';
+          chip.appendChild(checkIcon);
+
+          if (feedback) {
+            feedback.className = 'practice-feedback feedback-correct';
+            feedback.innerHTML = '<span>🎉</span> <span><strong>Correct!</strong> Great calculation.</span>';
+            feedback.classList.remove('hidden');
+          }
+
+          SoundFX.correct();
+          awardXP(10, 'Practice Check Bonus');
+        } else {
+          chip.classList.add('wrong-chip');
+          const crossIcon = document.createElement('span');
+          crossIcon.className = 'practice-result-icon';
+          crossIcon.textContent = ' ✗';
+          chip.appendChild(crossIcon);
+
+          // Reveal the correct option in green
+          chips.forEach((c) => {
+            if (c.getAttribute('data-correct') === 'true') {
+              c.classList.add('correct-chip');
+              const rightIcon = document.createElement('span');
+              rightIcon.className = 'practice-result-icon';
+              rightIcon.textContent = ' (Correct)';
+              c.appendChild(rightIcon);
+            }
+          });
+
+          if (feedback) {
+            feedback.className = 'practice-feedback feedback-wrong';
+            feedback.innerHTML = '<span>💡</span> <span><strong>Not quite!</strong> The correct answer is highlighted in green.</span>';
+            feedback.classList.remove('hidden');
+          }
+
+          SoundFX.incorrect();
+        }
+      });
+    });
+  });
+}
+
+// ============================================================
 // 7. USER JOURNEY 8-METRIC PUZZLE (SCREEN 25)
 // ============================================================
 function setupUserJourneyPuzzle() {
@@ -1309,6 +1374,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Setup Systems
   setupAuthSystem();
   setupQuestionScreens();
+  setupExplanationPractice();
   setupUserJourneyPuzzle();
   setupReviewModal();
   setupRetakeButton();
