@@ -11,13 +11,15 @@ echo  Repository: https://github.com/etiyadav1-pixel/LearnWise.git
 echo ========================================================
 echo.
 
+git add .
+git commit -m "fix: Resolve Cannot GET / error by configuring static root and Vercel routing" 2>nul
 git push -u origin main
 
 if %ERRORLEVEL% EQU 0 (
     echo.
     echo ========================================================
     echo  SUCCESS! Code pushed to GitHub successfully!
-    echo  Next Step: Open vercel.com and import this repository!
+    echo  Vercel will automatically redeploy the fix in ~30 seconds!
     echo ========================================================
 ) else (
     echo.

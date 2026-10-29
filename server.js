@@ -535,7 +535,65 @@ app.get('/api/student-progress', async (req, res) => {
   }
 });
 
-// 7. HEALTH CHECK
+// 7. LEADERBOARD (Ranked by XP descending with highest streak)
+app.get('/api/leaderboard', async (req, res) => {
+  try {
+    if (supabase) {
+      const { data: users, error } = await supabase.auth.admin.listUsers({ perPage: 100 });
+      if (error) throw error;
+
+      let highestStreak = 0;
+      let highestHolder = 'No records yet';
+
+      const leaderboard = (users.users || []).map(u => {
+        const meta = u.user_metadata || {};
+        let streak = meta.best_streak || meta.best_combo || 0;
+        if (Array.isArray(meta.attempts)) {
+          meta.attempts.forEach(att => {
+            if (att.best_combo && att.best_combo > streak) streak = att.best_combo;
+          });
+        }
+
+        const studentName = meta.student_name || (u.email ? u.email.split('@')[0] : 'Student');
+        if (streak > highestStreak) {
+          highestStreak = streak;
+          highestHolder = studentName;
+        }
+
+        return {
+          student_id: u.id,
+          student_name: studentName,
+          total_xp: meta.total_xp || 0,
+          best_streak: streak,
+          percentage: meta.best_percentage || 0,
+          total_attempts: meta.total_attempts || 0
+        };
+      });
+
+      leaderboard.sort((a, b) => b.total_xp - a.total_xp || b.best_streak - a.best_streak);
+
+      return res.json({
+        leaderboard,
+        highest_streak: {
+          streak: highestStreak,
+          holder: highestHolder
+        }
+      });
+    } else {
+      const db = getLocalDb();
+      const results = db.quiz_results || [];
+      return res.json({
+        leaderboard: results,
+        highest_streak: { streak: 0, holder: 'None yet' }
+      });
+    }
+  } catch (error) {
+    console.error('Leaderboard error:', error);
+    res.json({ leaderboard: [], highest_streak: { streak: 0, holder: 'No records yet' } });
+  }
+});
+
+// 8. HEALTH CHECK
 app.get('/api/health', async (req, res) => {
   let dbActive = false;
   if (supabase) {
@@ -556,11 +614,27 @@ app.get('/api/health', async (req, res) => {
   });
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`=======================================================`);
-  console.log(`LearnWise × Kraftshala Server running on port ${PORT}`);
-  console.log(`Access the application at: http://localhost:${PORT}`);
-  console.log(`=======================================================`);
+// 9. SERVE FRONTEND (Explicit root handler and SPA fallback)
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
+
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api/')) {
+    return res.status(404).json({ error: 'Endpoint not found' });
+  }
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// Start server
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => {
+    console.log(`=======================================================`);
+    console.log(`LearnWise × Kraftshala Server running on port ${PORT}`);
+    console.log(`Access the application at: http://localhost:${PORT}`);
+    console.log(`=======================================================`);
+  });
+}
+
+module.exports = app;
 
