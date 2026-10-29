@@ -4,7 +4,7 @@
  */
 
 const SUPABASE_URL = process.env.SUPABASE_URL || 'https://crudeeqziwlsdhejyqwz.supabase.co';
-const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_KEY;
+const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNydWRlZXF6aXdsc2RoZWp5cXd6Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc5Mjk5NDY3MywiZXhwIjoyMTA4NTcwNjczfQ.AOpuvY8n4M-cgxxU7xedtl99py27QE2vsgvF7sTJ_ho';
 
 function getEmailSlug(name) {
   let clean = (name || '').trim().toLowerCase().replace(/[^a-z0-9]/g, '.');
@@ -29,6 +29,22 @@ module.exports = async function handler(req, res) {
   // Parse path
   const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
   const pathname = url.pathname;
+
+  // Safe body parsing for Vercel
+  let parsedBody = req.body || {};
+  if (typeof parsedBody === 'string') {
+    try { parsedBody = JSON.parse(parsedBody); } catch (e) { parsedBody = {}; }
+  } else if (!req.body && req.method === 'POST') {
+    try {
+      const buffers = [];
+      for await (const chunk of req) {
+        buffers.push(chunk);
+      }
+      const raw = Buffer.concat(buffers).toString();
+      if (raw) parsedBody = JSON.parse(raw);
+    } catch (e) { parsedBody = {}; }
+  }
+  req.body = parsedBody;
 
   const authHeaders = {
     'apikey': SUPABASE_KEY,
