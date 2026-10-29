@@ -499,7 +499,11 @@ while ($true) {
         # ---------------- STATIC FILES ----------------
         $cleanPath = $urlPath.TrimStart('/')
         if (-not $cleanPath) { $cleanPath = "index.html" }
-        $filePath = Join-Path $ROOT $cleanPath
+        $pubDir = Join-Path $ROOT "public"
+        $filePath = Join-Path $pubDir $cleanPath
+        if (-not (Test-Path $filePath -PathType Leaf)) {
+            $filePath = Join-Path $ROOT $cleanPath
+        }
 
         if (Test-Path $filePath -PathType Leaf) {
             $ext = [System.IO.Path]::GetExtension($filePath).ToLower()
