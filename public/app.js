@@ -378,6 +378,7 @@ function updateCoverAuthUI() {
 }
 
 function handleLogout() {
+  QuestionTimer.stop();
   localStorage.removeItem('learnwise_student_id');
   localStorage.removeItem('learnwise_student_name');
   AppState.studentId = null;
@@ -429,6 +430,14 @@ function navigateTo(screenId, isBackNav = false) {
   } else {
     hud.classList.remove('hidden');
     updateProgressBar();
+  }
+
+  // Handle 23-second Question Timer
+  const questionObj = QUESTIONS.find(q => q.screenId === screenId);
+  if (questionObj && !AppState.answers[questionObj.id]) {
+    QuestionTimer.start(questionObj);
+  } else {
+    QuestionTimer.stop();
   }
 
   // Scroll viewport to top
@@ -546,6 +555,163 @@ function showToast(message, className = '') {
 }
 
 // ============================================================
+// 5B. 23-SECOND QUESTION TIMER ENGINE
+// ============================================================
+const QuestionTimer = {
+  totalSeconds: 23,
+  secondsRemaining: 23,
+  intervalId: null,
+  activeQuestion: null,
+
+  start(q) {
+    this.stop();
+    this.activeQuestion = q;
+    this.secondsRemaining = this.totalSeconds;
+    this.updateDisplay(this.secondsRemaining, false);
+
+    const hudTimer = document.getElementById('hud-timer-pill');
+    if (hudTimer) hudTimer.classList.remove('hidden');
+
+    this.intervalId = setInterval(() => {
+      this.secondsRemaining--;
+      const isUrgent = this.secondsRemaining <= 5;
+      this.updateDisplay(this.secondsRemaining, isUrgent);
+
+      if (isUrgent && this.secondsRemaining > 0) {
+        SoundFX.play(ctx => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(550, ctx.currentTime);
+          gain.gain.setValueAtTime(0.04, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.08);
+        });
+      }
+
+      if (this.secondsRemaining <= 0) {
+        this.stop();
+        handleQuestionTimeout(this.activeQuestion);
+      }
+    }, 1000);
+  },
+
+  stop() {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+      this.intervalId = null;
+    }
+    const hudTimer = document.getElementById('hud-timer-pill');
+    if (hudTimer) {
+      hudTimer.classList.add('hidden');
+      hudTimer.classList.remove('timer-urgent');
+    }
+  },
+
+  updateDisplay(secs, isUrgent) {
+    const val = Math.max(0, secs);
+    if (this.activeQuestion) {
+      const qScreen = document.getElementById(this.activeQuestion.screenId);
+      if (qScreen) {
+        const badge = qScreen.querySelector('.quiz-timer-badge');
+        const count = qScreen.querySelector('.timer-countdown');
+        if (count) count.textContent = val;
+        if (badge) {
+          if (isUrgent) badge.classList.add('timer-urgent');
+          else badge.classList.remove('timer-urgent');
+        }
+      }
+    }
+    const hudVal = document.getElementById('hud-timer-val');
+    const hudPill = document.getElementById('hud-timer-pill');
+    if (hudVal) hudVal.textContent = val;
+    if (hudPill) {
+      if (isUrgent) hudPill.classList.add('timer-urgent');
+      else hudPill.classList.remove('timer-urgent');
+    }
+  }
+};
+
+function handleQuestionTimeout(q) {
+  if (!q) return;
+  const qScreen = document.getElementById(q.screenId);
+  if (!qScreen) return;
+
+  const optContainer = qScreen.querySelector('.options-container');
+  const submitBtn = qScreen.querySelector('.btn-submit');
+  const feedbackBox = qScreen.querySelector('.feedback-box');
+  if (!optContainer || !submitBtn || !feedbackBox) return;
+
+  if (AppState.answers[q.id]) return;
+
+  const optButtons = optContainer.querySelectorAll('.option-btn');
+  optButtons.forEach(b => b.classList.add('locked'));
+  submitBtn.disabled = true;
+
+  const chosenOpt = AppState.selectedOption;
+  const isCorrect = chosenOpt === q.correct;
+  const chosenBtn = chosenOpt ? optContainer.querySelector(`[data-opt="${chosenOpt}"]`) : null;
+  const correctBtn = optContainer.querySelector(`[data-opt="${q.correct}"]`);
+
+  const feedbackText = feedbackBox.querySelector('.feedback-text');
+  const feedbackIcon = feedbackBox.querySelector('.feedback-icon');
+
+  if (isCorrect) {
+    if (chosenBtn) chosenBtn.classList.add('correct');
+    feedbackBox.classList.remove('hidden', 'is-incorrect');
+    feedbackBox.classList.add('is-correct');
+    feedbackText.textContent = "Time's up! Your selected option was correct! 🎉";
+    feedbackIcon.textContent = '🎉';
+    awardXP(10, 'Correct Answer');
+    updateCombo(true);
+    SoundFX.correct();
+  } else {
+    if (chosenBtn) chosenBtn.classList.add('incorrect');
+    if (correctBtn) correctBtn.classList.add('correct');
+    feedbackBox.classList.remove('hidden', 'is-correct');
+    feedbackBox.classList.add('is-incorrect');
+    if (chosenOpt) {
+      feedbackText.textContent = `⏰ Time's up! Option ${chosenOpt} is incorrect. Correct answer: ${q.correct}.`;
+    } else {
+      feedbackText.textContent = `⏰ Time's up! You did not select an option. Correct answer: ${q.correct}.`;
+    }
+    feedbackIcon.textContent = '⏰';
+    updateCombo(false);
+    SoundFX.streakBreak();
+  }
+
+  AppState.answers[q.id] = {
+    selected: chosenOpt || 'TIMEOUT',
+    isCorrect,
+    xpAwarded: isCorrect ? 10 : 0,
+    topic: q.topic,
+    question: q.question
+  };
+
+  if (AppState.studentId) {
+    API.saveAnswer(
+      AppState.studentId,
+      AppState.attemptId,
+      q.id,
+      q.topic,
+      chosenOpt || 'TIMEOUT',
+      isCorrect,
+      isCorrect ? 10 : 0
+    );
+  }
+
+  submitBtn.textContent = 'Continue to Explanation →';
+  submitBtn.disabled = false;
+  submitBtn.classList.add('pulse-active');
+  submitBtn.onclick = () => {
+    navigateTo(q.expId);
+  };
+}
+
+// ============================================================
 // 6. QUESTION & OPTION EVENT HANDLERS
 // ============================================================
 function setupQuestionScreens() {
@@ -587,6 +753,7 @@ function setupQuestionScreens() {
     // Handle Submit Answer
     submitBtn.addEventListener('click', async () => {
       if (submitBtn.disabled) return;
+      QuestionTimer.stop();
 
       const chosenOpt = AppState.selectedOption;
       if (!chosenOpt) return;
@@ -1284,6 +1451,10 @@ function setupRetakeButton() {
     AppState.attemptId = crypto.randomUUID ? crypto.randomUUID() : 'att_' + Date.now();
 
     // Reset all UI question states
+    QuestionTimer.stop();
+    document.querySelectorAll('.timer-countdown').forEach(el => el.textContent = '23');
+    document.querySelectorAll('.quiz-timer-badge').forEach(b => b.classList.remove('timer-urgent'));
+
     QUESTIONS.forEach(q => {
       const qScreen = document.getElementById(q.screenId);
       if (!qScreen) return;
