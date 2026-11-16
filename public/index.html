@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -206,59 +206,62 @@
         </div>
       </div>
 
-      <div class="intro-canvas">
-        <div class="intro-brand-top">
-          <img src="assets/images/image18.png" alt="Kraftshala" class="intro-logo-img">
-        </div>
-
-        <div class="airplane-flight-path intro-path">
-          <svg class="flight-svg" viewBox="0 0 500 200" fill="none">
-            <path d="M 50 160 Q 250 20 480 80" stroke="#F1AE13" stroke-width="2.5" stroke-dasharray="6 6" />
-          </svg>
-          <div class="paper-plane-icon" id="intro-plane">✈️</div>
-        </div>
-
-        <div class="intro-main-box">
-          <span class="intro-eyebrow">Interactive Assessment</span>
-          <h1 class="intro-title">
-            Meta Ads — <span class="highlight-yellow">Crucial Metrics</span>
-          </h1>
-          <p class="intro-desc">
-            Test your understanding of the most important Meta Ads metrics with quick, practical questions and scenario challenges.
-          </p>
-
-          <div class="intro-checklist-preview">
-            <div class="check-chip"><span>✓</span> Impressions</div>
-            <div class="check-chip"><span>✓</span> Reach & Frequency</div>
-            <div class="check-chip"><span>✓</span> Clicks vs Views</div>
-            <div class="check-chip"><span>✓</span> CTR & Conversions</div>
-          </div>
-
-          <div class="intro-action-group">
-            <button id="btn-take-quiz" class="btn-primary-kraft btn-hero">
-              <span>Take the Quiz</span>
-              <span class="btn-arrow">→</span>
-            </button>
-            <p class="intro-footnote">⚡ Earn XP & badges as you solve real advertising scenarios!</p>
-          </div>
-
-          <!-- Interactive Learning Pathway & Level Select Dashboard -->
-          <div id="intro-dashboard-section" class="intro-dashboard-section">
-            <div class="dashboard-section-header">
-              <div class="dashboard-header-text">
-                <span class="dash-icon">🎯</span>
-                <div>
-                  <h3 class="dash-title">Learning Pathway & Level Select</h3>
-                  <p class="dash-subtitle">Score &gt; 75% on any level to unlock the next level directly without repeating previous levels!</p>
-                </div>
+      <div class="intro-split-wrapper">
+        <!-- LEFT COLUMN: Learning Pathway & Level Select (Stacked Vertically) -->
+        <aside id="intro-dashboard-section" class="intro-dashboard-section">
+          <div class="dashboard-section-header">
+            <div class="dashboard-header-text">
+              <span class="dash-icon">🎯</span>
+              <div>
+                <h3 class="dash-title">Learning Pathway & Level Select</h3>
+                <p class="dash-subtitle">Score ≥ 75% on each level to unlock the next level</p>
               </div>
-              <button id="btn-intro-view-leaderboard" class="btn-dash-leaderboard" title="View Combined Student Rankings">
-                <span>🏆 Combined Leaderboard</span>
-              </button>
+            </div>
+            <button id="btn-intro-view-leaderboard" class="btn-dash-leaderboard" title="View Combined Student Rankings">
+              <span>🏆 Combined Leaderboard</span>
+            </button>
+          </div>
+
+          <div id="dashboard-levels-grid" class="dashboard-levels-grid">
+            <!-- Dynamically populated by renderDashboardLevels() in app.js -->
+          </div>
+        </aside>
+
+        <!-- RIGHT COLUMN: Quiz Overview & CTA -->
+        <div class="intro-canvas intro-overview-canvas">
+          <div class="intro-brand-top">
+            <img src="assets/images/image18.png" alt="Kraftshala" class="intro-logo-img">
+          </div>
+
+          <div class="airplane-flight-path intro-path">
+            <svg class="flight-svg" viewBox="0 0 500 200" fill="none">
+              <path d="M 50 160 Q 250 20 480 80" stroke="#F1AE13" stroke-width="2.5" stroke-dasharray="6 6" />
+            </svg>
+            <div class="paper-plane-icon" id="intro-plane">✈️</div>
+          </div>
+
+          <div class="intro-main-box">
+            <span class="intro-eyebrow">Interactive Assessment</span>
+            <h1 class="intro-title">
+              Meta Ads — <span class="highlight-yellow">Crucial Metrics</span>
+            </h1>
+            <p class="intro-desc">
+              Test your understanding of the most important Meta Ads metrics with quick, practical questions and scenario challenges.
+            </p>
+
+            <div class="intro-checklist-preview">
+              <div class="check-chip"><span>✓</span> Impressions</div>
+              <div class="check-chip"><span>✓</span> Reach & Frequency</div>
+              <div class="check-chip"><span>✓</span> Clicks vs Views</div>
+              <div class="check-chip"><span>✓</span> CTR & Conversions</div>
             </div>
 
-            <div id="dashboard-levels-grid" class="dashboard-levels-grid">
-              <!-- Dynamically populated by renderDashboardLevels() in app.js -->
+            <div class="intro-action-group">
+              <button id="btn-take-quiz" class="btn-primary-kraft btn-hero">
+                <span>Take the Quiz</span>
+                <span class="btn-arrow">→</span>
+              </button>
+              <p class="intro-footnote">⚡ Earn XP & badges as you solve real advertising scenarios!</p>
             </div>
           </div>
         </div>
