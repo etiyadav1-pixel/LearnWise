@@ -1375,6 +1375,33 @@ function showToast(message, className = '') {
   }, 2600);
 }
 
+// Calculate dynamic XP for answering question correctly based on level, streak, and re-attempt status:
+// Level 1: 1st correct = 10 XP, consecutive streak = 12 XP (resets to 10 XP on wrong answer)
+// Level 2: 1st correct = 12 XP, consecutive streak = 14 XP (resets to 12 XP on wrong answer)
+// Level 3: Correct answer = 15 XP
+// Re-attempt: All scores are halved (x 0.5)
+function calculateQuestionXP(q) {
+  const lvl = getLevelForScreen(q.screenId) || 1;
+  const isStreak = AppState.combo >= 1; // already has at least 1 correct answer in current streak
+  let baseXP = 10;
+
+  if (lvl === 1) {
+    baseXP = isStreak ? 12 : 10;
+  } else if (lvl === 2) {
+    baseXP = isStreak ? 14 : 12;
+  } else if (lvl === 3) {
+    baseXP = 15;
+  }
+
+  // Re-attempting penalty: half the scores
+  const hasAttemptedBefore = Boolean(AppState.levelScores[lvl]);
+  if (hasAttemptedBefore) {
+    return Math.round((baseXP * 0.5) * 10) / 10;
+  }
+
+  return baseXP;
+}
+
 // Helper: Question Countdown Seconds per Level
 // Level 1: 25s
 // Level 2 (Numericals): 35s
@@ -1494,13 +1521,15 @@ function handleQuestionTimeout(q) {
   const feedbackText = feedbackBox.querySelector('.feedback-text');
   const feedbackIcon = feedbackBox.querySelector('.feedback-icon');
 
+  const earnedXP = isCorrect ? calculateQuestionXP(q) : 0;
+
   if (isCorrect) {
     if (chosenBtn) chosenBtn.classList.add('correct');
     feedbackBox.classList.remove('hidden', 'is-incorrect');
     feedbackBox.classList.add('is-correct');
     feedbackText.textContent = "Time's up! Your selected option was correct! 🎉";
     feedbackIcon.textContent = '🎉';
-    awardXP(10, 'Correct Answer');
+    awardXP(earnedXP, 'Correct Answer');
     updateCombo(true);
     SoundFX.correct();
   } else {
@@ -1521,7 +1550,7 @@ function handleQuestionTimeout(q) {
   AppState.answers[q.id] = {
     selected: chosenOpt || 'TIMEOUT',
     isCorrect,
-    xpAwarded: isCorrect ? 10 : 0,
+    xpAwarded: earnedXP,
     topic: q.topic,
     question: q.question
   };
@@ -1534,7 +1563,7 @@ function handleQuestionTimeout(q) {
       q.topic,
       chosenOpt || 'TIMEOUT',
       isCorrect,
-      isCorrect ? 10 : 0
+      earnedXP
     );
   }
 
@@ -1601,6 +1630,7 @@ function setupQuestionScreens() {
       const isCorrect = chosenOpt === q.correct;
       const chosenBtn = optContainer.querySelector(`[data-opt="${chosenOpt}"]`);
       const correctBtn = optContainer.querySelector(`[data-opt="${q.correct}"]`);
+      const earnedXP = isCorrect ? calculateQuestionXP(q) : 0;
 
       // Feedback Text
       const feedbackText = feedbackBox.querySelector('.feedback-text');
@@ -1614,7 +1644,7 @@ function setupQuestionScreens() {
         feedbackText.textContent = randMsg;
         feedbackIcon.textContent = '🎉';
 
-        awardXP(10, 'Correct Answer');
+        awardXP(earnedXP, 'Correct Answer');
         updateCombo(true);
         SoundFX.correct();
       } else {
@@ -1634,7 +1664,7 @@ function setupQuestionScreens() {
       AppState.answers[q.id] = {
         selected: chosenOpt,
         isCorrect,
-        xpAwarded: isCorrect ? 10 : 0,
+        xpAwarded: earnedXP,
         topic: q.topic,
         question: q.question
       };
@@ -1648,7 +1678,7 @@ function setupQuestionScreens() {
           q.topic,
           chosenOpt,
           isCorrect,
-          isCorrect ? 10 : 0
+          earnedXP
         );
       }
 
@@ -2089,7 +2119,9 @@ function setupExplanationPractice() {
           }
 
           SoundFX.correct();
-          awardXP(10, 'Practice Check Bonus');
+          const hasAttemptedL1 = Boolean(AppState.levelScores[1]);
+          const practiceXP = hasAttemptedL1 ? 2.5 : 5;
+          awardXP(practiceXP, 'Practice Check Bonus');
         } else {
           chip.classList.add('wrong-chip');
           const crossIcon = document.createElement('span');
@@ -2205,9 +2237,9 @@ function setupUserJourneyPuzzle() {
       if (Object.keys(AppState.journeyPlacements).length === 8) {
         AppState.journeyCompleted = true;
         nextJourneyBtn.disabled = false;
-        awardXP(15, 'Journey Mastery Bonus');
+        // Funnel journey awards 0 XP as per rules
         SoundFX.combo();
-        showToast('🏆 Perfect Funnel Journey! +15 XP', 'toast-xp');
+        showToast('🏆 Perfect Funnel Journey Completed!', 'toast-combo');
       }
     } else {
       // Incorrect Match
