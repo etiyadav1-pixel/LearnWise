@@ -533,7 +533,7 @@ app.post('/api/save-progress', async (req, res) => {
         current_screen: progress.current_screen || meta.current_screen || 'screen-q1',
         level_scores: { ...(meta.level_scores || {}), ...(progress.level_scores || {}) },
         total_xp: typeof progress.total_xp === 'number' ? progress.total_xp : (meta.total_xp || 0),
-        best_streak: Math.max(meta.best_streak || 0, progress.best_streak || 0),
+        best_streak: Math.min(Math.max(meta.best_streak || 0, progress.best_streak || 0), 11),
         last_active: new Date().toISOString()
       };
 
@@ -598,12 +598,17 @@ app.get('/api/leaderboard', async (req, res) => {
 
       const leaderboard = (users.users || []).map(u => {
         const meta = u.user_metadata || {};
-        let streak = meta.best_streak || meta.best_combo || 0;
+        const MAX_STREAK = 11;
+        let streak = Math.min(meta.best_streak || meta.best_combo || 0, MAX_STREAK);
         if (Array.isArray(meta.attempts)) {
           meta.attempts.forEach(att => {
-            if (att.best_combo && att.best_combo > streak) streak = att.best_combo;
+            if (att.best_combo) {
+              const capped = Math.min(att.best_combo, MAX_STREAK);
+              if (capped > streak) streak = capped;
+            }
           });
         }
+        streak = Math.min(streak, MAX_STREAK);
 
         const studentName = meta.student_name || (u.email ? u.email.split('@')[0] : 'Student');
         if (streak > highestStreak) {

@@ -753,7 +753,10 @@ const AppState = {
       const savedXp = localStorage.getItem('learnwise_xp');
       if (savedXp) this.xp = parseInt(savedXp, 10) || 0;
       const savedCombo = localStorage.getItem('learnwise_best_combo');
-      if (savedCombo) this.bestCombo = parseInt(savedCombo, 10) || 0;
+      if (savedCombo) {
+        this.bestCombo = Math.min(parseInt(savedCombo, 10) || 0, getMaxStreakLimit());
+        localStorage.setItem('learnwise_best_combo', String(this.bestCombo));
+      }
 
       // STRICT 75% ENFORCEMENT: Filter out any level where score is < 75%
       this.clearedLevels = (this.clearedLevels || []).filter(lvlId => {
@@ -811,8 +814,13 @@ const AppState = {
           const xpVal = document.getElementById('hud-xp-val');
           if (xpVal) xpVal.textContent = this.xp;
         }
-        if (typeof p.best_streak === 'number' && p.best_streak > this.bestCombo) {
-          this.bestCombo = p.best_streak;
+        if (typeof p.best_streak === 'number') {
+          const maxLimit = getMaxStreakLimit();
+          const cleanStreak = Math.min(p.best_streak, maxLimit);
+          if (cleanStreak > this.bestCombo) {
+            this.bestCombo = cleanStreak;
+            localStorage.setItem('learnwise_best_combo', String(this.bestCombo));
+          }
         }
         updateLevelIndicator();
         renderDashboardLevels();
@@ -852,13 +860,16 @@ const AppState = {
 
 // Persist progress to localStorage & Supabase
 function saveCurrentProgress() {
+  const maxLimit = getMaxStreakLimit();
+  if (AppState.bestCombo > maxLimit) AppState.bestCombo = maxLimit;
+
   const payload = {
     cleared_levels: AppState.clearedLevels,
     current_level: AppState.currentLevel,
     current_screen: AppState.currentScreen,
     level_scores: AppState.levelScores,
     total_xp: AppState.xp,
-    best_streak: AppState.bestCombo
+    best_streak: Math.min(AppState.bestCombo, maxLimit)
   };
 
   try {
@@ -1317,6 +1328,23 @@ function awardXP(amount, reason = '') {
   showToast(`⚡ +${amount} XP ${reason}`, 'toast-xp');
 }
 
+// Dynamic streak cap: streak can't be more than highest no. of questions in a level (11 for now)
+function getMaxStreakLimit() {
+  let maxCount = 11;
+  if (typeof LEVELS !== 'undefined' && Array.isArray(LEVELS)) {
+    LEVELS.forEach(lvl => {
+      if (lvl.parts && Array.isArray(lvl.parts)) {
+        lvl.parts.forEach(p => {
+          if (p.questionCount && p.questionCount > maxCount) maxCount = p.questionCount;
+        });
+      } else if (lvl.questions && Array.isArray(lvl.questions)) {
+        if (lvl.questions.length > maxCount) maxCount = lvl.questions.length;
+      }
+    });
+  }
+  return maxCount;
+}
+
 function resetStreak() {
   AppState.combo = 0;
   const comboVal = document.getElementById('hud-combo-val');
@@ -1330,12 +1358,13 @@ function resetStreak() {
 function updateCombo(isCorrect) {
   const comboPill = document.getElementById('hud-combo-pill');
   const comboVal = document.getElementById('hud-combo-val');
+  const maxLimit = getMaxStreakLimit();
 
   if (isCorrect) {
-    // Add 1 on every correct answer
-    AppState.combo++;
+    // Add 1 on every correct answer, strictly capped to highest no. of questions in a level
+    AppState.combo = Math.min(AppState.combo + 1, maxLimit);
     if (AppState.combo > AppState.bestCombo) {
-      AppState.bestCombo = AppState.combo;
+      AppState.bestCombo = Math.min(AppState.combo, maxLimit);
     }
 
     if (comboVal) comboVal.textContent = AppState.combo;
@@ -2427,13 +2456,15 @@ async function renderLeaderboard() {
     const data = await API.getLeaderboard();
     const list = data.leaderboard || [];
     const highest = data.highest_streak || { streak: 0, holder: 'None yet' };
+    const maxLimit = getMaxStreakLimit();
+    const cappedHighestStreak = Math.min(highest.streak || 0, maxLimit);
 
     // Update Global Highest Streak Banner
     if (globalStreakVal) {
-      globalStreakVal.textContent = highest.streak > 0 ? `${highest.streak} in a row` : '0 in a row';
+      globalStreakVal.textContent = cappedHighestStreak > 0 ? `${cappedHighestStreak} in a row` : '0 in a row';
     }
     if (globalStreakHolder) {
-      globalStreakHolder.textContent = highest.streak > 0 ? `held by ${escapeHtml(highest.holder)}` : 'No streak recorded yet';
+      globalStreakHolder.textContent = cappedHighestStreak > 0 ? `held by ${escapeHtml(highest.holder)}` : 'No streak recorded yet';
     }
 
     if (list.length === 0) {
@@ -2464,6 +2495,7 @@ async function renderLeaderboard() {
 
       const isCurrentStudent = AppState.studentId && entry.student_id === AppState.studentId;
       const initial = (entry.student_name || 'S').charAt(0).toUpperCase();
+      const studentStreak = Math.min(entry.best_streak || 0, maxLimit);
 
       rowsHtml += `
         <div class="leaderboard-row ${rankClass} ${isCurrentStudent ? 'is-current-user' : ''}">
@@ -2480,7 +2512,7 @@ async function renderLeaderboard() {
             <span class="xp-unit-text">XP</span>
           </div>
           <div class="td-cell td-streak">
-            <span class="streak-val-text">🔥 ${entry.best_streak}</span>
+            <span class="streak-val-text">🔥 ${studentStreak}</span>
             <span class="streak-sub-text">in a row</span>
           </div>
           <div class="td-cell td-accuracy">
