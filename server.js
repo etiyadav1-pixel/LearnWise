@@ -611,12 +611,27 @@ app.get('/api/leaderboard', async (req, res) => {
           highestHolder = studentName;
         }
 
+        let pct = meta.best_percentage || 0;
+        if (!pct && meta.level_scores) {
+          let totalScore = 0;
+          let totalQs = 0;
+          Object.values(meta.level_scores).forEach(ls => {
+            if (ls && ls.total) {
+              totalScore += ls.score || 0;
+              totalQs += ls.total;
+            }
+          });
+          if (totalQs > 0) {
+            pct = Math.round((totalScore / totalQs) * 100);
+          }
+        }
+
         return {
           student_id: u.id,
           student_name: studentName,
           total_xp: meta.total_xp || 0,
           best_streak: streak,
-          percentage: meta.best_percentage || 0,
+          percentage: pct,
           total_attempts: meta.total_attempts || 0
         };
       });
