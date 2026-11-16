@@ -499,12 +499,53 @@ function getLevelForScreen(screenId) {
   return null;
 }
 
+// Helper: Get or dynamically calculate score for a given level or sub-part ('3_A', '3_B', 1, 2, 3)
+function getLevelScore(levelId) {
+  if (AppState.levelScores[levelId]) {
+    return AppState.levelScores[levelId];
+  }
+  let questions = [];
+  if (levelId === '3_A') {
+    const l3 = LEVELS.find(l => l.id === 3);
+    if (l3) questions = l3.questions.filter(q => q.part === 'A');
+  } else if (levelId === '3_B') {
+    const l3 = LEVELS.find(l => l.id === 3);
+    if (l3) questions = l3.questions.filter(q => q.part === 'B');
+  } else {
+    const lvl = LEVELS.find(l => l.id === levelId);
+    if (lvl) questions = lvl.questions;
+  }
+
+  if (!questions || questions.length === 0) return null;
+
+  const answered = questions.filter(q => Boolean(AppState.answers[q.id]));
+  if (answered.length === 0) return null;
+
+  const correct = answered.filter(q => AppState.answers[q.id]?.isCorrect).length;
+  const pct = Math.round((correct / questions.length) * 100);
+
+  const res = { score: correct, total: questions.length, percentage: pct, isComplete: answered.length === questions.length };
+  if (answered.length === questions.length) {
+    AppState.levelScores[levelId] = res;
+  }
+  return res;
+}
+
 // Helper: Check if Level 3 Part A is completed (all 7 questions answered)
 function isLevel3PartACleared() {
   const l3 = LEVELS.find(l => l.id === 3);
   if (!l3) return false;
   const partA = l3.questions.filter(q => q.part === 'A');
   return partA.every(q => Boolean(AppState.answers[q.id]));
+}
+
+// Check if Level 3 Part B is unlocked:
+// Unlocked if Level 3 is unlocked AND (Part A score >= 75% OR Part A cleared)
+function isLevel3PartBUnlocked() {
+  if (!isLevelUnlocked(3)) return false;
+  const partAScore = getLevelScore('3_A');
+  if (partAScore && partAScore.percentage >= 75) return true;
+  return isLevel3PartACleared();
 }
 
 // Check if a level is cleared based on the configurable UNLOCK_RULE
@@ -524,11 +565,26 @@ function isLevelCleared(levelId) {
   return answered === lvl.questions.length;
 }
 
-// Check if a level is unlocked strictly in sequence
+// Check if a level is unlocked:
+// A person who has attempted any level once whenever and scored more than 75%
+// should have the option to directly open next level via the dashboard without having to attempt the previous level.
 function isLevelUnlocked(levelId) {
   if (levelId === 1) return true;
+
+  const prevLevelId = levelId - 1;
+  const prevScoreObj = getLevelScore(prevLevelId);
+  if (prevScoreObj && prevScoreObj.percentage >= 75) {
+    return true;
+  }
+  if (AppState.clearedLevels.includes(prevLevelId)) {
+    return true;
+  }
+
+  // Check if all previous levels were cleared or passed >=75%
   for (let prev = 1; prev < levelId; prev++) {
-    if (!AppState.clearedLevels.includes(prev)) {
+    const scoreObj = getLevelScore(prev);
+    const passed = (scoreObj && scoreObj.percentage >= 75) || AppState.clearedLevels.includes(prev);
+    if (!passed) {
       return false;
     }
   }
@@ -766,6 +822,7 @@ const AppState = {
           this.bestCombo = p.best_streak;
         }
         updateLevelIndicator();
+        renderDashboardLevels();
       }
     } catch (err) {
       console.warn('Silent sync with server failed:', err);
@@ -858,6 +915,155 @@ function updateCoverAuthUI() {
 
     if (takeQuizBtn) takeQuizBtn.innerHTML = `<span>Sign In & Start Quiz</span> <span class="btn-arrow">→</span>`;
   }
+
+  // Render the level select pathway cards on intro dashboard
+  renderDashboardLevels();
+}
+
+// Render dynamic learning pathway level cards on the Intro dashboard
+function renderDashboardLevels() {
+  const container = document.getElementById('dashboard-levels-grid');
+  if (!container) return;
+
+  const cardsHtml = LEVELS.map(lvl => {
+    const isUnlocked = isLevelUnlocked(lvl.id);
+    const isCleared = AppState.clearedLevels.includes(lvl.id);
+    const scoreObj = getLevelScore(lvl.id);
+    const hasAttempted = Boolean(scoreObj);
+    const pct = scoreObj ? scoreObj.percentage : 0;
+    const isPassed = pct >= 75;
+
+    let cardClass = 'dashboard-level-card';
+    if (isCleared || isPassed) cardClass += ' is-cleared';
+    else if (isUnlocked) cardClass += ' is-unlocked';
+    else cardClass += ' is-locked';
+
+    let statusPill = '';
+    if (isCleared || isPassed) {
+      statusPill = `<span class="card-status-pill status-passed">Score: ${pct}% · Passed ✓</span>`;
+    } else if (hasAttempted) {
+      statusPill = `<span class="card-status-pill status-unlocked">Score: ${pct}% · Retake for &gt;75%</span>`;
+    } else if (isUnlocked) {
+      statusPill = `<span class="card-status-pill status-unlocked">Unlocked 🔓</span>`;
+    } else {
+      statusPill = `<span class="card-status-pill status-locked">Locked 🔒</span>`;
+    }
+
+    let actionsHtml = '';
+    if (lvl.id === 1) {
+      actionsHtml = `
+        <button class="btn-dash-open ${hasAttempted ? 'secondary' : 'primary'}" onclick="startLevelFromDashboard(1)">
+          <span>${hasAttempted ? 'Replay Level 1 🔄' : 'Start Level 1 →'}</span>
+        </button>
+      `;
+    } else if (lvl.id === 2) {
+      if (isUnlocked) {
+        actionsHtml = `
+          <button class="btn-dash-open primary" onclick="startLevelFromDashboard(2)">
+            <span>Open Level 2 →</span>
+          </button>
+        `;
+      } else {
+        actionsHtml = `
+          <button class="btn-dash-open" disabled>
+            <span>🔒 Locked (Score &gt;75% in Level 1)</span>
+          </button>
+        `;
+      }
+    } else if (lvl.id === 3) {
+      if (isUnlocked) {
+        const isPartBUnlocked = isLevel3PartBUnlocked();
+        const partAScore = getLevelScore('3_A');
+        actionsHtml = `
+          <button class="btn-dash-open ${isPartBUnlocked ? 'secondary' : 'primary'}" onclick="startLevelFromDashboard(3, 'A')">
+            <span>Open Part A (Set 1) ${partAScore ? `(${partAScore.percentage}%)` : '→'}</span>
+          </button>
+          ${isPartBUnlocked
+            ? `<button class="btn-dash-open primary" onclick="startLevelFromDashboard(3, 'B')">
+                 <span>Open Part B (Set 2) →</span>
+               </button>`
+            : `<button class="btn-dash-open" disabled>
+                 <span>🔒 Part B (Score &gt;75% in Part A)</span>
+               </button>`
+          }
+        `;
+      } else {
+        actionsHtml = `
+          <button class="btn-dash-open" disabled>
+            <span>🔒 Locked (Score &gt;75% in Level 2)</span>
+          </button>
+        `;
+      }
+    } else if (lvl.id === 4) {
+      if (isUnlocked) {
+        actionsHtml = `
+          <button class="btn-dash-open primary" onclick="handleStartLevel(4)">
+            <span>Open Level 4 →</span>
+          </button>
+        `;
+      } else {
+        actionsHtml = `
+          <button class="btn-dash-open" disabled>
+            <span>🔒 Locked (Score &gt;75% in Level 3)</span>
+          </button>
+        `;
+      }
+    }
+
+    return `
+      <div class="${cardClass}">
+        <div class="card-top-row">
+          <span class="card-level-badge">Level ${lvl.id}</span>
+          ${statusPill}
+        </div>
+        <div class="card-body">
+          <h4>${lvl.title}</h4>
+          <p>${lvl.subtitle}</p>
+        </div>
+        <div class="card-actions">
+          ${actionsHtml}
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  container.innerHTML = cardsHtml;
+}
+
+// Directly jump into any unlocked level from the dashboard
+function startLevelFromDashboard(levelId, part = 'A') {
+  if (!AppState.isAuthenticated) {
+    const authModal = document.getElementById('auth-modal');
+    if (authModal) authModal.classList.remove('hidden');
+    showToast('Please sign in or create an account to start.', 'toast-info');
+    return;
+  }
+
+  if (levelId === 1) {
+    navigateTo('screen-q1');
+  } else if (levelId === 2) {
+    if (!isLevelUnlocked(2)) {
+      showToast('🔒 Level 2 is locked! Score >75% in Level 1 first.', 'toast-break');
+      return;
+    }
+    navigateTo('screen-l2-q1');
+  } else if (levelId === 3) {
+    if (!isLevelUnlocked(3)) {
+      showToast('🔒 Level 3 is locked! Score >75% in Level 2 first.', 'toast-break');
+      return;
+    }
+    if (part === 'B') {
+      if (!isLevel3PartBUnlocked()) {
+        showToast('🔒 Part B (Set 2) unlocks when Part A is completed with >75% score!', 'toast-break');
+        return;
+      }
+      navigateTo('screen-l3-b-q1');
+    } else {
+      navigateTo('screen-l3-a-q1');
+    }
+  } else if (levelId === 4) {
+    handleStartLevel(4);
+  }
 }
 
 function handleLogout() {
@@ -895,10 +1101,10 @@ function navigateTo(screenId, isBackNav = false) {
     }
 
     // STRICT PART B GATING FOR LEVEL 3:
-    // Part B (Set 2) unlocks only after Part A (Set 1) is fully completed
+    // Part B (Set 2) unlocks when Part A is completed or scored >= 75%
     if (screenId.startsWith('screen-l3-b-') || screenId === 'screen-level-3-complete') {
-      if (!isLevel3PartACleared()) {
-        showToast('🔒 Part B (Set 2) unlocks only after completing Part A!', 'toast-break');
+      if (!isLevel3PartBUnlocked()) {
+        showToast('🔒 Part B (Set 2) unlocks when Part A is completed with >75% score!', 'toast-break');
         return;
       }
     }
@@ -906,7 +1112,10 @@ function navigateTo(screenId, isBackNav = false) {
     AppState.currentLevel = screenLevel;
   }
 
-  if (AppState.currentScreen === screenId) return;
+  if (AppState.currentScreen === screenId) {
+    if (screenId === 'screen-intro') renderDashboardLevels();
+    return;
+  }
 
   const currentScreenEl = document.getElementById(AppState.currentScreen);
   const targetScreenEl = document.getElementById(screenId);
@@ -931,6 +1140,9 @@ function navigateTo(screenId, isBackNav = false) {
   const hud = document.getElementById('gamification-hud');
   if (screenId === 'screen-cover' || screenId === 'screen-intro') {
     hud.classList.add('hidden');
+    if (screenId === 'screen-intro') {
+      renderDashboardLevels();
+    }
   } else {
     hud.classList.remove('hidden');
     updateLevelIndicator();
@@ -1527,6 +1739,41 @@ function setupQuestionScreens() {
     });
   }
 
+  // HUD Home Button (return to home dashboard from anywhere)
+  const btnHudHome = document.getElementById('btn-hud-home');
+  if (btnHudHome) {
+    btnHudHome.addEventListener('click', () => {
+      QuestionTimer.stop();
+      navigateTo('screen-intro');
+      renderDashboardLevels();
+    });
+  }
+
+  // All Return-to-Home Buttons (on level completion screens, in-progress, and final report)
+  document.querySelectorAll('.btn-return-home').forEach(btn => {
+    btn.addEventListener('click', () => {
+      QuestionTimer.stop();
+      navigateTo('screen-intro');
+      renderDashboardLevels();
+    });
+  });
+
+  // Intro Dashboard: Combined Leaderboard Button
+  const btnIntroLeaderboard = document.getElementById('btn-intro-view-leaderboard');
+  if (btnIntroLeaderboard) {
+    btnIntroLeaderboard.addEventListener('click', () => {
+      finalizeAndShowReport();
+    });
+  }
+
+  // Level 3 Complete: Combined Leaderboard Button
+  const btnL3Leaderboard = document.getElementById('btn-l3-view-leaderboard');
+  if (btnL3Leaderboard) {
+    btnL3Leaderboard.addEventListener('click', () => {
+      finalizeAndShowReport();
+    });
+  }
+
   // In-Progress Screen buttons
   const btnInProgReport = document.getElementById('btn-in-progress-view-report');
   if (btnInProgReport) {
@@ -1537,7 +1784,9 @@ function setupQuestionScreens() {
   const btnInProgBack = document.getElementById('btn-in-progress-back');
   if (btnInProgBack) {
     btnInProgBack.addEventListener('click', () => {
-      navigateTo('screen-cover');
+      QuestionTimer.stop();
+      navigateTo('screen-intro');
+      renderDashboardLevels();
     });
   }
 }
@@ -2189,13 +2438,23 @@ function setupAuthSystem() {
         return;
       }
     }
-    // Check sequential progression
-    if (!AppState.clearedLevels.includes(1)) {
+    // Check sequential progression with >75% direct unlock
+    const l1Score = getLevelScore(1);
+    const l2Score = getLevelScore(2);
+    const l3Score = getLevelScore(3);
+    const l3AScore = getLevelScore('3_A');
+
+    const l1Passed = AppState.clearedLevels.includes(1) || (l1Score && l1Score.percentage >= 75);
+    const l2Passed = AppState.clearedLevels.includes(2) || (l2Score && l2Score.percentage >= 75);
+    const l3Passed = AppState.clearedLevels.includes(3) || (l3Score && l3Score.percentage >= 75);
+    const l3APassed = isLevel3PartACleared() || (l3AScore && l3AScore.percentage >= 75);
+
+    if (!l1Passed) {
       navigateTo('screen-q1');
-    } else if (!AppState.clearedLevels.includes(2)) {
+    } else if (!l2Passed) {
       navigateTo('screen-l2-q1');
-    } else if (!AppState.clearedLevels.includes(3)) {
-      if (!isLevel3PartACleared()) {
+    } else if (!l3Passed) {
+      if (!l3APassed) {
         navigateTo('screen-l3-a-q1');
       } else {
         navigateTo('screen-l3-b-q1');
@@ -2397,6 +2656,16 @@ document.addEventListener('DOMContentLoaded', () => {
   setupUserJourneyPuzzle();
   setupReviewModal();
   setupRetakeButton();
+
+  // Initial dashboard levels render
+  renderDashboardLevels();
+
+  // Expose global helpers for inline handlers and navigation
+  window.startLevelFromDashboard = startLevelFromDashboard;
+  window.handleStartLevel = handleStartLevel;
+  window.finalizeAndShowReport = finalizeAndShowReport;
+  window.navigateTo = navigateTo;
+  window.renderDashboardLevels = renderDashboardLevels;
 
   console.log('LearnWise × Kraftshala application initialized successfully.');
 });

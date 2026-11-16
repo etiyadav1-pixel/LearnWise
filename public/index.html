@@ -20,6 +20,9 @@
       <button id="btn-back" class="hud-btn-back" title="Go back to previous screen">
         <span class="back-arrow">←</span> <span class="back-text">Back</span>
       </button>
+      <button id="btn-hud-home" class="hud-btn-back hud-btn-home" title="Return to Home Dashboard">
+        <span class="back-arrow">🏠</span> <span class="back-text">Home</span>
+      </button>
       <div class="hud-topic-tag">
         <span class="topic-dot"></span>
         <span class="topic-title">META ADS · KEY METRICS</span>
@@ -237,6 +240,26 @@
               <span class="btn-arrow">→</span>
             </button>
             <p class="intro-footnote">⚡ Earn XP & badges as you solve real advertising scenarios!</p>
+          </div>
+
+          <!-- Interactive Learning Pathway & Level Select Dashboard -->
+          <div id="intro-dashboard-section" class="intro-dashboard-section">
+            <div class="dashboard-section-header">
+              <div class="dashboard-header-text">
+                <span class="dash-icon">🎯</span>
+                <div>
+                  <h3 class="dash-title">Learning Pathway & Level Select</h3>
+                  <p class="dash-subtitle">Score &gt; 75% on any level to unlock the next level directly without repeating previous levels!</p>
+                </div>
+              </div>
+              <button id="btn-intro-view-leaderboard" class="btn-dash-leaderboard" title="View Combined Student Rankings">
+                <span>🏆 Combined Leaderboard</span>
+              </button>
+            </div>
+
+            <div id="dashboard-levels-grid" class="dashboard-levels-grid">
+              <!-- Dynamically populated by renderDashboardLevels() in app.js -->
+            </div>
           </div>
         </div>
       </div>
@@ -1584,6 +1607,9 @@
           <button id="btn-start-level-2" class="btn-primary-kraft btn-hero">
             <span>Start Level 2 →</span>
           </button>
+          <button class="btn-secondary-kraft btn-return-home" title="Return to Home Dashboard">
+            <span>🏠 Return to Home</span>
+          </button>
         </div>
       </div>
     </section>
@@ -2399,6 +2425,9 @@
           <button id="btn-start-level-3" class="btn-primary-kraft btn-hero">
             <span>Proceed to Level 3 →</span>
           </button>
+          <button class="btn-secondary-kraft btn-return-home" title="Return to Home Dashboard">
+            <span>🏠 Return to Home</span>
+          </button>
         </div>
       </div>
     </section>
@@ -2961,6 +2990,9 @@
         <div class="level-complete-actions">
           <button id="btn-start-l3-part-b" class="btn-primary-kraft btn-hero">
             <span>Start Part B (Set 2) →</span>
+          </button>
+          <button class="btn-secondary-kraft btn-return-home" title="Return to Home Dashboard">
+            <span>🏠 Return to Home</span>
           </button>
         </div>
       </div>
@@ -3525,6 +3557,12 @@
           <button id="btn-start-level-4" class="btn-primary-kraft btn-hero">
             <span>Proceed to Level 4 →</span>
           </button>
+          <button id="btn-l3-view-leaderboard" class="btn-secondary-kraft" title="View Combined Student Leaderboard">
+            <span>🏆 View Combined Leaderboard</span>
+          </button>
+          <button class="btn-secondary-kraft btn-return-home" title="Return to Home Dashboard">
+            <span>🏠 Return to Home</span>
+          </button>
         </div>
       </div>
     </section>
@@ -3557,8 +3595,8 @@
           <button id="btn-in-progress-view-report" class="btn-primary-kraft">
             <span>View Overall Performance Report 🏆</span>
           </button>
-          <button id="btn-in-progress-back" class="btn-secondary-kraft">
-            <span>← Back to Cover</span>
+          <button id="btn-in-progress-back" class="btn-secondary-kraft btn-return-home" title="Return to Home Dashboard">
+            <span>🏠 Return to Home Dashboard</span>
           </button>
         </div>
       </div>
@@ -3663,8 +3701,8 @@
             <div class="leaderboard-title-group">
               <span class="leaderboard-trophy-icon">🏆</span>
               <div>
-                <h3 class="leaderboard-title">Student Leaderboard</h3>
-                <p class="leaderboard-subtitle">Ranked by total XP points scored across students</p>
+                <h3 class="leaderboard-title">All-Levels Combined Leaderboard</h3>
+                <p class="leaderboard-subtitle">Cumulative rankings, XP points & accuracy across all levels</p>
               </div>
             </div>
 
@@ -3704,6 +3742,9 @@
           </button>
           <button id="btn-retake-quiz" class="btn-primary-kraft">
             <span>Retake Quiz 🔄</span>
+          </button>
+          <button class="btn-secondary-kraft btn-return-home" title="Return to Home Dashboard">
+            <span>🏠 Return to Home Dashboard</span>
           </button>
         </div>
       </div>
