@@ -1060,6 +1060,9 @@ function startLevelFromDashboard(levelId, part = 'A') {
     return;
   }
 
+  // Streaks are calculated on questions only, starting fresh per level
+  resetStreak();
+
   if (levelId === 1) {
     navigateTo('screen-q1');
   } else if (levelId === 2) {
@@ -1156,6 +1159,11 @@ function navigateTo(screenId, isBackNav = false) {
 
   targetScreenEl.classList.add('active');
   AppState.currentScreen = screenId;
+
+  // Streak is calculated on questions only, starting fresh when entering each level/part
+  if (screenId === 'screen-q1' || screenId === 'screen-l2-q1' || screenId === 'screen-l3-a-q1' || screenId === 'screen-l3-b-q1') {
+    resetStreak();
+  }
 
   // Manage HUD visibility
   const hud = document.getElementById('gamification-hud');
@@ -1307,6 +1315,16 @@ function awardXP(amount, reason = '') {
   if (xpVal) xpVal.textContent = AppState.xp;
 
   showToast(`⚡ +${amount} XP ${reason}`, 'toast-xp');
+}
+
+function resetStreak() {
+  AppState.combo = 0;
+  const comboVal = document.getElementById('hud-combo-val');
+  if (comboVal) comboVal.textContent = '0';
+  const comboPill = document.getElementById('hud-combo-pill');
+  if (comboPill) {
+    comboPill.classList.remove('active-streak', 'pop', 'streak-broken');
+  }
 }
 
 function updateCombo(isCorrect) {
@@ -2064,6 +2082,9 @@ function handleStartLevel(levelNum) {
     return;
   }
 
+  // Streaks are calculated on questions only, starting fresh per level
+  resetStreak();
+
   AppState.currentLevel = levelNum;
 
   if (targetLvl.questions.length === 0) {
@@ -2237,9 +2258,9 @@ function setupUserJourneyPuzzle() {
       if (Object.keys(AppState.journeyPlacements).length === 8) {
         AppState.journeyCompleted = true;
         nextJourneyBtn.disabled = false;
-        // Funnel journey awards 0 XP as per rules
-        SoundFX.combo();
-        showToast('🏆 Perfect Funnel Journey Completed!', 'toast-combo');
+        // Funnel journey awards 0 XP as per rules; streak is calculated on questions only
+        SoundFX.celebrate();
+        showToast('🏆 Perfect Funnel Journey Completed!', 'toast-xp');
       }
     } else {
       // Incorrect Match
