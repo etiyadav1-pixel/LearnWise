@@ -298,15 +298,181 @@ const LEVELS = [
   },
   {
     id: 3,
-    title: "Metric Correlation",
-    subtitle: "Understanding cause-and-effect relationships across the ad funnel",
-    questions: [] // Currently in progress
+    title: "Advanced Numericals",
+    subtitle: "Multi-step advertising math, budget allocation & reverse diagnostics",
+    parts: [
+      { id: 'part-a', title: 'Part A (Set 1)', questionCount: 7 },
+      { id: 'part-b', title: 'Part B (Set 2)', questionCount: 7 }
+    ],
+    questions: [
+      // ==========================================
+      // PART A (SET 1) – 7 QUESTIONS
+      // ==========================================
+      {
+        id: 'L3_A_Q1',
+        part: 'A',
+        topic: 'Impressions from Spend & CPM',
+        question: 'You spent ₹15,000. Your CPM is ₹300. How many impressions did you get?',
+        options: { A: '50', B: '5,000', C: '50,000', D: '4,500,000' },
+        correct: 'C',
+        screenId: 'screen-l3-a-q1',
+        expId: 'screen-l3-a-exp1',
+        nextScreenId: 'screen-l3-a-q2'
+      },
+      {
+        id: 'L3_A_Q2',
+        part: 'A',
+        topic: 'CPA from CPC & Conversion Rate',
+        question: 'CPC is ₹50, conversion rate is 8%. What is your CPA?',
+        options: { A: '₹625', B: '₹4', C: '₹400', D: '₹6.25' },
+        correct: 'A',
+        screenId: 'screen-l3-a-q2',
+        expId: 'screen-l3-a-exp2',
+        nextScreenId: 'screen-l3-a-q3'
+      },
+      {
+        id: 'L3_A_Q3',
+        part: 'A',
+        topic: 'CPA with Distractor Metric (CTR)',
+        question: 'If CPC is ₹60, CTR is 0.5%, and conversion rate is 20%, what is your CPA?',
+        options: { A: '₹12', B: '₹600', C: '₹60,000', D: '₹300' },
+        correct: 'D',
+        screenId: 'screen-l3-a-q3',
+        expId: 'screen-l3-a-exp3',
+        nextScreenId: 'screen-l3-a-q4'
+      },
+      {
+        id: 'L3_A_Q4',
+        part: 'A',
+        topic: 'CPA with Distractor Metric (CTR)',
+        question: 'Your CTR is 1.5%, CPC is ₹80, and conversion rate is 10%. What is your CPA?',
+        options: { A: '₹8', B: '₹800', C: '₹120', D: '₹53,333' },
+        correct: 'B',
+        screenId: 'screen-l3-a-q4',
+        expId: 'screen-l3-a-exp4',
+        nextScreenId: 'screen-l3-a-q5'
+      },
+      {
+        id: 'L3_A_Q5',
+        part: 'A',
+        topic: 'Conversions from Spend, CPC & CVR',
+        question: 'You spend ₹20,000. Your CPC is ₹100, and conversion rate is 10%. How many conversions did you get?',
+        options: { A: '200', B: '2', C: '20', D: '2,000' },
+        correct: 'C',
+        screenId: 'screen-l3-a-q5',
+        expId: 'screen-l3-a-exp5',
+        nextScreenId: 'screen-l3-a-q6'
+      },
+      {
+        id: 'L3_A_Q6',
+        part: 'A',
+        topic: 'Conversions from Spend, CPC & CVR',
+        question: 'You spent ₹12,000. CPC is ₹60. Conversion rate is 5%. How many conversions did you get?',
+        options: { A: '10', B: '200', C: '100', D: '40' },
+        correct: 'A',
+        screenId: 'screen-l3-a-q6',
+        expId: 'screen-l3-a-exp6',
+        nextScreenId: 'screen-l3-a-q7'
+      },
+      {
+        id: 'L3_A_Q7',
+        part: 'A',
+        topic: 'Max Bid CPC from Target CPA & CVR',
+        question: 'The max money your company wants to spend on each conversion is Rs 3000. The past Click to conversion rate has been around 9%. What is the maximum money that you can spend on a click?',
+        options: { A: '₹27', B: '₹33,333', C: '₹2,730', D: '₹270' },
+        correct: 'D',
+        screenId: 'screen-l3-a-q7',
+        expId: 'screen-l3-a-exp7',
+        nextScreenId: 'screen-level-3-part-a-complete'
+      },
+
+      // ==========================================
+      // PART B (SET 2) – 7 QUESTIONS (UNLOCKS AFTER PART A)
+      // ==========================================
+      {
+        id: 'L3_B_Q1',
+        part: 'B',
+        topic: 'Clicks from Conversions & CVR',
+        question: 'You got 100 conversions at a CPA of ₹400. Your conversion rate was 10%. How many clicks did you get?',
+        options: { A: '10', B: '1,000', C: '4,000', D: '40,000' },
+        correct: 'B',
+        screenId: 'screen-l3-b-q1',
+        expId: 'screen-l3-b-exp1',
+        nextScreenId: 'screen-l3-b-q2'
+      },
+      {
+        id: 'L3_B_Q2',
+        part: 'B',
+        topic: 'Clicks from Spend, CPM & CTR',
+        question: 'You spent ₹10,000. CPM is ₹250 and CTR is 2%. How many clicks did you get?',
+        options: { A: '40', B: '40,000', C: '800', D: '8,000' },
+        correct: 'C',
+        screenId: 'screen-l3-b-q2',
+        expId: 'screen-l3-b-exp2',
+        nextScreenId: 'screen-l3-b-q3'
+      },
+      {
+        id: 'L3_B_Q3',
+        part: 'B',
+        topic: 'CPA from CPM, CTR & CVR',
+        question: 'If CPM is ₹200, CTR is 2%, and conversion rate is 5%, what is your CPA?',
+        options: { A: '₹200', B: '₹10', C: '₹0.20', D: '₹2,000' },
+        correct: 'A',
+        screenId: 'screen-l3-b-q3',
+        expId: 'screen-l3-b-exp3',
+        nextScreenId: 'screen-l3-b-q4'
+      },
+      {
+        id: 'L3_B_Q4',
+        part: 'B',
+        topic: 'CPA from CPM, CTR & CVR',
+        question: 'CPM is ₹600, CTR is 1.5%, and conversion rate is 5%. What is the CPA?',
+        options: { A: '₹40', B: '₹2', C: '₹8,000', D: '₹800' },
+        correct: 'D',
+        screenId: 'screen-l3-b-q4',
+        expId: 'screen-l3-b-exp4',
+        nextScreenId: 'screen-l3-b-q5'
+      },
+      {
+        id: 'L3_B_Q5',
+        part: 'B',
+        topic: 'CPA from CPM, CTR & CVR',
+        question: 'CPM is ₹500, CTR is 4%, and conversion rate is 2%. What is the CPA?',
+        options: { A: '₹12.50', B: '₹625', C: '₹0.25', D: '₹6,250' },
+        correct: 'B',
+        screenId: 'screen-l3-b-q5',
+        expId: 'screen-l3-b-exp5',
+        nextScreenId: 'screen-l3-b-q6'
+      },
+      {
+        id: 'L3_B_Q6',
+        part: 'B',
+        topic: 'Reverse CPM from CPA, CVR & CTR',
+        question: 'CPA is ₹500, conversion rate is 4%, and CTR is 2%. What is the CPM?',
+        options: { A: '₹20', B: '₹1,000', C: '₹400', D: '₹0.40' },
+        correct: 'C',
+        screenId: 'screen-l3-b-q6',
+        expId: 'screen-l3-b-exp6',
+        nextScreenId: 'screen-l3-b-q7'
+      },
+      {
+        id: 'L3_B_Q7',
+        part: 'B',
+        topic: 'Reverse CPM from CPA, CVR & CTR',
+        question: 'Your CPA is ₹500, and conversion rate is 5%. CTR is 2%. What is your CPM?',
+        options: { A: '₹25', B: '₹1,250', C: '₹0.50', D: '₹500' },
+        correct: 'D',
+        screenId: 'screen-l3-b-q7',
+        expId: 'screen-l3-b-exp7',
+        nextScreenId: 'screen-level-3-complete'
+      }
+    ]
   },
   {
     id: 4,
     title: "Campaign Analysis & Comparison",
     subtitle: "Real-world campaign scenarios and diagnostic problem-solving",
-    questions: [] // Locked until Level 3 cleared
+    questions: [] // Locked until Level 3 is cleared
   }
 ];
 
@@ -324,12 +490,21 @@ function getQuestionByScreenId(screenId) {
 function getLevelForScreen(screenId) {
   if (screenId === 'screen-level-1-complete') return 1;
   if (screenId === 'screen-level-2-complete') return 2;
-  if (screenId === 'screen-level-in-progress') return AppState.currentLevel || 3;
+  if (screenId === 'screen-level-3-part-a-complete' || screenId === 'screen-level-3-complete') return 3;
+  if (screenId === 'screen-level-in-progress') return AppState.currentLevel || 4;
   if (screenId.startsWith('screen-l2-')) return 2;
   if (screenId.startsWith('screen-l3-')) return 3;
   if (screenId.startsWith('screen-l4-')) return 4;
   if (screenId.startsWith('screen-q') || screenId.startsWith('screen-exp') || screenId === 'screen-journey') return 1;
   return null;
+}
+
+// Helper: Check if Level 3 Part A is completed (all 7 questions answered)
+function isLevel3PartACleared() {
+  const l3 = LEVELS.find(l => l.id === 3);
+  if (!l3) return false;
+  const partA = l3.questions.filter(q => q.part === 'A');
+  return partA.every(q => Boolean(AppState.answers[q.id]));
 }
 
 // Check if a level is cleared based on the configurable UNLOCK_RULE
@@ -718,6 +893,16 @@ function navigateTo(screenId, isBackNav = false) {
       showToast(`🔒 Level ${screenLevel} is locked! Clear Level ${screenLevel - 1} first.`, 'toast-break');
       return;
     }
+
+    // STRICT PART B GATING FOR LEVEL 3:
+    // Part B (Set 2) unlocks only after Part A (Set 1) is fully completed
+    if (screenId.startsWith('screen-l3-b-') || screenId === 'screen-level-3-complete') {
+      if (!isLevel3PartACleared()) {
+        showToast('🔒 Part B (Set 2) unlocks only after completing Part A!', 'toast-break');
+        return;
+      }
+    }
+
     AppState.currentLevel = screenLevel;
   }
 
@@ -851,6 +1036,29 @@ function updateProgressBar() {
     const pct = Math.min(100, Math.round((step / 10) * 100));
     fill.style.width = `${pct}%`;
     text.textContent = `${Math.min(10, Math.max(1, step))} / 10`;
+  } else if (currentLevel === 3) {
+    // Level 3: 14 questions split into Part A (7) and Part B (7)
+    let step = 1;
+    let label = 'Part A: 1 / 7';
+
+    if (AppState.currentScreen.startsWith('screen-l3-a-')) {
+      step = parseInt(AppState.currentScreen.replace(/screen-l3-a-(q|exp)/, ''), 10) || 1;
+      label = `Part A: ${step} / 7`;
+    } else if (AppState.currentScreen === 'screen-level-3-part-a-complete') {
+      step = 7;
+      label = `Part A Cleared`;
+    } else if (AppState.currentScreen.startsWith('screen-l3-b-')) {
+      const bStep = parseInt(AppState.currentScreen.replace(/screen-l3-b-(q|exp)/, ''), 10) || 1;
+      step = 7 + bStep;
+      label = `Part B: ${bStep} / 7`;
+    } else if (AppState.currentScreen === 'screen-level-3-complete') {
+      step = 14;
+      label = `Level 3 Cleared`;
+    }
+
+    const pct = Math.min(100, Math.round((step / 14) * 100));
+    fill.style.width = `${pct}%`;
+    text.textContent = label;
   } else {
     fill.style.width = '100%';
     text.textContent = `Level ${currentLevel}`;
@@ -1231,7 +1439,23 @@ function setupQuestionScreens() {
     'btn-next-l2-exp6': 'screen-l2-q7',
     'btn-next-l2-exp7': 'screen-l2-q8',
     'btn-next-l2-exp8': 'screen-l2-q9',
-    'btn-next-l2-exp9': 'screen-l2-q10'
+    'btn-next-l2-exp9': 'screen-l2-q10',
+
+    // Level 3 · Part A mappings
+    'btn-next-l3-a-exp1': 'screen-l3-a-q2',
+    'btn-next-l3-a-exp2': 'screen-l3-a-q3',
+    'btn-next-l3-a-exp3': 'screen-l3-a-q4',
+    'btn-next-l3-a-exp4': 'screen-l3-a-q5',
+    'btn-next-l3-a-exp5': 'screen-l3-a-q6',
+    'btn-next-l3-a-exp6': 'screen-l3-a-q7',
+
+    // Level 3 · Part B mappings
+    'btn-next-l3-b-exp1': 'screen-l3-b-q2',
+    'btn-next-l3-b-exp2': 'screen-l3-b-q3',
+    'btn-next-l3-b-exp3': 'screen-l3-b-q4',
+    'btn-next-l3-b-exp4': 'screen-l3-b-q5',
+    'btn-next-l3-b-exp5': 'screen-l3-b-q6',
+    'btn-next-l3-b-exp6': 'screen-l3-b-q7'
   };
 
   Object.entries(nextMappings).forEach(([btnId, targetScreen]) => {
@@ -1272,6 +1496,34 @@ function setupQuestionScreens() {
   if (btnStartL3) {
     btnStartL3.addEventListener('click', () => {
       handleStartLevel(3);
+    });
+  }
+
+  // Level 3 Part A Completion Trigger on L3-A-EXP7
+  const btnFinishL3PartA = document.getElementById('btn-finish-l3-part-a');
+  if (btnFinishL3PartA) {
+    btnFinishL3PartA.addEventListener('click', handleLevel3PartAComplete);
+  }
+
+  // Start Level 3 Part B Trigger from Part A Complete Screen
+  const btnStartL3PartB = document.getElementById('btn-start-l3-part-b');
+  if (btnStartL3PartB) {
+    btnStartL3PartB.addEventListener('click', () => {
+      navigateTo('screen-l3-b-q1');
+    });
+  }
+
+  // Level 3 Full Completion Trigger on L3-B-EXP7
+  const btnFinishL3 = document.getElementById('btn-finish-level-3');
+  if (btnFinishL3) {
+    btnFinishL3.addEventListener('click', handleLevel3Complete);
+  }
+
+  // Start Level 4 Trigger from Level 3 Complete Screen
+  const btnStartL4 = document.getElementById('btn-start-level-4');
+  if (btnStartL4) {
+    btnStartL4.addEventListener('click', () => {
+      handleStartLevel(4);
     });
   }
 
@@ -1340,6 +1592,52 @@ function handleLevel2Complete() {
   navigateTo('screen-level-2-complete');
 }
 
+// Level 3 Part A Completion logic
+function handleLevel3PartAComplete() {
+  const l3Questions = LEVELS[2].questions.filter(q => q.part === 'A');
+  const correctCount = l3Questions.filter(q => AppState.answers[q.id]?.isCorrect).length;
+  const total = l3Questions.length;
+  const pct = Math.round((correctCount / total) * 100);
+
+  AppState.levelScores['3_A'] = { score: correctCount, total, percentage: pct };
+
+  const scoreDisp = document.getElementById('l3-a-score-display');
+  const pctDisp = document.getElementById('l3-a-pct-display');
+  const xpDisp = document.getElementById('l3-a-xp-display');
+  if (scoreDisp) scoreDisp.textContent = `${correctCount} / ${total}`;
+  if (pctDisp) pctDisp.textContent = `${pct}% Accuracy`;
+  if (xpDisp) xpDisp.textContent = `⚡ ${AppState.xp} XP`;
+
+  SoundFX.celebrate();
+  saveCurrentProgress();
+  navigateTo('screen-level-3-part-a-complete');
+}
+
+// Level 3 Full Completion logic (Part A + Part B)
+function handleLevel3Complete() {
+  const l3Questions = LEVELS[2].questions;
+  const correctCount = l3Questions.filter(q => AppState.answers[q.id]?.isCorrect).length;
+  const total = l3Questions.length;
+  const pct = Math.round((correctCount / total) * 100);
+
+  if (!AppState.clearedLevels.includes(3)) {
+    AppState.clearedLevels.push(3);
+  }
+  AppState.currentLevel = 4;
+  AppState.levelScores[3] = { score: correctCount, total, percentage: pct };
+
+  const scoreDisp = document.getElementById('l3-score-display');
+  const pctDisp = document.getElementById('l3-pct-display');
+  const xpDisp = document.getElementById('l3-xp-display');
+  if (scoreDisp) scoreDisp.textContent = `${correctCount} / ${total}`;
+  if (pctDisp) pctDisp.textContent = `${pct}% Accuracy`;
+  if (xpDisp) xpDisp.textContent = `⚡ ${AppState.xp} XP`;
+
+  SoundFX.celebrate();
+  saveCurrentProgress();
+  navigateTo('screen-level-3-complete');
+}
+
 // Start Level Handler (Modular: if level has 0 questions, shows In-Progress screen automatically)
 function handleStartLevel(levelNum) {
   const targetLvl = LEVELS.find(l => l.id === levelNum);
@@ -1361,7 +1659,14 @@ function handleStartLevel(levelNum) {
     if (desc) desc.textContent = `Level ${levelNum} – ${targetLvl.title} is being built. Check back soon!`;
     navigateTo('screen-level-in-progress');
   } else {
-    navigateTo(targetLvl.questions[0].screenId);
+    // Level 3 starts at Part A Q1 (or Part B Q1 if Part A already cleared)
+    if (levelNum === 3 && !isLevel3PartACleared()) {
+      navigateTo('screen-l3-a-q1');
+    } else if (levelNum === 3 && isLevel3PartACleared()) {
+      navigateTo('screen-l3-b-q1');
+    } else {
+      navigateTo(targetLvl.questions[0].screenId);
+    }
   }
 }
 
@@ -1890,9 +2195,13 @@ function setupAuthSystem() {
     } else if (!AppState.clearedLevels.includes(2)) {
       navigateTo('screen-l2-q1');
     } else if (!AppState.clearedLevels.includes(3)) {
-      handleStartLevel(3);
+      if (!isLevel3PartACleared()) {
+        navigateTo('screen-l3-a-q1');
+      } else {
+        navigateTo('screen-l3-b-q1');
+      }
     } else {
-      navigateTo('screen-report');
+      handleStartLevel(4);
     }
   }
 
