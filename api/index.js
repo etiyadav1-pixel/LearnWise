@@ -227,6 +227,76 @@ module.exports = async function handler(req, res) {
       }
     }
 
+    // 4b. SAVE USER PROGRESS ACROSS SESSIONS & DEVICES
+    if (req.method === 'POST' && pathname === '/api/save-progress') {
+      const { student_id, progress } = req.body || {};
+      if (!student_id || !progress) {
+        return res.status(400).json({ error: 'student_id and progress payload required' });
+      }
+
+      try {
+        const userRes = await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${student_id}`, { headers: authHeaders });
+        if (!userRes.ok) return res.status(404).json({ error: 'Student account not found' });
+        const userObj = await userRes.json();
+        const meta = userObj.user_metadata || {};
+
+        const mergedCleared = Array.from(new Set([
+          ...(Array.isArray(meta.cleared_levels) ? meta.cleared_levels : []),
+          ...(Array.isArray(progress.cleared_levels) ? progress.cleared_levels : [])
+        ]));
+
+        const updatedMeta = {
+          ...meta,
+          cleared_levels: mergedCleared,
+          current_level: progress.current_level || meta.current_level || 1,
+          current_screen: progress.current_screen || meta.current_screen || 'screen-q1',
+          level_scores: { ...(meta.level_scores || {}), ...(progress.level_scores || {}) },
+          total_xp: typeof progress.total_xp === 'number' ? progress.total_xp : (meta.total_xp || 0),
+          best_streak: Math.max(meta.best_streak || 0, progress.best_streak || 0),
+          last_active: new Date().toISOString()
+        };
+
+        await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${student_id}`, {
+          method: 'PUT',
+          headers: authHeaders,
+          body: JSON.stringify({ user_metadata: updatedMeta })
+        });
+
+        return res.status(200).json({ success: true, progress: updatedMeta });
+      } catch (err) {
+        console.error('Save progress error:', err);
+        return res.status(500).json({ error: 'Failed to save progress' });
+      }
+    }
+
+    // 4c. GET USER PROGRESS
+    if (req.method === 'GET' && pathname === '/api/student-progress') {
+      const studentId = url.searchParams.get('student_id');
+      if (!studentId) return res.status(400).json({ error: 'student_id query param required' });
+
+      try {
+        const userRes = await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${studentId}`, { headers: authHeaders });
+        if (!userRes.ok) return res.status(404).json({ error: 'Student not found' });
+        const userObj = await userRes.json();
+        const meta = userObj.user_metadata || {};
+
+        return res.status(200).json({
+          success: true,
+          progress: {
+            cleared_levels: meta.cleared_levels || [],
+            current_level: meta.current_level || 1,
+            current_screen: meta.current_screen || 'screen-q1',
+            level_scores: meta.level_scores || {},
+            total_xp: meta.total_xp || 0,
+            best_streak: meta.best_streak || 0,
+            student_name: meta.student_name || 'Student'
+          }
+        });
+      } catch (err) {
+        return res.status(500).json({ error: 'Failed to fetch student progress' });
+      }
+    }
+
     // 5. GET LEADERBOARD
     if (req.method === 'GET' && pathname === '/api/leaderboard') {
       try {

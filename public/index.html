@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -27,10 +27,16 @@
     </div>
 
     <div class="hud-center">
-      <div class="progress-track" title="Quiz Progress">
-        <div id="progress-bar-fill" class="progress-fill" style="width: 0%;"></div>
+      <!-- Sequential Level Progress Indicator (Display Only) -->
+      <div id="hud-level-indicator" class="hud-level-indicator" aria-label="Level Progression" title="Level Progression">
+        <!-- Rendered dynamically: Level 1 · Level 2 🔒 · Level 3 🔒 · Level 4 🔒 -->
       </div>
-      <span id="progress-text" class="progress-counter">1 / 12</span>
+      <div class="hud-sub-progress">
+        <div class="progress-track" title="Level Progress">
+          <div id="progress-bar-fill" class="progress-fill" style="width: 0%;"></div>
+        </div>
+        <span id="progress-text" class="progress-counter">1 / 11</span>
+      </div>
     </div>
 
     <div class="hud-right">
@@ -60,16 +66,14 @@
         <span id="audio-icon">🔊</span>
       </button>
 
-      <!-- Student Profile -->
-      <div id="hud-user-profile" class="user-profile-badge" title="Logged in student">
-        <div class="user-avatar" id="user-avatar-initial">S</div>
-        <span class="user-name-text" id="user-display-name">Student</span>
+      <!-- Student Profile & Logout (Matches Cover Top-Bar) -->
+      <div id="hud-user-profile" class="hud-auth-section" title="Logged in student">
+        <span class="cover-student-chip">
+          <span class="student-chip-icon">👤</span>
+          <strong id="user-display-name">Student</strong>
+        </span>
+        <button id="btn-hud-logout" class="btn-cover-auth btn-auth-logout" title="Sign out" aria-label="Log Out">Log Out</button>
       </div>
-
-      <!-- HUD Logout Button -->
-      <button id="btn-hud-logout" class="hud-icon-btn" title="Sign out" aria-label="Sign out">
-        <span>🚪</span>
-      </button>
 
       <!-- Kraftshala Logo -->
       <a href="https://www.kraftshala.com" target="_blank" rel="noopener noreferrer" class="hud-logo-link" title="Visit Kraftshala">
@@ -177,6 +181,28 @@
          SCREEN 2: INTRO SCREEN
          ======================================================== -->
     <section id="screen-intro" class="screen screen-intro-layout">
+      <!-- Clean Top Navigation Bar matching Cover -->
+      <div class="cover-top-bar">
+        <div class="cover-brand-title">
+          <span>Meta Ads Key Metrics</span>
+        </div>
+        <div class="cover-auth-container">
+          <!-- When Logged Out -->
+          <div id="intro-guest-section" class="cover-auth-state">
+            <button id="btn-intro-login" class="btn-cover-auth btn-auth-login">Login / Sign Up</button>
+          </div>
+
+          <!-- When Logged In -->
+          <div id="intro-user-section" class="cover-auth-state hidden">
+            <span class="cover-student-chip">
+              <span class="student-chip-icon">👤</span>
+              <strong id="intro-student-name">Student</strong>
+            </span>
+            <button id="btn-intro-logout" class="btn-cover-auth btn-auth-logout">Log Out</button>
+          </div>
+        </div>
+      </div>
+
       <div class="intro-canvas">
         <div class="intro-brand-top">
           <img src="assets/images/image18.png" alt="Kraftshala" class="intro-logo-img">
@@ -1514,12 +1540,903 @@
               <span>Everything in the user journey comes at a cost. Manage your funnel to keep CPA profitable!</span>
             </div>
           </div>
-          <button class="btn-primary-kraft btn-finish-quiz" id="btn-finish-quiz">
-            Finish & View Results 🏆
+          <button class="btn-primary-kraft btn-finish-quiz" id="btn-finish-level-1">
+            Complete Level 1 🎉 →
           </button>
         </div>
       </div>
     </section>
+
+    <!-- ========================================================
+         LEVEL 1 COMPLETE SCREEN
+         ======================================================== -->
+    <section id="screen-level-1-complete" class="screen level-complete-screen">
+      <div class="level-complete-canvas">
+        <div class="level-complete-header">
+          <div class="level-celebrate-burst">🎉</div>
+          <span class="level-complete-badge">Level 1 · Fundamentals Cleared</span>
+          <h1 class="level-complete-title">Level 1 Cleared! 🎉</h1>
+          <p class="level-complete-msg">Level 1 cleared! Level 2 unlocked.</p>
+        </div>
+
+        <div class="level-score-hero">
+          <div class="level-stat-card">
+            <span class="stat-card-label">Level 1 Score</span>
+            <span id="l1-score-display" class="stat-card-value">0 / 11</span>
+            <span id="l1-pct-display" class="stat-card-sub">0% Accuracy</span>
+          </div>
+          <div class="level-stat-card xp-gain-card">
+            <span class="stat-card-label">Total XP Earned</span>
+            <span id="l1-xp-display" class="stat-card-value">⚡ 0 XP</span>
+            <span class="stat-card-sub">Ready for Level 2!</span>
+          </div>
+        </div>
+
+        <div class="level-next-teaser">
+          <div class="next-level-preview-card">
+            <div class="preview-badge">Next Milestone</div>
+            <h3>Level 2 – Numericals</h3>
+            <p>10 practical math problems to calculate CTR, CVR, CPM, CPC, CPA, Reach & Frequency.</p>
+          </div>
+        </div>
+
+        <div class="level-complete-actions">
+          <button id="btn-start-level-2" class="btn-primary-kraft btn-hero">
+            <span>Start Level 2 →</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         LEVEL 2: NUMERICAL QUESTIONS (1 TO 10)
+         ======================================================== -->
+
+    <!-- L2-Q1: Click-Through Rate (CTR) -->
+    <section id="screen-l2-q1" class="screen question-screen">
+      <div class="quiz-card-container">
+        <div class="quiz-header">
+          <div class="quiz-header-meta">
+            <span class="quiz-badge">Level 2 · Question 1</span>
+            <div class="quiz-timer-badge">
+              <span class="timer-icon">⏱️</span>
+              <span class="timer-countdown">23</span><span class="timer-unit">s</span>
+            </div>
+          </div>
+          <h2 class="quiz-question-text">A Meta Ads campaign generated 500 clicks from 10,000 impressions. What is the CTR?</h2>
+        </div>
+        <div class="options-container" data-qid="L2_Q1">
+          <button class="option-btn" data-opt="A">
+            <span class="opt-key">A</span>
+            <span class="opt-label">2%</span>
+          </button>
+          <button class="option-btn" data-opt="B">
+            <span class="opt-key">B</span>
+            <span class="opt-label">5%</span>
+          </button>
+          <button class="option-btn" data-opt="C">
+            <span class="opt-key">C</span>
+            <span class="opt-label">10%</span>
+          </button>
+          <button class="option-btn" data-opt="D">
+            <span class="opt-key">D</span>
+            <span class="opt-label">20%</span>
+          </button>
+        </div>
+        <div class="feedback-box hidden" id="feedback-L2_Q1">
+          <div class="feedback-content">
+            <span class="feedback-icon">🎉</span>
+            <span class="feedback-text">Correct! Great calculation.</span>
+          </div>
+        </div>
+        <div class="quiz-footer">
+          <div class="quiz-footer-doodle">⚡</div>
+          <button class="btn-primary-kraft btn-submit" id="btn-submit-L2_Q1" disabled>Submit Answer →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- L2-EXP1: CTR Explanation -->
+    <section id="screen-l2-exp1" class="screen explanation-screen">
+      <div class="exp-card-container">
+        <div class="exp-header">
+          <span class="exp-badge">Level 2 · Numerical Explanation</span>
+          <h1 class="exp-title">CTR (Click-Through Rate) Calculation</h1>
+          <p class="exp-subtitle">Formula and step-by-step working.</p>
+        </div>
+        <div class="numerical-working-card">
+          <div class="numerical-solution-pill">
+            <span class="pill-check">✓</span> Correct Answer: <strong>Option B (5%)</strong>
+          </div>
+          <div class="formula-box-styled">
+            <span class="formula-label">Formula:</span>
+            <code>CTR = (Clicks ÷ Impressions) × 100</code>
+          </div>
+          <div class="numerical-summary-pill">
+            <strong>Working:</strong> CTR = (Clicks ÷ Impressions) × 100 = (500 ÷ 10,000) × 100 = 5%
+          </div>
+        </div>
+        <div class="exp-footer">
+          <div class="remember-card">
+            <span class="remember-lamp">💡</span>
+            <div>
+              <strong>Quick Tip:</strong>
+              <span>CTR evaluates creative appeal: out of 10,000 deliveries, 5% generated clicks.</span>
+            </div>
+          </div>
+          <button class="btn-primary-kraft btn-next-exp" id="btn-next-l2-exp1">Next Question →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- L2-Q2: Conversion Rate (CVR) -->
+    <section id="screen-l2-q2" class="screen question-screen">
+      <div class="quiz-card-container">
+        <div class="quiz-header">
+          <div class="quiz-header-meta">
+            <span class="quiz-badge">Level 2 · Question 2</span>
+            <div class="quiz-timer-badge">
+              <span class="timer-icon">⏱️</span>
+              <span class="timer-countdown">23</span><span class="timer-unit">s</span>
+            </div>
+          </div>
+          <h2 class="quiz-question-text">A campaign received 2,000 clicks and generated 100 conversions. What is the Conversion Rate?</h2>
+        </div>
+        <div class="options-container" data-qid="L2_Q2">
+          <button class="option-btn" data-opt="A">
+            <span class="opt-key">A</span>
+            <span class="opt-label">2%</span>
+          </button>
+          <button class="option-btn" data-opt="B">
+            <span class="opt-key">B</span>
+            <span class="opt-label">5%</span>
+          </button>
+          <button class="option-btn" data-opt="C">
+            <span class="opt-key">C</span>
+            <span class="opt-label">10%</span>
+          </button>
+          <button class="option-btn" data-opt="D">
+            <span class="opt-key">D</span>
+            <span class="opt-label">20%</span>
+          </button>
+        </div>
+        <div class="feedback-box hidden" id="feedback-L2_Q2">
+          <div class="feedback-content">
+            <span class="feedback-icon">🎉</span>
+            <span class="feedback-text">Correct! Great calculation.</span>
+          </div>
+        </div>
+        <div class="quiz-footer">
+          <div class="quiz-footer-doodle">⚡</div>
+          <button class="btn-primary-kraft btn-submit" id="btn-submit-L2_Q2" disabled>Submit Answer →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- L2-EXP2: CVR Explanation -->
+    <section id="screen-l2-exp2" class="screen explanation-screen">
+      <div class="exp-card-container">
+        <div class="exp-header">
+          <span class="exp-badge">Level 2 · Numerical Explanation</span>
+          <h1 class="exp-title">Conversion Rate (CVR) Calculation</h1>
+          <p class="exp-subtitle">Formula and step-by-step working.</p>
+        </div>
+        <div class="numerical-working-card">
+          <div class="numerical-solution-pill">
+            <span class="pill-check">✓</span> Correct Answer: <strong>Option B (5%)</strong>
+          </div>
+          <div class="formula-box-styled">
+            <span class="formula-label">Formula:</span>
+            <code>CVR = (Conversions ÷ Clicks) × 100</code>
+          </div>
+          <div class="numerical-summary-pill">
+            <strong>Working:</strong> CVR = (Conversions ÷ Clicks) × 100 = (100 ÷ 2,000) × 100 = 5%
+          </div>
+        </div>
+        <div class="exp-footer">
+          <div class="remember-card">
+            <span class="remember-lamp">💡</span>
+            <div>
+              <strong>Quick Tip:</strong>
+              <span>CVR measures website / landing page quality: 5% of traffic completed a purchase.</span>
+            </div>
+          </div>
+          <button class="btn-primary-kraft btn-next-exp" id="btn-next-l2-exp2">Next Question →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- L2-Q3: Cost per Mille (CPM) -->
+    <section id="screen-l2-q3" class="screen question-screen">
+      <div class="quiz-card-container">
+        <div class="quiz-header">
+          <div class="quiz-header-meta">
+            <span class="quiz-badge">Level 2 · Question 3</span>
+            <div class="quiz-timer-badge">
+              <span class="timer-icon">⏱️</span>
+              <span class="timer-countdown">23</span><span class="timer-unit">s</span>
+            </div>
+          </div>
+          <h2 class="quiz-question-text">A campaign spent ₹2,000 and generated 50,000 impressions. What is the CPM?</h2>
+        </div>
+        <div class="options-container" data-qid="L2_Q3">
+          <button class="option-btn" data-opt="A">
+            <span class="opt-key">A</span>
+            <span class="opt-label">₹20</span>
+          </button>
+          <button class="option-btn" data-opt="B">
+            <span class="opt-key">B</span>
+            <span class="opt-label">₹40</span>
+          </button>
+          <button class="option-btn" data-opt="C">
+            <span class="opt-key">C</span>
+            <span class="opt-label">₹50</span>
+          </button>
+          <button class="option-btn" data-opt="D">
+            <span class="opt-key">D</span>
+            <span class="opt-label">₹100</span>
+          </button>
+        </div>
+        <div class="feedback-box hidden" id="feedback-L2_Q3">
+          <div class="feedback-content">
+            <span class="feedback-icon">🎉</span>
+            <span class="feedback-text">Correct! Spot on calculation.</span>
+          </div>
+        </div>
+        <div class="quiz-footer">
+          <div class="quiz-footer-doodle">⚡</div>
+          <button class="btn-primary-kraft btn-submit" id="btn-submit-L2_Q3" disabled>Submit Answer →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- L2-EXP3: CPM Explanation -->
+    <section id="screen-l2-exp3" class="screen explanation-screen">
+      <div class="exp-card-container">
+        <div class="exp-header">
+          <span class="exp-badge">Level 2 · Numerical Explanation</span>
+          <h1 class="exp-title">CPM (Cost per Mille) Calculation</h1>
+          <p class="exp-subtitle">Formula and step-by-step working.</p>
+        </div>
+        <div class="numerical-working-card">
+          <div class="numerical-solution-pill">
+            <span class="pill-check">✓</span> Correct Answer: <strong>Option B (₹40)</strong>
+          </div>
+          <div class="formula-box-styled">
+            <span class="formula-label">Formula:</span>
+            <code>CPM = (Spend ÷ Impressions) × 1,000</code>
+          </div>
+          <div class="numerical-summary-pill">
+            <strong>Working:</strong> CPM = (Spend ÷ Impressions) × 1,000 = (2,000 ÷ 50,000) × 1,000 = ₹40
+          </div>
+        </div>
+        <div class="exp-footer">
+          <div class="remember-card">
+            <span class="remember-lamp">💡</span>
+            <div>
+              <strong>Quick Tip:</strong>
+              <span>Mille means thousand. ₹2,000 for 50k impressions equals ₹40 for every 1,000 deliveries.</span>
+            </div>
+          </div>
+          <button class="btn-primary-kraft btn-next-exp" id="btn-next-l2-exp3">Next Question →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- L2-Q4: Cost per Click (CPC) -->
+    <section id="screen-l2-q4" class="screen question-screen">
+      <div class="quiz-card-container">
+        <div class="quiz-header">
+          <div class="quiz-header-meta">
+            <span class="quiz-badge">Level 2 · Question 4</span>
+            <div class="quiz-timer-badge">
+              <span class="timer-icon">⏱️</span>
+              <span class="timer-countdown">23</span><span class="timer-unit">s</span>
+            </div>
+          </div>
+          <h2 class="quiz-question-text">A campaign spent ₹5,000 and generated 1,000 clicks. What is the CPC?</h2>
+        </div>
+        <div class="options-container" data-qid="L2_Q4">
+          <button class="option-btn" data-opt="A">
+            <span class="opt-key">A</span>
+            <span class="opt-label">₹2</span>
+          </button>
+          <button class="option-btn" data-opt="B">
+            <span class="opt-key">B</span>
+            <span class="opt-label">₹5</span>
+          </button>
+          <button class="option-btn" data-opt="C">
+            <span class="opt-key">C</span>
+            <span class="opt-label">₹10</span>
+          </button>
+          <button class="option-btn" data-opt="D">
+            <span class="opt-key">D</span>
+            <span class="opt-label">₹50</span>
+          </button>
+        </div>
+        <div class="feedback-box hidden" id="feedback-L2_Q4">
+          <div class="feedback-content">
+            <span class="feedback-icon">🎉</span>
+            <span class="feedback-text">Correct! Great math.</span>
+          </div>
+        </div>
+        <div class="quiz-footer">
+          <div class="quiz-footer-doodle">⚡</div>
+          <button class="btn-primary-kraft btn-submit" id="btn-submit-L2_Q4" disabled>Submit Answer →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- L2-EXP4: CPC Explanation -->
+    <section id="screen-l2-exp4" class="screen explanation-screen">
+      <div class="exp-card-container">
+        <div class="exp-header">
+          <span class="exp-badge">Level 2 · Numerical Explanation</span>
+          <h1 class="exp-title">CPC (Cost per Click) Calculation</h1>
+          <p class="exp-subtitle">Formula and step-by-step working.</p>
+        </div>
+        <div class="numerical-working-card">
+          <div class="numerical-solution-pill">
+            <span class="pill-check">✓</span> Correct Answer: <strong>Option B (₹5)</strong>
+          </div>
+          <div class="formula-box-styled">
+            <span class="formula-label">Formula:</span>
+            <code>CPC = Spend ÷ Clicks</code>
+          </div>
+          <div class="numerical-summary-pill">
+            <strong>Working:</strong> CPC = Spend ÷ Clicks = 5,000 ÷ 1,000 = ₹5
+          </div>
+        </div>
+        <div class="exp-footer">
+          <div class="remember-card">
+            <span class="remember-lamp">💡</span>
+            <div>
+              <strong>Quick Tip:</strong>
+              <span>CPC measures direct acquisition cost per click to your target website.</span>
+            </div>
+          </div>
+          <button class="btn-primary-kraft btn-next-exp" id="btn-next-l2-exp4">Next Question →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- L2-Q5: Cost per Acquisition (CPA) -->
+    <section id="screen-l2-q5" class="screen question-screen">
+      <div class="quiz-card-container">
+        <div class="quiz-header">
+          <div class="quiz-header-meta">
+            <span class="quiz-badge">Level 2 · Question 5</span>
+            <div class="quiz-timer-badge">
+              <span class="timer-icon">⏱️</span>
+              <span class="timer-countdown">23</span><span class="timer-unit">s</span>
+            </div>
+          </div>
+          <h2 class="quiz-question-text">A campaign spent ₹6,000 and generated 120 conversions. What is the CPA?</h2>
+        </div>
+        <div class="options-container" data-qid="L2_Q5">
+          <button class="option-btn" data-opt="A">
+            <span class="opt-key">A</span>
+            <span class="opt-label">₹20</span>
+          </button>
+          <button class="option-btn" data-opt="B">
+            <span class="opt-key">B</span>
+            <span class="opt-label">₹40</span>
+          </button>
+          <button class="option-btn" data-opt="C">
+            <span class="opt-key">C</span>
+            <span class="opt-label">₹50</span>
+          </button>
+          <button class="option-btn" data-opt="D">
+            <span class="opt-key">D</span>
+            <span class="opt-label">₹60</span>
+          </button>
+        </div>
+        <div class="feedback-box hidden" id="feedback-L2_Q5">
+          <div class="feedback-content">
+            <span class="feedback-icon">🎉</span>
+            <span class="feedback-text">Correct! Exactly ₹50 per conversion.</span>
+          </div>
+        </div>
+        <div class="quiz-footer">
+          <div class="quiz-footer-doodle">⚡</div>
+          <button class="btn-primary-kraft btn-submit" id="btn-submit-L2_Q5" disabled>Submit Answer →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- L2-EXP5: CPA Explanation -->
+    <section id="screen-l2-exp5" class="screen explanation-screen">
+      <div class="exp-card-container">
+        <div class="exp-header">
+          <span class="exp-badge">Level 2 · Numerical Explanation</span>
+          <h1 class="exp-title">CPA (Cost per Acquisition) Calculation</h1>
+          <p class="exp-subtitle">Formula and step-by-step working.</p>
+        </div>
+        <div class="numerical-working-card">
+          <div class="numerical-solution-pill">
+            <span class="pill-check">✓</span> Correct Answer: <strong>Option C (₹50)</strong>
+          </div>
+          <div class="formula-box-styled">
+            <span class="formula-label">Formula:</span>
+            <code>CPA = Spend ÷ Conversions</code>
+          </div>
+          <div class="numerical-summary-pill">
+            <strong>Working:</strong> CPA = Spend ÷ Conversions = 6,000 ÷ 120 = ₹50
+          </div>
+        </div>
+        <div class="exp-footer">
+          <div class="remember-card">
+            <span class="remember-lamp">💡</span>
+            <div>
+              <strong>Quick Tip:</strong>
+              <span>Keeping CPA below your product margin is the key to profitable advertising.</span>
+            </div>
+          </div>
+          <button class="btn-primary-kraft btn-next-exp" id="btn-next-l2-exp5">Next Question →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- L2-Q6: Average Frequency -->
+    <section id="screen-l2-q6" class="screen question-screen">
+      <div class="quiz-card-container">
+        <div class="quiz-header">
+          <div class="quiz-header-meta">
+            <span class="quiz-badge">Level 2 · Question 6</span>
+            <div class="quiz-timer-badge">
+              <span class="timer-icon">⏱️</span>
+              <span class="timer-countdown">23</span><span class="timer-unit">s</span>
+            </div>
+          </div>
+          <h2 class="quiz-question-text">A Meta Ads campaign generated 30,000 impressions and reached 10,000 unique people. What is the average frequency?</h2>
+        </div>
+        <div class="options-container" data-qid="L2_Q6">
+          <button class="option-btn" data-opt="A">
+            <span class="opt-key">A</span>
+            <span class="opt-label">2</span>
+          </button>
+          <button class="option-btn" data-opt="B">
+            <span class="opt-key">B</span>
+            <span class="opt-label">3</span>
+          </button>
+          <button class="option-btn" data-opt="C">
+            <span class="opt-key">C</span>
+            <span class="opt-label">4</span>
+          </button>
+          <button class="option-btn" data-opt="D">
+            <span class="opt-key">D</span>
+            <span class="opt-label">5</span>
+          </button>
+        </div>
+        <div class="feedback-box hidden" id="feedback-L2_Q6">
+          <div class="feedback-content">
+            <span class="feedback-icon">🎉</span>
+            <span class="feedback-text">Correct! Frequency is exactly 3.</span>
+          </div>
+        </div>
+        <div class="quiz-footer">
+          <div class="quiz-footer-doodle">⚡</div>
+          <button class="btn-primary-kraft btn-submit" id="btn-submit-L2_Q6" disabled>Submit Answer →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- L2-EXP6: Frequency Explanation -->
+    <section id="screen-l2-exp6" class="screen explanation-screen">
+      <div class="exp-card-container">
+        <div class="exp-header">
+          <span class="exp-badge">Level 2 · Numerical Explanation</span>
+          <h1 class="exp-title">Average Frequency Calculation</h1>
+          <p class="exp-subtitle">Formula and step-by-step working.</p>
+        </div>
+        <div class="numerical-working-card">
+          <div class="numerical-solution-pill">
+            <span class="pill-check">✓</span> Correct Answer: <strong>Option B (3)</strong>
+          </div>
+          <div class="formula-box-styled">
+            <span class="formula-label">Formula:</span>
+            <code>Frequency = Impressions ÷ Reach</code>
+          </div>
+          <div class="numerical-summary-pill">
+            <strong>Working:</strong> Frequency = Impressions ÷ Reach = 30,000 ÷ 10,000 = 3
+          </div>
+        </div>
+        <div class="exp-footer">
+          <div class="remember-card">
+            <span class="remember-lamp">💡</span>
+            <div>
+              <strong>Quick Tip:</strong>
+              <span>On average, each unique viewer was shown the ad 3 times.</span>
+            </div>
+          </div>
+          <button class="btn-primary-kraft btn-next-exp" id="btn-next-l2-exp6">Next Question →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- L2-Q7: Reach from Impressions & Frequency -->
+    <section id="screen-l2-q7" class="screen question-screen">
+      <div class="quiz-card-container">
+        <div class="quiz-header">
+          <div class="quiz-header-meta">
+            <span class="quiz-badge">Level 2 · Question 7</span>
+            <div class="quiz-timer-badge">
+              <span class="timer-icon">⏱️</span>
+              <span class="timer-countdown">23</span><span class="timer-unit">s</span>
+            </div>
+          </div>
+          <h2 class="quiz-question-text">A Meta Ads campaign generated 40,000 impressions at an average frequency of 4. How many unique people did the campaign reach?</h2>
+        </div>
+        <div class="options-container" data-qid="L2_Q7">
+          <button class="option-btn" data-opt="A">
+            <span class="opt-key">A</span>
+            <span class="opt-label">8,000</span>
+          </button>
+          <button class="option-btn" data-opt="B">
+            <span class="opt-key">B</span>
+            <span class="opt-label">10,000</span>
+          </button>
+          <button class="option-btn" data-opt="C">
+            <span class="opt-key">C</span>
+            <span class="opt-label">12,000</span>
+          </button>
+          <button class="option-btn" data-opt="D">
+            <span class="opt-key">D</span>
+            <span class="opt-label">16,000</span>
+          </button>
+        </div>
+        <div class="feedback-box hidden" id="feedback-L2_Q7">
+          <div class="feedback-content">
+            <span class="feedback-icon">🎉</span>
+            <span class="feedback-text">Correct! Reach = 10,000 unique people.</span>
+          </div>
+        </div>
+        <div class="quiz-footer">
+          <div class="quiz-footer-doodle">⚡</div>
+          <button class="btn-primary-kraft btn-submit" id="btn-submit-L2_Q7" disabled>Submit Answer →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- L2-EXP7: Reach Explanation -->
+    <section id="screen-l2-exp7" class="screen explanation-screen">
+      <div class="exp-card-container">
+        <div class="exp-header">
+          <span class="exp-badge">Level 2 · Numerical Explanation</span>
+          <h1 class="exp-title">Reach Calculation</h1>
+          <p class="exp-subtitle">Formula and step-by-step working.</p>
+        </div>
+        <div class="numerical-working-card">
+          <div class="numerical-solution-pill">
+            <span class="pill-check">✓</span> Correct Answer: <strong>Option B (10,000)</strong>
+          </div>
+          <div class="formula-box-styled">
+            <span class="formula-label">Formula:</span>
+            <code>Reach = Impressions ÷ Frequency</code>
+          </div>
+          <div class="numerical-summary-pill">
+            <strong>Working:</strong> Reach = Impressions ÷ Frequency = 40,000 ÷ 4 = 10,000
+          </div>
+        </div>
+        <div class="exp-footer">
+          <div class="remember-card">
+            <span class="remember-lamp">💡</span>
+            <div>
+              <strong>Quick Tip:</strong>
+              <span>Rearranging Frequency = Impressions ÷ Reach gives Reach = Impressions ÷ Frequency.</span>
+            </div>
+          </div>
+          <button class="btn-primary-kraft btn-next-exp" id="btn-next-l2-exp7">Next Question →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- L2-Q8: Impressions from Reach & Frequency -->
+    <section id="screen-l2-q8" class="screen question-screen">
+      <div class="quiz-card-container">
+        <div class="quiz-header">
+          <div class="quiz-header-meta">
+            <span class="quiz-badge">Level 2 · Question 8</span>
+            <div class="quiz-timer-badge">
+              <span class="timer-icon">⏱️</span>
+              <span class="timer-countdown">23</span><span class="timer-unit">s</span>
+            </div>
+          </div>
+          <h2 class="quiz-question-text">A campaign reached 15,000 unique people with an average frequency of 3. What were the total impressions?</h2>
+        </div>
+        <div class="options-container" data-qid="L2_Q8">
+          <button class="option-btn" data-opt="A">
+            <span class="opt-key">A</span>
+            <span class="opt-label">30,000</span>
+          </button>
+          <button class="option-btn" data-opt="B">
+            <span class="opt-key">B</span>
+            <span class="opt-label">35,000</span>
+          </button>
+          <button class="option-btn" data-opt="C">
+            <span class="opt-key">C</span>
+            <span class="opt-label">45,000</span>
+          </button>
+          <button class="option-btn" data-opt="D">
+            <span class="opt-key">D</span>
+            <span class="opt-label">50,000</span>
+          </button>
+        </div>
+        <div class="feedback-box hidden" id="feedback-L2_Q8">
+          <div class="feedback-content">
+            <span class="feedback-icon">🎉</span>
+            <span class="feedback-text">Correct! 45,000 total impressions.</span>
+          </div>
+        </div>
+        <div class="quiz-footer">
+          <div class="quiz-footer-doodle">⚡</div>
+          <button class="btn-primary-kraft btn-submit" id="btn-submit-L2_Q8" disabled>Submit Answer →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- L2-EXP8: Impressions Explanation -->
+    <section id="screen-l2-exp8" class="screen explanation-screen">
+      <div class="exp-card-container">
+        <div class="exp-header">
+          <span class="exp-badge">Level 2 · Numerical Explanation</span>
+          <h1 class="exp-title">Impressions Calculation</h1>
+          <p class="exp-subtitle">Formula and step-by-step working.</p>
+        </div>
+        <div class="numerical-working-card">
+          <div class="numerical-solution-pill">
+            <span class="pill-check">✓</span> Correct Answer: <strong>Option C (45,000)</strong>
+          </div>
+          <div class="formula-box-styled">
+            <span class="formula-label">Formula:</span>
+            <code>Impressions = Reach × Frequency</code>
+          </div>
+          <div class="numerical-summary-pill">
+            <strong>Working:</strong> Impressions = Reach × Frequency = 15,000 × 3 = 45,000
+          </div>
+        </div>
+        <div class="exp-footer">
+          <div class="remember-card">
+            <span class="remember-lamp">💡</span>
+            <div>
+              <strong>Quick Tip:</strong>
+              <span>Multiplying unique people reached by the average appearances per person yields total impressions.</span>
+            </div>
+          </div>
+          <button class="btn-primary-kraft btn-next-exp" id="btn-next-l2-exp8">Next Question →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- L2-Q9: Total Spend from CPM -->
+    <section id="screen-l2-q9" class="screen question-screen">
+      <div class="quiz-card-container">
+        <div class="quiz-header">
+          <div class="quiz-header-meta">
+            <span class="quiz-badge">Level 2 · Question 9</span>
+            <div class="quiz-timer-badge">
+              <span class="timer-icon">⏱️</span>
+              <span class="timer-countdown">23</span><span class="timer-unit">s</span>
+            </div>
+          </div>
+          <h2 class="quiz-question-text">A campaign generated 80,000 impressions at a CPM of ₹50. What was the total ad spend?</h2>
+        </div>
+        <div class="options-container" data-qid="L2_Q9">
+          <button class="option-btn" data-opt="A">
+            <span class="opt-key">A</span>
+            <span class="opt-label">₹2,000</span>
+          </button>
+          <button class="option-btn" data-opt="B">
+            <span class="opt-key">B</span>
+            <span class="opt-label">₹3,000</span>
+          </button>
+          <button class="option-btn" data-opt="C">
+            <span class="opt-key">C</span>
+            <span class="opt-label">₹4,000</span>
+          </button>
+          <button class="option-btn" data-opt="D">
+            <span class="opt-key">D</span>
+            <span class="opt-label">₹5,000</span>
+          </button>
+        </div>
+        <div class="feedback-box hidden" id="feedback-L2_Q9">
+          <div class="feedback-content">
+            <span class="feedback-icon">🎉</span>
+            <span class="feedback-text">Correct! Spend = ₹4,000.</span>
+          </div>
+        </div>
+        <div class="quiz-footer">
+          <div class="quiz-footer-doodle">⚡</div>
+          <button class="btn-primary-kraft btn-submit" id="btn-submit-L2_Q9" disabled>Submit Answer →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- L2-EXP9: Spend Explanation -->
+    <section id="screen-l2-exp9" class="screen explanation-screen">
+      <div class="exp-card-container">
+        <div class="exp-header">
+          <span class="exp-badge">Level 2 · Numerical Explanation</span>
+          <h1 class="exp-title">Ad Spend from CPM</h1>
+          <p class="exp-subtitle">Formula and step-by-step working.</p>
+        </div>
+        <div class="numerical-working-card">
+          <div class="numerical-solution-pill">
+            <span class="pill-check">✓</span> Correct Answer: <strong>Option C (₹4,000)</strong>
+          </div>
+          <div class="formula-box-styled">
+            <span class="formula-label">Formula:</span>
+            <code>Spend = (CPM × Impressions) ÷ 1,000</code>
+          </div>
+          <div class="numerical-summary-pill">
+            <strong>Working:</strong> Spend = (CPM × Impressions) ÷ 1,000 = (50 × 80,000) ÷ 1,000 = ₹4,000
+          </div>
+        </div>
+        <div class="exp-footer">
+          <div class="remember-card">
+            <span class="remember-lamp">💡</span>
+            <div>
+              <strong>Quick Tip:</strong>
+              <span>80,000 impressions represents 80 batches of 1,000. At ₹50 per thousand, 80 × ₹50 = ₹4,000.</span>
+            </div>
+          </div>
+          <button class="btn-primary-kraft btn-next-exp" id="btn-next-l2-exp9">Next Question →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- L2-Q10: Conversions from CVR -->
+    <section id="screen-l2-q10" class="screen question-screen">
+      <div class="quiz-card-container">
+        <div class="quiz-header">
+          <div class="quiz-header-meta">
+            <span class="quiz-badge">Level 2 · Question 10</span>
+            <div class="quiz-timer-badge">
+              <span class="timer-icon">⏱️</span>
+              <span class="timer-countdown">23</span><span class="timer-unit">s</span>
+            </div>
+          </div>
+          <h2 class="quiz-question-text">A campaign received 2,500 clicks and recorded a Conversion Rate (CVR) of 4%. How many conversions did the campaign generate?</h2>
+        </div>
+        <div class="options-container" data-qid="L2_Q10">
+          <button class="option-btn" data-opt="A">
+            <span class="opt-key">A</span>
+            <span class="opt-label">50</span>
+          </button>
+          <button class="option-btn" data-opt="B">
+            <span class="opt-key">B</span>
+            <span class="opt-label">75</span>
+          </button>
+          <button class="option-btn" data-opt="C">
+            <span class="opt-key">C</span>
+            <span class="opt-label">100</span>
+          </button>
+          <button class="option-btn" data-opt="D">
+            <span class="opt-key">D</span>
+            <span class="opt-label">125</span>
+          </button>
+        </div>
+        <div class="feedback-box hidden" id="feedback-L2_Q10">
+          <div class="feedback-content">
+            <span class="feedback-icon">🎉</span>
+            <span class="feedback-text">Correct! Exactly 100 conversions.</span>
+          </div>
+        </div>
+        <div class="quiz-footer">
+          <div class="quiz-footer-doodle">⚡</div>
+          <button class="btn-primary-kraft btn-submit" id="btn-submit-L2_Q10" disabled>Submit Answer →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- L2-EXP10: Conversions Explanation -->
+    <section id="screen-l2-exp10" class="screen explanation-screen">
+      <div class="exp-card-container">
+        <div class="exp-header">
+          <span class="exp-badge">Level 2 · Numerical Explanation</span>
+          <h1 class="exp-title">Conversions from CVR</h1>
+          <p class="exp-subtitle">Formula and step-by-step working.</p>
+        </div>
+        <div class="numerical-working-card">
+          <div class="numerical-solution-pill">
+            <span class="pill-check">✓</span> Correct Answer: <strong>Option C (100)</strong>
+          </div>
+          <div class="formula-box-styled">
+            <span class="formula-label">Formula:</span>
+            <code>Conversions = Clicks × CVR</code>
+          </div>
+          <div class="numerical-summary-pill">
+            <strong>Working:</strong> Conversions = Clicks × CVR = 2,500 × 4% = 100
+          </div>
+        </div>
+        <div class="exp-footer">
+          <div class="remember-card">
+            <span class="remember-lamp">💡</span>
+            <div>
+              <strong>Quick Tip:</strong>
+              <span>4% of 2,500 means 4 for every 100 clicks: 25 × 4 = 100 conversions.</span>
+            </div>
+          </div>
+          <button class="btn-primary-kraft btn-next-exp" id="btn-next-l2-exp10">Finish Level 2 🚀 →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         LEVEL 2 COMPLETE SCREEN
+         ======================================================== -->
+    <section id="screen-level-2-complete" class="screen level-complete-screen">
+      <div class="level-complete-canvas">
+        <div class="level-complete-header">
+          <div class="level-celebrate-burst">🚀</div>
+          <span class="level-complete-badge">Level 2 · Numericals Cleared</span>
+          <h1 class="level-complete-title">Level 2 Cleared! 🚀</h1>
+          <p class="level-complete-msg">Level 2 cleared! Level 3 unlocked.</p>
+        </div>
+
+        <div class="level-score-hero">
+          <div class="level-stat-card">
+            <span class="stat-card-label">Level 2 Score</span>
+            <span id="l2-score-display" class="stat-card-value">0 / 10</span>
+            <span id="l2-pct-display" class="stat-card-sub">0% Accuracy</span>
+          </div>
+          <div class="level-stat-card xp-gain-card">
+            <span class="stat-card-label">Total XP Earned</span>
+            <span id="l2-xp-display" class="stat-card-value">⚡ 0 XP</span>
+            <span class="stat-card-sub">Math Master!</span>
+          </div>
+        </div>
+
+        <div class="level-next-teaser">
+          <div class="next-level-preview-card">
+            <div class="preview-badge">Next Milestone</div>
+            <h3>Level 3 – Metric Correlation</h3>
+            <p>Understand how metrics influence each other across the marketing funnel.</p>
+          </div>
+        </div>
+
+        <div class="level-complete-actions">
+          <button id="btn-start-level-3" class="btn-primary-kraft btn-hero">
+            <span>Proceed to Level 3 →</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         LEVEL IN-PROGRESS SCREEN (LEVELS 3 & 4)
+         ======================================================== -->
+    <section id="screen-level-in-progress" class="screen in-progress-screen">
+      <div class="in-progress-canvas">
+        <div class="in-progress-icon-box">
+          <span class="in-progress-emoji">🛠️</span>
+        </div>
+        <span id="in-progress-badge" class="in-progress-badge">Level 3 Unlocked 🔓</span>
+        <h1 id="in-progress-title" class="in-progress-title">Level 3 – Metric Correlation</h1>
+        <p id="in-progress-message" class="in-progress-desc">Level 3 – Metric Correlation is being built. Check back soon!</p>
+        <div class="in-progress-card">
+          <div class="in-progress-card-header">
+            <span class="lamp-icon">💡</span>
+            <h4>Curriculum Status:</h4>
+          </div>
+          <ul class="in-progress-checklist">
+            <li><span class="bullet-check">✓</span> <strong>Level 1 (Basic Metrics & Concepts)</strong> — Cleared</li>
+            <li><span class="bullet-check">✓</span> <strong>Level 2 (Numericals)</strong> — Cleared</li>
+            <li><span class="bullet-clock">⏳</span> <strong>Level 3 (Metric Correlation)</strong> — In Progress (Questions coming soon)</li>
+            <li><span class="bullet-lock">🔒</span> <strong>Level 4 (Campaign Analysis & Comparison)</strong> — Locked until Level 3 is cleared</li>
+          </ul>
+        </div>
+        <div class="in-progress-actions">
+          <button id="btn-in-progress-view-report" class="btn-primary-kraft">
+            <span>View Overall Performance Report 🏆</span>
+          </button>
+          <button id="btn-in-progress-back" class="btn-secondary-kraft">
+            <span>← Back to Cover</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
 
     <!-- ========================================================
          SCREEN 26: FINAL GAMIFIED PERFORMANCE REPORT

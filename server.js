@@ -508,6 +508,56 @@ app.get('/api/quiz-results', async (req, res) => {
   }
 });
 
+// 5b. SAVE STUDENT PROGRESS ACROSS SESSIONS
+app.post('/api/save-progress', async (req, res) => {
+  try {
+    const { student_id, progress } = req.body;
+    if (!student_id || !progress) {
+      return res.status(400).json({ error: 'student_id and progress payload required.' });
+    }
+
+    if (supabase) {
+      const { data: userObj, error: fetchErr } = await supabase.auth.admin.getUserById(student_id);
+      if (fetchErr) throw fetchErr;
+
+      const meta = userObj.user.user_metadata || {};
+      const mergedCleared = Array.from(new Set([
+        ...(Array.isArray(meta.cleared_levels) ? meta.cleared_levels : []),
+        ...(Array.isArray(progress.cleared_levels) ? progress.cleared_levels : [])
+      ]));
+
+      const updatedMeta = {
+        ...meta,
+        cleared_levels: mergedCleared,
+        current_level: progress.current_level || meta.current_level || 1,
+        current_screen: progress.current_screen || meta.current_screen || 'screen-q1',
+        level_scores: { ...(meta.level_scores || {}), ...(progress.level_scores || {}) },
+        total_xp: typeof progress.total_xp === 'number' ? progress.total_xp : (meta.total_xp || 0),
+        best_streak: Math.max(meta.best_streak || 0, progress.best_streak || 0),
+        last_active: new Date().toISOString()
+      };
+
+      await supabase.auth.admin.updateUserById(student_id, { user_metadata: updatedMeta });
+      return res.json({ success: true, progress: updatedMeta });
+    } else {
+      const db = getLocalDb();
+      if (!db.student_progress) db.student_progress = [];
+      let entry = db.student_progress.find(p => p.student_id === student_id);
+      if (!entry) {
+        entry = { student_id, ...progress };
+        db.student_progress.push(entry);
+      } else {
+        Object.assign(entry, progress);
+      }
+      saveLocalDb(db);
+      return res.json({ success: true, progress: entry });
+    }
+  } catch (error) {
+    console.error('Save progress error:', error);
+    res.status(500).json({ error: 'Failed to save progress.' });
+  }
+});
+
 // 6. GET STUDENT PROGRESS
 app.get('/api/student-progress', async (req, res) => {
   try {

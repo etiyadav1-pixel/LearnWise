@@ -12,7 +12,7 @@ echo ========================================================
 echo.
 
 git add .
-git commit -m "fix: Resolve Cannot GET / error by configuring static root and Vercel routing" 2>nul
+git commit -m "feat: Restructure Meta Ads quiz into sequential 4-level linear learning path with Level 2 Numericals and Supabase sync" 2>nul
 git push -u origin main
 
 if %ERRORLEVEL% EQU 0 (

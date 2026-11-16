@@ -5,175 +5,363 @@
  */
 
 // ============================================================
-// 1. QUESTION CATALOG & CURRICULUM
+// 1. CONFIGURATION & SEQUENTIAL LEVEL CURRICULUM
 // ============================================================
-const QUESTIONS = [
+
+/**
+ * Single configurable rule to determine whether a level is cleared.
+ * Options:
+ *  - "complete_all": user must answer every question in that level.
+ *  - A number (e.g. 70): user must achieve at least that percentage score.
+ */
+const UNLOCK_RULE = "complete_all";
+
+const LEVELS = [
   {
-    id: 'Q1',
-    topic: 'Impressions',
-    question: 'What are Impressions?',
-    options: {
-      A: 'The number of times your ad was delivered (shown) on screen.',
-      B: 'The number of unique people who saw your ad.',
-      C: 'The number of audience you targeted in your Meta campaign.',
-      D: 'The average number of times a unique user saw your ad.'
-    },
-    correct: 'A',
-    screenId: 'screen-q1',
-    expId: 'screen-exp1',
-    nextScreenId: 'screen-q2'
+    id: 1,
+    title: "Basic Metrics & Concepts",
+    subtitle: "Core advertising definitions and marketing funnel puzzle",
+    questions: [
+      {
+        id: 'Q1',
+        topic: 'Impressions',
+        question: 'What are Impressions?',
+        options: {
+          A: 'The number of times your ad was delivered (shown) on screen.',
+          B: 'The number of unique people who saw your ad.',
+          C: 'The number of audience you targeted in your Meta campaign.',
+          D: 'The average number of times a unique user saw your ad.'
+        },
+        correct: 'A',
+        screenId: 'screen-q1',
+        expId: 'screen-exp1',
+        nextScreenId: 'screen-q2'
+      },
+      {
+        id: 'Q2',
+        topic: 'Reach',
+        question: 'What is Reach?',
+        options: {
+          A: 'The total number of times your ad was shown.',
+          B: 'The total number of unique people who saw your ad.',
+          C: 'The number of clicks your ad received.',
+          D: 'The number of people who engaged with your ad.'
+        },
+        correct: 'B',
+        screenId: 'screen-q2',
+        expId: 'screen-exp2',
+        nextScreenId: 'screen-q3'
+      },
+      {
+        id: 'Q3',
+        topic: 'Frequency',
+        question: 'What is Frequency?',
+        options: {
+          A: 'The total number of impressions generated.',
+          B: 'The average number of times each unique person saw your ad (Impressions ÷ Reach).',
+          C: 'The speed at which your budget is consumed daily.',
+          D: 'The number of days an ad set remains actively published.'
+        },
+        correct: 'B',
+        screenId: 'screen-q3',
+        expId: 'screen-exp3',
+        nextScreenId: 'screen-q4'
+      },
+      {
+        id: 'Q4',
+        topic: 'Clicks (all)',
+        question: 'What does Clicks (all) count?',
+        options: {
+          A: 'Only clicks on the call-to-action button.',
+          B: 'Only link clicks that direct users off Meta to an external website.',
+          C: 'Every single click on the ad, including post likes, comments, shares, profile visits, and link clicks.',
+          D: 'Only clicks made by unique individuals.'
+        },
+        correct: 'C',
+        screenId: 'screen-q4',
+        expId: 'screen-exp4',
+        nextScreenId: 'screen-q5'
+      },
+      {
+        id: 'Q5',
+        topic: 'Link Clicks',
+        question: 'What does Link Clicks count?',
+        options: {
+          A: 'All reactions, comments, and shares on the ad.',
+          B: 'Only clicks that result in an immediate purchase.',
+          C: 'Clicks on links that direct users to select destinations (e.g. website, app store, messaging app).',
+          D: 'The total number of unique people who clicked.'
+        },
+        correct: 'C',
+        screenId: 'screen-q5',
+        expId: 'screen-exp5',
+        nextScreenId: 'screen-q6'
+      },
+      {
+        id: 'Q6',
+        topic: 'Unique Clicks (all)',
+        question: 'What is the difference between Clicks (all) and Unique Clicks (all)?',
+        options: {
+          A: 'They are the same metric with different names in Ads Manager.',
+          B: 'Clicks (all) counts only link clicks; Unique Clicks counts all clicks.',
+          C: 'Clicks (all) counts every interaction; Unique Clicks (all) counts the number of unique individuals who clicked.',
+          D: 'Unique Clicks counts clicks that occurred during desktop sessions only.'
+        },
+        correct: 'C',
+        screenId: 'screen-q6',
+        expId: 'screen-exp6',
+        nextScreenId: 'screen-q7'
+      },
+      {
+        id: 'Q7',
+        topic: 'Landing Page Views',
+        question: 'What does Landing Page Views count?',
+        options: {
+          A: 'The number of times someone clicked any link in your ad.',
+          B: 'The number of people who saw your landing page in search results.',
+          C: 'The number of times a person clicked an ad link and the landing page successfully loaded (Meta Pixel fired).',
+          D: 'The total number of page refreshes made by your internal team.'
+        },
+        correct: 'C',
+        screenId: 'screen-q7',
+        expId: 'screen-exp7',
+        nextScreenId: 'screen-q8'
+      },
+      {
+        id: 'Q8',
+        topic: 'Conversions',
+        question: 'What is a Conversion in Meta Ads?',
+        options: {
+          A: 'Any generic click on your ad image.',
+          B: 'When someone watches an ad video for more than 3 seconds.',
+          C: 'The total number of impressions delivered on mobile feeds.',
+          D: 'A specific valuable action a person takes on your website or app that aligns with your campaign goal.'
+        },
+        correct: 'D',
+        screenId: 'screen-q8',
+        expId: 'screen-exp8',
+        nextScreenId: 'screen-journey' // Leads directly into User Journey puzzle
+      },
+      {
+        id: 'Q9',
+        topic: 'Click-Through Rate (CTR)',
+        question: 'How is Click-Through Rate (CTR) calculated?',
+        options: {
+          A: '(Impressions ÷ Clicks) × 100',
+          B: '(Clicks ÷ Impressions) × 100',
+          C: '(Conversions ÷ Impressions) × 100',
+          D: 'Clicks × Impressions'
+        },
+        correct: 'B',
+        screenId: 'screen-q9',
+        expId: 'screen-exp9',
+        nextScreenId: 'screen-q10'
+      },
+      {
+        id: 'Q10',
+        topic: 'Conversion Rate (CVR)',
+        question: 'How is Conversion Rate (CVR) calculated?',
+        options: {
+          A: '(Conversions ÷ Impressions) × 100',
+          B: '(Conversions ÷ Total Clicks) × 100',
+          C: '(Total Clicks ÷ Conversions) × 100',
+          D: 'Conversions × Total Spend'
+        },
+        correct: 'B',
+        screenId: 'screen-q10',
+        expId: 'screen-exp10',
+        nextScreenId: 'screen-q11'
+      },
+      {
+        id: 'Q11',
+        topic: 'CPC & CPA',
+        question: 'How do CPC and CPA evaluate campaign efficiency?',
+        options: {
+          A: 'CPC and CPA both measure the exact same cost per impression.',
+          B: 'CPC measures cost per traffic click; CPA measures cost per acquired conversion goal.',
+          C: 'CPC measures frequency efficiency; CPA measures reach efficiency.',
+          D: 'They are only used in non-profit awareness campaigns.'
+        },
+        correct: 'B',
+        screenId: 'screen-q11',
+        expId: 'screen-exp11',
+        nextScreenId: 'screen-level-1-complete'
+      }
+    ]
   },
   {
-    id: 'Q2',
-    topic: 'Reach',
-    question: 'What is Reach?',
-    options: {
-      A: 'The total number of times your ad was shown.',
-      B: 'The total number of unique people who saw your ad.',
-      C: 'The number of clicks your ad received.',
-      D: 'The number of people who engaged with your ad.'
-    },
-    correct: 'B',
-    screenId: 'screen-q2',
-    expId: 'screen-exp2',
-    nextScreenId: 'screen-q3'
+    id: 2,
+    title: "Numericals",
+    subtitle: "10 practical marketing math problems",
+    questions: [
+      {
+        id: 'L2_Q1',
+        topic: 'CTR Calculation',
+        question: 'A Meta Ads campaign generated 500 clicks from 10,000 impressions. What is the CTR?',
+        options: { A: '2%', B: '5%', C: '10%', D: '20%' },
+        correct: 'B',
+        screenId: 'screen-l2-q1',
+        expId: 'screen-l2-exp1',
+        nextScreenId: 'screen-l2-q2'
+      },
+      {
+        id: 'L2_Q2',
+        topic: 'CVR Calculation',
+        question: 'A campaign received 2,000 clicks and generated 100 conversions. What is the Conversion Rate?',
+        options: { A: '2%', B: '5%', C: '10%', D: '20%' },
+        correct: 'B',
+        screenId: 'screen-l2-q2',
+        expId: 'screen-l2-exp2',
+        nextScreenId: 'screen-l2-q3'
+      },
+      {
+        id: 'L2_Q3',
+        topic: 'CPM Calculation',
+        question: 'A campaign spent ₹2,000 and generated 50,000 impressions. What is the CPM?',
+        options: { A: '₹20', B: '₹40', C: '₹50', D: '₹100' },
+        correct: 'B',
+        screenId: 'screen-l2-q3',
+        expId: 'screen-l2-exp3',
+        nextScreenId: 'screen-l2-q4'
+      },
+      {
+        id: 'L2_Q4',
+        topic: 'CPC Calculation',
+        question: 'A campaign spent ₹5,000 and generated 1,000 clicks. What is the CPC?',
+        options: { A: '₹2', B: '₹5', C: '₹10', D: '₹50' },
+        correct: 'B',
+        screenId: 'screen-l2-q4',
+        expId: 'screen-l2-exp4',
+        nextScreenId: 'screen-l2-q5'
+      },
+      {
+        id: 'L2_Q5',
+        topic: 'CPA Calculation',
+        question: 'A campaign spent ₹6,000 and generated 120 conversions. What is the CPA?',
+        options: { A: '₹20', B: '₹40', C: '₹50', D: '₹60' },
+        correct: 'C',
+        screenId: 'screen-l2-q5',
+        expId: 'screen-l2-exp5',
+        nextScreenId: 'screen-l2-q6'
+      },
+      {
+        id: 'L2_Q6',
+        topic: 'Frequency Calculation',
+        question: 'A Meta Ads campaign generated 30,000 impressions and reached 10,000 unique people. What is the average frequency?',
+        options: { A: '2', B: '3', C: '4', D: '5' },
+        correct: 'B',
+        screenId: 'screen-l2-q6',
+        expId: 'screen-l2-exp6',
+        nextScreenId: 'screen-l2-q7'
+      },
+      {
+        id: 'L2_Q7',
+        topic: 'Reach Calculation',
+        question: 'A Meta Ads campaign generated 40,000 impressions at an average frequency of 4. How many unique people did the campaign reach?',
+        options: { A: '8,000', B: '10,000', C: '12,000', D: '16,000' },
+        correct: 'B',
+        screenId: 'screen-l2-q7',
+        expId: 'screen-l2-exp7',
+        nextScreenId: 'screen-l2-q8'
+      },
+      {
+        id: 'L2_Q8',
+        topic: 'Impressions from Reach & Frequency',
+        question: 'A campaign reached 15,000 unique people with an average frequency of 3. What were the total impressions?',
+        options: { A: '30,000', B: '35,000', C: '45,000', D: '50,000' },
+        correct: 'C',
+        screenId: 'screen-l2-q8',
+        expId: 'screen-l2-exp8',
+        nextScreenId: 'screen-l2-q9'
+      },
+      {
+        id: 'L2_Q9',
+        topic: 'Spend from CPM',
+        question: 'A campaign generated 80,000 impressions at a CPM of ₹50. What was the total ad spend?',
+        options: { A: '₹2,000', B: '₹3,000', C: '₹4,000', D: '₹5,000' },
+        correct: 'C',
+        screenId: 'screen-l2-q9',
+        expId: 'screen-l2-exp9',
+        nextScreenId: 'screen-l2-q10'
+      },
+      {
+        id: 'L2_Q10',
+        topic: 'Conversions from CVR',
+        question: 'A campaign received 2,500 clicks and recorded a Conversion Rate (CVR) of 4%. How many conversions did the campaign generate?',
+        options: { A: '50', B: '75', C: '100', D: '125' },
+        correct: 'C',
+        screenId: 'screen-l2-q10',
+        expId: 'screen-l2-exp10',
+        nextScreenId: 'screen-level-2-complete'
+      }
+    ]
   },
   {
-    id: 'Q3',
-    topic: 'Frequency',
-    question: 'What is Frequency?',
-    options: {
-      A: 'The total number of impressions generated.',
-      B: 'The average number of times each unique person saw your ad (Impressions ÷ Reach).',
-      C: 'The speed at which your budget is consumed daily.',
-      D: 'The number of days an ad set remains actively published.'
-    },
-    correct: 'B',
-    screenId: 'screen-q3',
-    expId: 'screen-exp3',
-    nextScreenId: 'screen-q4'
+    id: 3,
+    title: "Metric Correlation",
+    subtitle: "Understanding cause-and-effect relationships across the ad funnel",
+    questions: [] // Currently in progress
   },
   {
-    id: 'Q4',
-    topic: 'Clicks (all)',
-    question: 'What does Clicks (all) count?',
-    options: {
-      A: 'Only clicks on the call-to-action button.',
-      B: 'Only link clicks that direct users off Meta to an external website.',
-      C: 'Every single click on the ad, including post likes, comments, shares, profile visits, and link clicks.',
-      D: 'Only clicks made by unique individuals.'
-    },
-    correct: 'C',
-    screenId: 'screen-q4',
-    expId: 'screen-exp4',
-    nextScreenId: 'screen-q5'
-  },
-  {
-    id: 'Q5',
-    topic: 'Link Clicks',
-    question: 'What does Link Clicks count?',
-    options: {
-      A: 'All reactions, comments, and shares on the ad.',
-      B: 'Only clicks that result in an immediate purchase.',
-      C: 'Clicks on links that direct users to select destinations (e.g. website, app store, messaging app).',
-      D: 'The total number of unique people who clicked.'
-    },
-    correct: 'C',
-    screenId: 'screen-q5',
-    expId: 'screen-exp5',
-    nextScreenId: 'screen-q6'
-  },
-  {
-    id: 'Q6',
-    topic: 'Unique Clicks (all)',
-    question: 'What is the difference between Clicks (all) and Unique Clicks (all)?',
-    options: {
-      A: 'They are the same metric with different names in Ads Manager.',
-      B: 'Clicks (all) counts only link clicks; Unique Clicks counts all clicks.',
-      C: 'Clicks (all) counts every interaction; Unique Clicks (all) counts the number of unique individuals who clicked.',
-      D: 'Unique Clicks counts clicks that occurred during desktop sessions only.'
-    },
-    correct: 'C',
-    screenId: 'screen-q6',
-    expId: 'screen-exp6',
-    nextScreenId: 'screen-q7'
-  },
-  {
-    id: 'Q7',
-    topic: 'Landing Page Views',
-    question: 'What does Landing Page Views count?',
-    options: {
-      A: 'The number of times someone clicked any link in your ad.',
-      B: 'The number of people who saw your landing page in search results.',
-      C: 'The number of times a person clicked an ad link and the landing page successfully loaded (Meta Pixel fired).',
-      D: 'The total number of page refreshes made by your internal team.'
-    },
-    correct: 'C',
-    screenId: 'screen-q7',
-    expId: 'screen-exp7',
-    nextScreenId: 'screen-q8'
-  },
-  {
-    id: 'Q8',
-    topic: 'Conversions',
-    question: 'What is a Conversion in Meta Ads?',
-    options: {
-      A: 'Any generic click on your ad image.',
-      B: 'When someone watches an ad video for more than 3 seconds.',
-      C: 'The total number of impressions delivered on mobile feeds.',
-      D: 'A specific valuable action a person takes on your website or app that aligns with your campaign goal.'
-    },
-    correct: 'D',
-    screenId: 'screen-q8',
-    expId: 'screen-exp8',
-    nextScreenId: 'screen-journey' // Leads directly into User Journey puzzle!
-  },
-  {
-    id: 'Q9',
-    topic: 'Click-Through Rate (CTR)',
-    question: 'How is Click-Through Rate (CTR) calculated?',
-    options: {
-      A: '(Impressions ÷ Clicks) × 100',
-      B: '(Clicks ÷ Impressions) × 100',
-      C: '(Conversions ÷ Impressions) × 100',
-      D: 'Clicks × Impressions'
-    },
-    correct: 'B',
-    screenId: 'screen-q9',
-    expId: 'screen-exp9',
-    nextScreenId: 'screen-q10'
-  },
-  {
-    id: 'Q10',
-    topic: 'Conversion Rate (CVR)',
-    question: 'How is Conversion Rate (CVR) calculated?',
-    options: {
-      A: '(Conversions ÷ Impressions) × 100',
-      B: '(Conversions ÷ Total Clicks) × 100',
-      C: '(Total Clicks ÷ Conversions) × 100',
-      D: 'Conversions × Total Spend'
-    },
-    correct: 'B',
-    screenId: 'screen-q10',
-    expId: 'screen-exp10',
-    nextScreenId: 'screen-q11'
-  },
-  {
-    id: 'Q11',
-    topic: 'CPC & CPA',
-    question: 'How do CPC and CPA evaluate campaign efficiency?',
-    options: {
-      A: 'CPC and CPA both measure the exact same cost per impression.',
-      B: 'CPC measures cost per traffic click; CPA measures cost per acquired conversion goal.',
-      C: 'CPC measures frequency efficiency; CPA measures reach efficiency.',
-      D: 'They are only used in non-profit awareness campaigns.'
-    },
-    correct: 'B',
-    screenId: 'screen-q11',
-    expId: 'screen-exp11',
-    nextScreenId: 'screen-report' // Leads to Final Report
+    id: 4,
+    title: "Campaign Analysis & Comparison",
+    subtitle: "Real-world campaign scenarios and diagnostic problem-solving",
+    questions: [] // Locked until Level 3 cleared
   }
 ];
+
+// Helper: All questions flat array
+function getAllQuestions() {
+  return LEVELS.flatMap(l => l.questions);
+}
+
+// Helper: Find question by screenId across any level
+function getQuestionByScreenId(screenId) {
+  return getAllQuestions().find(q => q.screenId === screenId);
+}
+
+// Helper: Find level containing a specific screenId
+function getLevelForScreen(screenId) {
+  if (screenId === 'screen-level-1-complete') return 1;
+  if (screenId === 'screen-level-2-complete') return 2;
+  if (screenId === 'screen-level-in-progress') return AppState.currentLevel || 3;
+  if (screenId.startsWith('screen-l2-')) return 2;
+  if (screenId.startsWith('screen-l3-')) return 3;
+  if (screenId.startsWith('screen-l4-')) return 4;
+  if (screenId.startsWith('screen-q') || screenId.startsWith('screen-exp') || screenId === 'screen-journey') return 1;
+  return null;
+}
+
+// Check if a level is cleared based on the configurable UNLOCK_RULE
+function isLevelCleared(levelId) {
+  if (AppState.clearedLevels.includes(levelId)) return true;
+  const lvl = LEVELS.find(l => l.id === levelId);
+  if (!lvl || lvl.questions.length === 0) return false;
+
+  const answered = lvl.questions.filter(q => Boolean(AppState.answers[q.id])).length;
+  if (UNLOCK_RULE === "complete_all") {
+    return answered === lvl.questions.length;
+  } else if (typeof UNLOCK_RULE === 'number') {
+    const correct = lvl.questions.filter(q => AppState.answers[q.id]?.isCorrect).length;
+    const pct = Math.round((correct / lvl.questions.length) * 100);
+    return answered === lvl.questions.length && pct >= UNLOCK_RULE;
+  }
+  return answered === lvl.questions.length;
+}
+
+// Check if a level is unlocked strictly in sequence
+function isLevelUnlocked(levelId) {
+  if (levelId === 1) return true;
+  for (let prev = 1; prev < levelId; prev++) {
+    if (!AppState.clearedLevels.includes(prev)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+// Alias for backwards-compatibility
+const QUESTIONS = LEVELS[0].questions;
 
 // Feedback Message Variations
 const CORRECT_MESSAGES = [
@@ -314,17 +502,21 @@ const AppState = {
   studentName: null,
   isAuthenticated: false,
   attemptId: null,
-  answers: {},             // e.g. { Q1: { selected: 'A', isCorrect: true, xp: 10 } }
-  selectedOption: null,    // temporary selection for active question
+  clearedLevels: [],       // Array of cleared level numbers e.g. [1, 2]
+  currentLevel: 1,         // Active level: 1, 2, 3, or 4
+  levelScores: {},         // { 1: { score: 11, total: 11, percentage: 100 }, 2: { ... } }
+  savedResumeScreen: null, // Last active question screen to resume on
+  answers: {},             // { Q1: { selected: 'A', isCorrect: true, xp: 10 }, ... }
+  selectedOption: null,    // Temporary selection for active question
   xp: 0,
   combo: 0,
   bestCombo: 0,
   journeyPlacements: {},   // { 1: 'Impressions', 2: 'Reach', ... }
   journeyCompleted: false,
-  selectedJourneyChip: null, // For mobile tap-to-place fallback
+  selectedJourneyChip: null, // Mobile tap-to-place fallback
 
   init() {
-    // Check saved session
+    // 1. Restore auth session
     const savedId = localStorage.getItem('learnwise_student_id');
     const savedName = localStorage.getItem('learnwise_student_name');
     if (savedId && savedName) {
@@ -334,7 +526,29 @@ const AppState = {
       this.updateUserProfileHUD();
     }
 
-    // Audio pref
+    // 2. Restore cached level progress
+    try {
+      const savedCleared = localStorage.getItem('learnwise_cleared_levels');
+      if (savedCleared) this.clearedLevels = JSON.parse(savedCleared);
+      const savedLvl = localStorage.getItem('learnwise_current_level');
+      if (savedLvl) this.currentLevel = parseInt(savedLvl, 10) || 1;
+      const savedScreen = localStorage.getItem('learnwise_current_screen');
+      if (savedScreen && savedScreen !== 'screen-cover' && savedScreen !== 'screen-intro') {
+        this.savedResumeScreen = savedScreen;
+      }
+      const savedScores = localStorage.getItem('learnwise_level_scores');
+      if (savedScores) this.levelScores = JSON.parse(savedScores);
+      const savedAnswers = localStorage.getItem('learnwise_answers');
+      if (savedAnswers) this.answers = JSON.parse(savedAnswers);
+      const savedXp = localStorage.getItem('learnwise_xp');
+      if (savedXp) this.xp = parseInt(savedXp, 10) || 0;
+      const savedCombo = localStorage.getItem('learnwise_best_combo');
+      if (savedCombo) this.bestCombo = parseInt(savedCombo, 10) || 0;
+    } catch (e) {
+      console.warn('Error reading cached progress from localStorage:', e);
+    }
+
+    // 3. Audio pref
     const audioPref = localStorage.getItem('learnwise_audio');
     if (audioPref === 'disabled') {
       SoundFX.enabled = false;
@@ -343,6 +557,44 @@ const AppState = {
     }
 
     this.attemptId = crypto.randomUUID ? crypto.randomUUID() : 'att_' + Date.now();
+
+    // 4. Background fetch latest progress from Supabase
+    if (this.studentId) {
+      this.syncProgressWithServer();
+    }
+  },
+
+  async syncProgressWithServer() {
+    if (!this.studentId || typeof API.getProgress !== 'function') return;
+    try {
+      const res = await API.getProgress(this.studentId);
+      if (res && res.progress) {
+        const p = res.progress;
+        if (Array.isArray(p.cleared_levels) && p.cleared_levels.length > 0) {
+          p.cleared_levels.forEach(lvl => {
+            if (!this.clearedLevels.includes(lvl)) this.clearedLevels.push(lvl);
+          });
+        }
+        if (p.current_level) this.currentLevel = p.current_level;
+        if (p.current_screen && p.current_screen !== 'screen-cover' && p.current_screen !== 'screen-intro') {
+          this.savedResumeScreen = p.current_screen;
+        }
+        if (p.level_scores) {
+          this.levelScores = { ...this.levelScores, ...p.level_scores };
+        }
+        if (typeof p.total_xp === 'number' && p.total_xp > this.xp) {
+          this.xp = p.total_xp;
+          const xpVal = document.getElementById('hud-xp-val');
+          if (xpVal) xpVal.textContent = this.xp;
+        }
+        if (typeof p.best_streak === 'number' && p.best_streak > this.bestCombo) {
+          this.bestCombo = p.best_streak;
+        }
+        updateLevelIndicator();
+      }
+    } catch (err) {
+      console.warn('Silent sync with server failed:', err);
+    }
   },
 
   updateUserProfileHUD() {
@@ -354,25 +606,81 @@ const AppState = {
     if (nameEl) {
       nameEl.textContent = this.studentName || 'Student';
     }
+
+    // Update HUD auth chip on top right
+    const hudChipName = document.getElementById('hud-student-chip-name');
+    if (hudChipName) {
+      hudChipName.textContent = this.studentName || 'Student';
+    }
+
+    const hudProfile = document.getElementById('hud-user-profile');
+    if (hudProfile) {
+      if (this.isAuthenticated) {
+        hudProfile.classList.remove('hidden');
+      } else {
+        hudProfile.classList.add('hidden');
+      }
+    }
     updateCoverAuthUI();
   }
 };
 
-// Update Cover Screen Auth Status
+// Persist progress to localStorage & Supabase
+function saveCurrentProgress() {
+  const payload = {
+    cleared_levels: AppState.clearedLevels,
+    current_level: AppState.currentLevel,
+    current_screen: AppState.currentScreen,
+    level_scores: AppState.levelScores,
+    total_xp: AppState.xp,
+    best_streak: AppState.bestCombo
+  };
+
+  try {
+    localStorage.setItem('learnwise_cleared_levels', JSON.stringify(AppState.clearedLevels));
+    localStorage.setItem('learnwise_current_level', String(AppState.currentLevel));
+    localStorage.setItem('learnwise_current_screen', AppState.currentScreen);
+    localStorage.setItem('learnwise_level_scores', JSON.stringify(AppState.levelScores));
+    localStorage.setItem('learnwise_answers', JSON.stringify(AppState.answers));
+    localStorage.setItem('learnwise_xp', String(AppState.xp));
+    localStorage.setItem('learnwise_best_combo', String(AppState.bestCombo));
+  } catch (e) {}
+
+  if (AppState.studentId && typeof API.saveProgress === 'function') {
+    API.saveProgress(AppState.studentId, payload);
+  }
+}
+
+// Update Cover & Intro Screen Auth Status
 function updateCoverAuthUI() {
   const guestSec = document.getElementById('cover-guest-section');
   const userSec = document.getElementById('cover-user-section');
   const studentNameEl = document.getElementById('cover-student-name');
+  const introGuestSec = document.getElementById('intro-guest-section');
+  const introUserSec = document.getElementById('intro-user-section');
+  const introStudentNameEl = document.getElementById('intro-student-name');
   const takeQuizBtn = document.getElementById('btn-take-quiz');
 
   if (AppState.isAuthenticated && AppState.studentName) {
     if (guestSec) guestSec.classList.add('hidden');
     if (userSec) userSec.classList.remove('hidden');
     if (studentNameEl) studentNameEl.textContent = AppState.studentName;
-    if (takeQuizBtn) takeQuizBtn.innerHTML = `<span>Start Quiz as ${AppState.studentName}</span> <span class="btn-arrow">→</span>`;
+
+    if (introGuestSec) introGuestSec.classList.add('hidden');
+    if (introUserSec) introUserSec.classList.remove('hidden');
+    if (introStudentNameEl) introStudentNameEl.textContent = AppState.studentName;
+
+    if (takeQuizBtn) {
+      // Resume logic: if student has existing progress, say Resume or Start
+      takeQuizBtn.innerHTML = `<span>Start Quiz as ${AppState.studentName}</span> <span class="btn-arrow">→</span>`;
+    }
   } else {
     if (guestSec) guestSec.classList.remove('hidden');
     if (userSec) userSec.classList.add('hidden');
+
+    if (introGuestSec) introGuestSec.classList.remove('hidden');
+    if (introUserSec) introUserSec.classList.add('hidden');
+
     if (takeQuizBtn) takeQuizBtn.innerHTML = `<span>Sign In & Start Quiz</span> <span class="btn-arrow">→</span>`;
   }
 }
@@ -390,7 +698,7 @@ function handleLogout() {
 }
 
 // ============================================================
-// 4. NAVIGATION & SCREEN MANAGER
+// 4. NAVIGATION & SCREEN MANAGER (WITH STRICT LEVEL GATING)
 // ============================================================
 function navigateTo(screenId, isBackNav = false) {
   // STRICT AUTH GATING:
@@ -400,6 +708,17 @@ function navigateTo(screenId, isBackNav = false) {
     if (authModal) authModal.classList.remove('hidden');
     showToast('Please sign in or create an account to attend the quiz.', 'toast-info');
     return;
+  }
+
+  // STRICT LEVEL GATING:
+  // Check if target screen belongs to a sequential level and if that level is unlocked
+  const screenLevel = getLevelForScreen(screenId);
+  if (screenLevel !== null) {
+    if (!isLevelUnlocked(screenLevel)) {
+      showToast(`🔒 Level ${screenLevel} is locked! Clear Level ${screenLevel - 1} first.`, 'toast-break');
+      return;
+    }
+    AppState.currentLevel = screenLevel;
   }
 
   if (AppState.currentScreen === screenId) return;
@@ -429,15 +748,21 @@ function navigateTo(screenId, isBackNav = false) {
     hud.classList.add('hidden');
   } else {
     hud.classList.remove('hidden');
+    updateLevelIndicator();
     updateProgressBar();
   }
 
-  // Handle 23-second Question Timer
-  const questionObj = QUESTIONS.find(q => q.screenId === screenId);
+  // Handle 23-second Question Timer across all questions in any level
+  const questionObj = getQuestionByScreenId(screenId);
   if (questionObj && !AppState.answers[questionObj.id]) {
     QuestionTimer.start(questionObj);
   } else {
     QuestionTimer.stop();
+  }
+
+  // Persist progress across page refreshes
+  if (screenId !== 'screen-cover' && screenId !== 'screen-intro') {
+    saveCurrentProgress();
   }
 
   // Scroll viewport to top
@@ -453,28 +778,83 @@ function goBack() {
   navigateTo(prevScreen, true);
 }
 
+// Render sequential Level progress indicator at top of quiz:
+// e.g. "Level 1 ✓ · Level 2 · Level 3 🔒 · Level 4 🔒" (Display Only)
+function updateLevelIndicator() {
+  const container = document.getElementById('hud-level-indicator');
+  if (!container) return;
+
+  container.innerHTML = LEVELS.map((lvl, index) => {
+    const isCleared = AppState.clearedLevels.includes(lvl.id);
+    const isUnlocked = isLevelUnlocked(lvl.id);
+    const isCurrent = AppState.currentLevel === lvl.id;
+
+    let badgeClass = 'level-step';
+    let icon = '';
+
+    if (isCleared) {
+      badgeClass += ' is-cleared';
+      icon = '<span class="level-step-icon">✓</span>';
+    } else if (isCurrent) {
+      badgeClass += ' is-current';
+      icon = '<span class="level-step-dot"></span>';
+    } else if (isUnlocked) {
+      badgeClass += ' is-unlocked';
+      icon = '<span class="level-step-icon">🔓</span>';
+    } else {
+      badgeClass += ' is-locked';
+      icon = '<span class="level-step-icon">🔒</span>';
+    }
+
+    const itemHtml = `<div class="${badgeClass}" title="Level ${lvl.id}: ${lvl.title}">${icon} <span class="level-step-label">Level ${lvl.id}</span></div>`;
+    const sep = index < LEVELS.length - 1 ? '<span class="level-sep">·</span>' : '';
+    return itemHtml + sep;
+  }).join('');
+}
+
 function updateProgressBar() {
   const fill = document.getElementById('progress-bar-fill');
   const text = document.getElementById('progress-text');
   if (!fill || !text) return;
 
-  // 12 units of progress: 11 questions + 1 user journey
-  let step = 0;
-  if (AppState.currentScreen.startsWith('screen-q')) {
-    const qNum = parseInt(AppState.currentScreen.replace('screen-q', ''), 10);
-    step = qNum <= 8 ? qNum : qNum + 1; // offset for journey puzzle
-  } else if (AppState.currentScreen.startsWith('screen-exp')) {
-    const expNum = parseInt(AppState.currentScreen.replace('screen-exp', ''), 10);
-    step = expNum <= 8 ? expNum : expNum + 1;
-  } else if (AppState.currentScreen === 'screen-journey') {
-    step = 9;
-  } else if (AppState.currentScreen === 'screen-report') {
-    step = 12;
-  }
+  const currentLevel = AppState.currentLevel || 1;
 
-  const pct = Math.min(100, Math.round((step / 12) * 100));
-  fill.style.width = `${pct}%`;
-  text.textContent = `${Math.min(12, Math.max(1, step))} / 12`;
+  if (currentLevel === 1) {
+    // Level 1: 12 units of progress (11 questions + 1 user journey)
+    let step = 1;
+    if (AppState.currentScreen.startsWith('screen-q')) {
+      const qNum = parseInt(AppState.currentScreen.replace('screen-q', ''), 10);
+      step = qNum <= 8 ? qNum : qNum + 1; // offset for journey puzzle
+    } else if (AppState.currentScreen.startsWith('screen-exp')) {
+      const expNum = parseInt(AppState.currentScreen.replace('screen-exp', ''), 10);
+      step = expNum <= 8 ? expNum : expNum + 1;
+    } else if (AppState.currentScreen === 'screen-journey') {
+      step = 9;
+    } else if (AppState.currentScreen === 'screen-level-1-complete') {
+      step = 12;
+    }
+
+    const pct = Math.min(100, Math.round((step / 12) * 100));
+    fill.style.width = `${pct}%`;
+    text.textContent = `${Math.min(12, Math.max(1, step))} / 12`;
+  } else if (currentLevel === 2) {
+    // Level 2: 10 numerical questions
+    let step = 1;
+    if (AppState.currentScreen.startsWith('screen-l2-q')) {
+      step = parseInt(AppState.currentScreen.replace('screen-l2-q', ''), 10) || 1;
+    } else if (AppState.currentScreen.startsWith('screen-l2-exp')) {
+      step = parseInt(AppState.currentScreen.replace('screen-l2-exp', ''), 10) || 1;
+    } else if (AppState.currentScreen === 'screen-level-2-complete') {
+      step = 10;
+    }
+
+    const pct = Math.min(100, Math.round((step / 10) * 100));
+    fill.style.width = `${pct}%`;
+    text.textContent = `${Math.min(10, Math.max(1, step))} / 10`;
+  } else {
+    fill.style.width = '100%';
+    text.textContent = `Level ${currentLevel}`;
+  }
 }
 
 // ============================================================
@@ -712,10 +1092,11 @@ function handleQuestionTimeout(q) {
 }
 
 // ============================================================
-// 6. QUESTION & OPTION EVENT HANDLERS
+// 6. QUESTION & OPTION EVENT HANDLERS (ALL LEVELS)
 // ============================================================
 function setupQuestionScreens() {
-  QUESTIONS.forEach(q => {
+  // Wire up every question across all sequential levels
+  getAllQuestions().forEach(q => {
     const qScreen = document.getElementById(q.screenId);
     if (!qScreen) return;
 
@@ -803,7 +1184,7 @@ function setupQuestionScreens() {
         question: q.question
       };
 
-      // Persist to Supabase / Backend in background
+      // Persist answer in background
       if (AppState.studentId) {
         API.saveAnswer(
           AppState.studentId,
@@ -826,8 +1207,9 @@ function setupQuestionScreens() {
     });
   });
 
-  // Wire up Explanation "Next" buttons
+  // Wire up Explanation "Next" buttons across Level 1 & Level 2
   const nextMappings = {
+    // Level 1 mappings
     'btn-next-exp1': 'screen-q2',
     'btn-next-exp2': 'screen-q3',
     'btn-next-exp3': 'screen-q4',
@@ -839,21 +1221,148 @@ function setupQuestionScreens() {
     'btn-next-journey': 'screen-q9',
     'btn-next-exp9': 'screen-q10',
     'btn-next-exp10': 'screen-q11',
-    'btn-finish-quiz': 'screen-report'
+
+    // Level 2 mappings
+    'btn-next-l2-exp1': 'screen-l2-q2',
+    'btn-next-l2-exp2': 'screen-l2-q3',
+    'btn-next-l2-exp3': 'screen-l2-q4',
+    'btn-next-l2-exp4': 'screen-l2-q5',
+    'btn-next-l2-exp5': 'screen-l2-q6',
+    'btn-next-l2-exp6': 'screen-l2-q7',
+    'btn-next-l2-exp7': 'screen-l2-q8',
+    'btn-next-l2-exp8': 'screen-l2-q9',
+    'btn-next-l2-exp9': 'screen-l2-q10'
   };
 
   Object.entries(nextMappings).forEach(([btnId, targetScreen]) => {
     const btn = document.getElementById(btnId);
     if (btn) {
       btn.addEventListener('click', () => {
-        if (btnId === 'btn-finish-quiz') {
-          finalizeAndShowReport();
-        } else {
-          navigateTo(targetScreen);
-        }
+        navigateTo(targetScreen);
       });
     }
   });
+
+  // Level 1 Completion Trigger
+  const btnFinishL1 = document.getElementById('btn-finish-level-1');
+  if (btnFinishL1) {
+    btnFinishL1.addEventListener('click', handleLevel1Complete);
+  }
+  const btnFinishQuizLegacy = document.getElementById('btn-finish-quiz');
+  if (btnFinishQuizLegacy) {
+    btnFinishQuizLegacy.addEventListener('click', handleLevel1Complete);
+  }
+
+  // Start Level 2 Trigger from Level 1 Complete Screen
+  const btnStartL2 = document.getElementById('btn-start-level-2');
+  if (btnStartL2) {
+    btnStartL2.addEventListener('click', () => {
+      navigateTo('screen-l2-q1');
+    });
+  }
+
+  // Level 2 Completion Trigger on last explanation screen (L2-EXP10)
+  const btnFinishL2 = document.getElementById('btn-next-l2-exp10');
+  if (btnFinishL2) {
+    btnFinishL2.addEventListener('click', handleLevel2Complete);
+  }
+
+  // Start Level 3 Trigger from Level 2 Complete Screen
+  const btnStartL3 = document.getElementById('btn-start-level-3');
+  if (btnStartL3) {
+    btnStartL3.addEventListener('click', () => {
+      handleStartLevel(3);
+    });
+  }
+
+  // In-Progress Screen buttons
+  const btnInProgReport = document.getElementById('btn-in-progress-view-report');
+  if (btnInProgReport) {
+    btnInProgReport.addEventListener('click', () => {
+      finalizeAndShowReport();
+    });
+  }
+  const btnInProgBack = document.getElementById('btn-in-progress-back');
+  if (btnInProgBack) {
+    btnInProgBack.addEventListener('click', () => {
+      navigateTo('screen-cover');
+    });
+  }
+}
+
+// Level 1 Completion logic
+function handleLevel1Complete() {
+  const l1Questions = LEVELS[0].questions;
+  const correctCount = l1Questions.filter(q => AppState.answers[q.id]?.isCorrect).length;
+  const total = l1Questions.length;
+  const pct = Math.round((correctCount / total) * 100);
+
+  if (!AppState.clearedLevels.includes(1)) {
+    AppState.clearedLevels.push(1);
+  }
+  AppState.currentLevel = 2;
+  AppState.levelScores[1] = { score: correctCount, total, percentage: pct };
+
+  const scoreDisp = document.getElementById('l1-score-display');
+  const pctDisp = document.getElementById('l1-pct-display');
+  const xpDisp = document.getElementById('l1-xp-display');
+  if (scoreDisp) scoreDisp.textContent = `${correctCount} / ${total}`;
+  if (pctDisp) pctDisp.textContent = `${pct}% Accuracy`;
+  if (xpDisp) xpDisp.textContent = `⚡ ${AppState.xp} XP`;
+
+  SoundFX.celebrate();
+  saveCurrentProgress();
+  navigateTo('screen-level-1-complete');
+}
+
+// Level 2 Completion logic
+function handleLevel2Complete() {
+  const l2Questions = LEVELS[1].questions;
+  const correctCount = l2Questions.filter(q => AppState.answers[q.id]?.isCorrect).length;
+  const total = l2Questions.length;
+  const pct = Math.round((correctCount / total) * 100);
+
+  if (!AppState.clearedLevels.includes(2)) {
+    AppState.clearedLevels.push(2);
+  }
+  AppState.currentLevel = 3;
+  AppState.levelScores[2] = { score: correctCount, total, percentage: pct };
+
+  const scoreDisp = document.getElementById('l2-score-display');
+  const pctDisp = document.getElementById('l2-pct-display');
+  const xpDisp = document.getElementById('l2-xp-display');
+  if (scoreDisp) scoreDisp.textContent = `${correctCount} / ${total}`;
+  if (pctDisp) pctDisp.textContent = `${pct}% Accuracy`;
+  if (xpDisp) xpDisp.textContent = `⚡ ${AppState.xp} XP`;
+
+  SoundFX.celebrate();
+  saveCurrentProgress();
+  navigateTo('screen-level-2-complete');
+}
+
+// Start Level Handler (Modular: if level has 0 questions, shows In-Progress screen automatically)
+function handleStartLevel(levelNum) {
+  const targetLvl = LEVELS.find(l => l.id === levelNum);
+  if (!targetLvl) return;
+
+  if (!isLevelUnlocked(levelNum)) {
+    showToast(`🔒 Level ${levelNum} is locked! Clear previous levels first.`, 'toast-break');
+    return;
+  }
+
+  AppState.currentLevel = levelNum;
+
+  if (targetLvl.questions.length === 0) {
+    const badge = document.getElementById('in-progress-badge');
+    const title = document.getElementById('in-progress-title');
+    const desc = document.getElementById('in-progress-message');
+    if (badge) badge.textContent = `Level ${levelNum} Unlocked 🔓`;
+    if (title) title.textContent = `Level ${levelNum} – ${targetLvl.title}`;
+    if (desc) desc.textContent = `Level ${levelNum} – ${targetLvl.title} is being built. Check back soon!`;
+    navigateTo('screen-level-in-progress');
+  } else {
+    navigateTo(targetLvl.questions[0].screenId);
+  }
 }
 
 // ============================================================
@@ -1026,12 +1535,14 @@ async function finalizeAndShowReport() {
   navigateTo('screen-report');
   SoundFX.celebrate();
 
-  const totalQuestions = QUESTIONS.length; // 11
+  const allAttemptedQuestions = getAllQuestions().filter(q => Boolean(AppState.answers[q.id]));
+  const questionsToEvaluate = allAttemptedQuestions.length > 0 ? allAttemptedQuestions : LEVELS[0].questions;
+  const totalQuestions = questionsToEvaluate.length;
   let score = 0;
   const strongAreas = [];
   const weakAreas = [];
 
-  QUESTIONS.forEach(q => {
+  questionsToEvaluate.forEach(q => {
     const ans = AppState.answers[q.id];
     if (ans && ans.isCorrect) {
       score++;
@@ -1316,9 +1827,11 @@ function setupAuthSystem() {
   const errorBanner = document.getElementById('auth-error-banner');
   const cancelBtn = document.getElementById('btn-cancel-auth');
 
-  // Cover & HUD Buttons
+  // Cover, Intro & HUD Buttons
   const btnCoverLogin = document.getElementById('btn-cover-login');
   const btnCoverLogout = document.getElementById('btn-cover-logout');
+  const btnIntroLogin = document.getElementById('btn-intro-login');
+  const btnIntroLogout = document.getElementById('btn-intro-logout');
   const btnHudLogout = document.getElementById('btn-hud-logout');
 
   let mode = 'login'; // 'login' or 'signup'
@@ -1343,17 +1856,45 @@ function setupAuthSystem() {
   if (tabSignup) tabSignup.addEventListener('click', () => setMode('signup'));
   if (cancelBtn) cancelBtn.addEventListener('click', () => authModal.classList.add('hidden'));
 
-  // Open modal from Cover Screen
+  // Open modal from Cover & Intro Screens
   if (btnCoverLogin) {
     btnCoverLogin.addEventListener('click', () => {
       setMode('login');
       authModal.classList.remove('hidden');
     });
   }
+  if (btnIntroLogin) {
+    btnIntroLogin.addEventListener('click', () => {
+      setMode('login');
+      authModal.classList.remove('hidden');
+    });
+  }
 
-  // Logout Handlers
+  // Logout Handlers (Cover, Intro & HUD)
   if (btnCoverLogout) btnCoverLogout.addEventListener('click', handleLogout);
+  if (btnIntroLogout) btnIntroLogout.addEventListener('click', handleLogout);
   if (btnHudLogout) btnHudLogout.addEventListener('click', handleLogout);
+
+  // Function to seamlessly start Level 1 or resume student at their active level
+  function resumeOrStartQuiz() {
+    if (AppState.savedResumeScreen) {
+      const scrLvl = getLevelForScreen(AppState.savedResumeScreen);
+      if (scrLvl === null || isLevelUnlocked(scrLvl)) {
+        navigateTo(AppState.savedResumeScreen);
+        return;
+      }
+    }
+    // Check sequential progression
+    if (!AppState.clearedLevels.includes(1)) {
+      navigateTo('screen-q1');
+    } else if (!AppState.clearedLevels.includes(2)) {
+      navigateTo('screen-l2-q1');
+    } else if (!AppState.clearedLevels.includes(3)) {
+      handleStartLevel(3);
+    } else {
+      navigateTo('screen-report');
+    }
+  }
 
   // Intercept Take Quiz
   const takeQuizBtn = document.getElementById('btn-take-quiz');
@@ -1363,7 +1904,7 @@ function setupAuthSystem() {
         setMode('signup');
         authModal.classList.remove('hidden');
       } else {
-        navigateTo('screen-q1');
+        resumeOrStartQuiz();
       }
     });
   }
@@ -1413,8 +1954,11 @@ function setupAuthSystem() {
         authModal.classList.add('hidden');
         showToast(`Welcome, ${result.student_name}! 👋`, 'toast-xp');
 
-        // Proceed to first question
-        navigateTo('screen-q1');
+        // Fetch user progress across sessions & devices from Supabase
+        await AppState.syncProgressWithServer();
+
+        // Proceed to saved screen or start Level 1
+        resumeOrStartQuiz();
       } catch (err) {
         errorBanner.textContent = err.message || 'Authentication error.';
         errorBanner.classList.remove('hidden');
@@ -1450,12 +1994,12 @@ function setupRetakeButton() {
     AppState.journeyCompleted = false;
     AppState.attemptId = crypto.randomUUID ? crypto.randomUUID() : 'att_' + Date.now();
 
-    // Reset all UI question states
+    // Reset all UI question states across all levels
     QuestionTimer.stop();
     document.querySelectorAll('.timer-countdown').forEach(el => el.textContent = '23');
     document.querySelectorAll('.quiz-timer-badge').forEach(b => b.classList.remove('timer-urgent'));
 
-    QUESTIONS.forEach(q => {
+    getAllQuestions().forEach(q => {
       const qScreen = document.getElementById(q.screenId);
       if (!qScreen) return;
       const optButtons = qScreen.querySelectorAll('.option-btn');

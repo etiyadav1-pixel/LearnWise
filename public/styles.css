@@ -208,11 +208,77 @@ button {
 
 .hud-center {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.8rem;
+  justify-content: center;
+  gap: 0.25rem;
   flex: 1;
-  max-width: 420px;
-  margin: 0 1.5rem;
+  max-width: 480px;
+  margin: 0 1rem;
+}
+
+.hud-sub-progress {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.hud-level-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  font-size: 0.76rem;
+  font-weight: 700;
+  user-select: none;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.level-step {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.12rem 0.5rem;
+  border-radius: var(--radius-full);
+  color: #64748B;
+  background: #F1F5F9;
+  transition: all 0.2s ease;
+}
+
+.level-step.active,
+.level-step.is-current {
+  background: var(--navy);
+  color: #FFFFFF;
+  font-weight: 800;
+  box-shadow: 0 1px 3px rgba(36, 62, 96, 0.25);
+}
+
+.level-step.completed,
+.level-step.is-cleared {
+  background: #ECFDF5;
+  color: #059669;
+  border: 1px solid #A7F3D0;
+  font-weight: 700;
+}
+
+.level-step.locked,
+.level-step.is-locked {
+  color: #94A3B8;
+  background: transparent;
+}
+
+.level-sep {
+  color: #CBD5E1;
+  font-weight: 800;
+  font-size: 0.8rem;
+}
+
+.hud-auth-section {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
 }
 
 .progress-track {
@@ -2566,5 +2632,341 @@ button {
   100% {
     box-shadow: 0 0 0 0 rgba(241, 174, 19, 0);
   }
+}
+
+/* ============================================================
+   LEVEL COMPLETE SCREEN STYLES
+   ============================================================ */
+.level-complete-screen {
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1.5rem;
+  background: radial-gradient(circle at 50% 10%, rgba(241, 174, 19, 0.12) 0%, transparent 50%),
+              linear-gradient(180deg, #F8FAFC 0%, #EFF6FF 100%);
+}
+
+.level-complete-canvas {
+  max-width: 680px;
+  width: 100%;
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 3rem 2.5rem;
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+  animation: modalScaleUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.level-celebrate-burst {
+  font-size: 3.5rem;
+  margin-bottom: 0.5rem;
+  animation: bounce 1.2s infinite alternate ease-in-out;
+}
+
+.level-complete-badge {
+  display: inline-block;
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #059669;
+  background: #ECFDF5;
+  border: 1px solid #A7F3D0;
+  padding: 0.35rem 0.95rem;
+  border-radius: var(--radius-full);
+  margin-bottom: 0.75rem;
+}
+
+.level-complete-title {
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 800;
+  color: var(--navy);
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.level-complete-msg {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #D97706;
+  background: #FEF3C7;
+  display: inline-block;
+  padding: 0.5rem 1.25rem;
+  border-radius: var(--radius-full);
+}
+
+.level-score-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+.level-stat-card {
+  background: #F8FAFC;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.level-stat-card.xp-gain-card {
+  background: #FFFBEB;
+  border-color: #FDE68A;
+}
+
+.stat-card-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.stat-card-value {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--navy);
+}
+
+.stat-card-sub {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #059669;
+}
+
+.next-level-preview-card {
+  background: #F0FDF4;
+  border: 1.5px dashed #86EFAC;
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  text-align: left;
+}
+
+.next-level-preview-card .preview-badge {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #15803D;
+  background: #DCFCE7;
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-full);
+  margin-bottom: 0.5rem;
+}
+
+.next-level-preview-card h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--navy);
+  margin-bottom: 0.35rem;
+}
+
+.next-level-preview-card p {
+  font-size: 0.92rem;
+  color: #475569;
+  line-height: 1.45;
+}
+
+.level-complete-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  align-items: center;
+}
+
+/* ============================================================
+   LEVEL 2 NUMERICAL EXPLANATION STYLES
+   ============================================================ */
+.numerical-working-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1.75rem;
+  text-align: left;
+}
+
+.numerical-solution-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #ECFDF5;
+  border: 1.5px solid #10B981;
+  color: #065F46;
+  font-size: 1.05rem;
+  font-weight: 800;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius-full);
+  align-self: flex-start;
+}
+
+.formula-box-styled {
+  background: #F8FAFC;
+  border: 1px solid #CBD5E1;
+  border-left: 5px solid var(--yellow);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.formula-label {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.formula-box-styled code {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.numerical-summary-pill {
+  background: #EFF6FF;
+  border: 1px solid #BFDBFE;
+  color: #1E40AF;
+  font-size: 1.05rem;
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-sm);
+}
+
+/* ============================================================
+   LEVEL IN-PROGRESS SCREEN STYLES
+   ============================================================ */
+.in-progress-screen {
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1.5rem;
+  background: radial-gradient(circle at 50% 20%, rgba(241, 174, 19, 0.1) 0%, transparent 50%),
+              linear-gradient(180deg, #F8FAFC 0%, #EFF6FF 100%);
+}
+
+.in-progress-canvas {
+  max-width: 640px;
+  width: 100%;
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 3rem 2.5rem;
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  animation: modalScaleUp 0.35s ease-out;
+}
+
+.in-progress-icon-box {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: #FEF3C7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.in-progress-emoji {
+  font-size: 2.75rem;
+}
+
+.in-progress-badge {
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #166534;
+  background: #DCFCE7;
+  border: 1px solid #86EFAC;
+  padding: 0.35rem 0.95rem;
+  border-radius: var(--radius-full);
+}
+
+.in-progress-title {
+  font-size: clamp(1.85rem, 3.5vw, 2.4rem);
+  font-weight: 800;
+  color: var(--navy);
+  margin: 0;
+}
+
+.in-progress-desc {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #475569;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.in-progress-card {
+  width: 100%;
+  background: #F8FAFC;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  text-align: left;
+}
+
+.in-progress-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
+}
+
+.in-progress-card-header h4 {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--navy);
+  margin: 0;
+}
+
+.in-progress-checklist {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  font-size: 0.92rem;
+  color: #334155;
+}
+
+.in-progress-checklist li {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.bullet-check {
+  color: #16A34A;
+  font-weight: 800;
+}
+
+.bullet-clock, .bullet-lock {
+  font-size: 0.95rem;
+}
+
+.in-progress-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 380px;
+  margin-top: 0.5rem;
 }
 

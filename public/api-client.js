@@ -95,6 +95,23 @@ const API = {
     }
   },
 
+  async saveProgress(studentId, progressData) {
+    try {
+      const res = await fetch(`${this.baseUrl}/api/save-progress`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          student_id: studentId,
+          progress: progressData
+        })
+      });
+      return await res.json();
+    } catch (err) {
+      console.warn('Save progress error:', err);
+      return { success: false };
+    }
+  },
+
   async getLeaderboard() {
     try {
       const res = await fetch(`${this.baseUrl}/api/leaderboard`);
