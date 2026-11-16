@@ -1376,24 +1376,24 @@ function showToast(message, className = '') {
 }
 
 // Helper: Question Countdown Seconds per Level
-// Level 1: 23s
+// Level 1: 25s
 // Level 2 (Numericals): 35s
 // Level 3 (Advanced Numericals Part A & Part B): 40s
 function getQuestionTimerDuration(q) {
-  if (!q) return 23;
+  if (!q) return 25;
   if (typeof q.timerSeconds === 'number') return q.timerSeconds;
   const lvl = getLevelForScreen(q.screenId);
   if (lvl === 2) return 35;
   if (lvl === 3) return 40;
-  return 23;
+  return 25;
 }
 
 // ============================================================
-// 5B. QUESTION TIMER ENGINE (23s Level 1 · 35s Level 2 · 40s Level 3)
+// 5B. QUESTION TIMER ENGINE (25s Level 1 · 35s Level 2 · 40s Level 3)
 // ============================================================
 const QuestionTimer = {
-  totalSeconds: 23,
-  secondsRemaining: 23,
+  totalSeconds: 25,
+  secondsRemaining: 25,
   intervalId: null,
   activeQuestion: null,
 
@@ -2707,7 +2707,7 @@ function setupRetakeButton() {
         const qObj = getQuestionByScreenId(qScreen.id);
         el.textContent = String(getQuestionTimerDuration(qObj));
       } else {
-        el.textContent = '23';
+        el.textContent = '25';
       }
     });
     document.querySelectorAll('.quiz-timer-badge').forEach(b => b.classList.remove('timer-urgent'));
